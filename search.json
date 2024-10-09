@@ -74,21 +74,28 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This comes from the file about.qmd.\nThis is a website for the final project for MA[46]15 Data Science with R by Team TEAMNAME. The members of this team are below."
+    "text": "This comes from the file about.qmd.\nThis is a website for the final project for MA[46]15 Data Science with R by Team 6. The members of this team are below."
   },
   {
-    "objectID": "about.html#chang-liu",
-    "href": "about.html#chang-liu",
+    "objectID": "about.html#yueyi-wang",
+    "href": "about.html#yueyi-wang",
     "title": "About",
-    "section": "Chang Liu",
-    "text": "Chang Liu\nLuis is a Ph.D. student in Stats and is the Teaching Fellow for the course."
+    "section": "Yueyi Wang",
+    "text": "Yueyi Wang\nYueyi is a senior student in Economics and a member of group 6 in MA415.\nhttps://github.com/yueyiw"
   },
   {
-    "objectID": "about.html#dan-sussman",
-    "href": "about.html#dan-sussman",
+    "objectID": "about.html#zhenyi-yuan",
+    "href": "about.html#zhenyi-yuan",
     "title": "About",
-    "section": "Dan Sussman",
-    "text": "Dan Sussman\nDan is a professor in the Math/Stat department and is the instructor for the course.\n\n\nAbout this Template.\nThis is based off of the standard Quarto website template from RStudio (2023.09.0 Build 463)."
+    "section": "Zhenyi Yuan",
+    "text": "Zhenyi Yuan\nZhenyi is a senior studying Economics and Mathematics and a member of group 6.\nhttps://github.com/zyi-yuan"
+  },
+  {
+    "objectID": "about.html#cindy-frempong",
+    "href": "about.html#cindy-frempong",
+    "title": "About",
+    "section": "Cindy Frempong",
+    "text": "Cindy Frempong\nCindy is a Junior studying Data Science and a member of group 6.\nhttps://github.com/CindyX0\n\n\nAbout this Template.\nThis is based off of the standard Quarto website template from RStudio (2023.09.0 Build 463)."
   },
   {
     "objectID": "big_picture.html",
