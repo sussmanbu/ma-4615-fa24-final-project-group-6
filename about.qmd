@@ -19,16 +19,26 @@ about:
 
 This comes from the file `about.qmd`.
 
-This is a website for the final project for MA[46]15 Data Science with R by Team TEAMNAME.
+This is a website for the final project for MA[46]15 Data Science with R by Team 6.
 The members of this team are below.
 
-## Chang Liu
+## Yueyi Wang
 
-Luis is a Ph.D. student in Stats and is the Teaching Fellow for the course.
+Yueyi is a senior student in Economics and a member of group 6 in MA415.
 
-## Dan Sussman
+https://github.com/yueyiw
 
-Dan is a professor in the Math/Stat department and is the instructor for the course.
+## Zhenyi Yuan
+
+Zhenyi is a senior studying Economics and Mathematics and a member of group 6.
+
+https://github.com/zyi-yuan
+
+## Cindy Frempong
+
+Cindy is a Junior studying Data Science and a member of group 6.
+
+https://github.com/CindyX0
 
 <!-- Please leave in the information below -->
 
