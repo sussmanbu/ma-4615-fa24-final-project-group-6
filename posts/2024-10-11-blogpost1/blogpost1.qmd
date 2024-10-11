@@ -28,3 +28,44 @@ Original Link: https://www.cdc.gov/brfss/annual_data/annual_2023.html
 This data set ranges over 48 states, the District of Columbia, Guam, Puerto Rico, and the US Virgin Islands in 2023. It includes self-reported health behaviors (including mental health), chronic health conditions, and use of preventive services survey for 433,323 observations. There are 350 variables detailing characteristics such as race, geography, education levels, marital status, and gender. The data was collected through phone interviews to track trends in behaviors, diseases, and conditions that pose significant risks to health over time and identify different health outcomes across populations. 
 
 By analyzing this data set, we hope to answer questions like how prevalent certain health risk behaviors are across populations, health disparities, and some variables (such as dietary habits or preventative services) that have a significant impact on the health outcomes. We can also look at mental health and find out groups that are most susceptible to mental health disorders. The data set has a clear codebook to it, but we can do some additional cleaning to make it meet our needs. Some challenges we foresee are that because this is a big data set with 350 variables, we may need to clearly select variables that correlate with our questions. 
+
+
+
+**Data Set 3**
+Original Link:https://docs.google.com/spreadsheets/d/1ce06FnS7lX0ilbEjnTmdj71t_UwnbR7fK4BkGO4k25I/edit?usp=sharing
+
+
+This data set is extracted from NLSY79 Cohort, which is a longitudinal project that follows the lives of a sample of American youth born between 1957-64. The cohort originally included 12,686 respondents ages 14-22 when first interviewed in 1979; after two subsamples were dropped, 9,964 respondents remain in the eligible samples. We only extracted data from the year 2020 and focused on healthcare information, such as coverage, health conditions, and income.
+There are 29 columns and 12,686 rows. 
+The immediate challenge we can forsee is that this dataset has many missing data that need to be cleaned, and every variable is labeled by number, which needs further coding to make it more readable.
+Although it seems challenging to do, I will be able to clean the data.
+Also, we need to brainstorm what possible information/correlation are interesting and could be pulled out. 
+The potential question: what is the portion with health issues that are covered by a medicare
+
+
+It includes variables:
+ASSESSMENT OF R'S GENERAL HEALTH
+HOW MUCH SLEEP R GETS AT NIGHT ON WEEKDAYS-HOURS
+SAMPLE IDENTIFICATION CODE
+ R'S RACIAL/ETHNIC COHORT FROM SCREENER
+SEX OF R
+IN THE PAST MONTH, DID R SUFFER FROM CHRONIC PAIN FROM AN ILLNESS
+OR MEDICAL CONDITION?
+IN THE PAST MONTH, HOW OFTEN DID R SUFFER FROM CHRONIC PAIN FROM AN
+ILLNESS OR MEDICAL CONDITION?
+ANYONE IN R'S HOUSEHOLD BESIDES R DISABLED OR CHRONICALLY ILL?
+R HAVE HEALTH CARE PROVIDER TO SEE WHEN SICK OR NEED HEALTH ADVICE?
+R COVERED BY ANY HEALTH/HOSPITALIZATION PLAN
+SOURCE OF HEALTH/HOSPITALIZATION(RESPONDENT) - PRIVATE INSURANCE
+R'S CURRENT/PREVIOUS EMPLOYER
+R COVERED BY MEDICAID
+HOW LONG SINCE R LAST HAD HEALTH CARE COVERAGE
+REASONS R NOT HAVING HEALTH INSURANCE - PERSON WITH INSURANCE LOST
+JOB OR CHANGED EMPLOYERS
+REASONS R NOT HAVING HEALTH INSURANCE(7 variables about reasons)
+SPOUSE COVERED BY ANY HEALTH/HOSPITALIZATION PLAN
+TOTAL INCOME FROM WAGES AND SALARY IN PAST CALENDAR YEAR 
+R MISSED PAYMENT OR BEEN AT LEAST 2 MONTHS LATE SINCE DATE OF LAST
+INTERVIEW?
+FAMILY POVERTY STATUS IN PREVIOUS CALENDAR YEAR
+
