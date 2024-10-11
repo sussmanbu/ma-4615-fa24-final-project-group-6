@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "posts/2024-10-11-blogpost1/blogpost1.html",
+    "href": "posts/2024-10-11-blogpost1/blogpost1.html",
+    "title": "Blog Post 1",
+    "section": "",
+    "text": "Data Set 1:\nOriginal Link: https://www.ciesin.columbia.edu/data/sepher/\nAbout Dataset: This Dataset hopes to reveal information about the impacts of climate change on vulnerable populations.\nNumber of rows and columns: 1664 columns and 86457 rows\nThe dataset was created by merging multiple publicly available datasets that include socio-economic, climate risk scores, evictions and housing variables, along with census information for the US. Datasets merged include the CDC vulnerability index dataset, FEMA’s national risk index dataset, and Evictions and Home mortgage data. The Home Mortgage Dataset is managed by the Consumer Financial Protection Bureau . The Evictions dataset is compiled and managed by the Eviction Lab at Princeton University. We also would utilize US census tract data in addition to this dataset. We can load the data and it comes cleaned, but we can clean it further to meet our requirements and needs.\nA theme we want to address is how climate change incidents are impacting different demographics, from a racial and economic standpoint. At what frequency are people being displaced, who are the majority of people being displaced? What are their economic, social, and demographic backgrounds? This is especially relevant because we are currently seeing more extreme natural disasters globally and domestically, this would further inform about the communities that are at the brunt of such disasters. Some challenges we might encounter are challenges that often come with manipulating large datasets. When working with a huge mass of data that has numerous variables it can be difficult to come up with an extremely specific research question, also multiple variables can impact the other and correlate with each other although we might only be assessing a few. Being that the data is so detailed we have to be careful in our analysis when describing variables as correlated or not.\nData Set 2\nOriginal Link: https://www.cdc.gov/brfss/annual_data/annual_2023.html\nThis data set ranges over 48 states, the District of Columbia, Guam, Puerto Rico, and the US Virgin Islands in 2023. It includes self-reported health behaviors (including mental health), chronic health conditions, and use of preventive services survey for 433,323 observations. There are 350 variables detailing characteristics such as race, geography, education levels, marital status, and gender. The data was collected through phone interviews to track trends in behaviors, diseases, and conditions that pose significant risks to health over time and identify different health outcomes across populations.\nBy analyzing this data set, we hope to answer questions like how prevalent certain health risk behaviors are across populations, health disparities, and some variables (such as dietary habits or preventative services) that have a significant impact on the health outcomes. We can also look at mental health and find out groups that are most susceptible to mental health disorders. The data set has a clear codebook to it, but we can do some additional cleaning to make it meet our needs. Some challenges we foresee are that because this is a big data set with 350 variables, we may need to clearly select variables that correlate with our questions.\nData Set 3\nOriginal Link:https://docs.google.com/spreadsheets/d/1ce06FnS7lX0ilbEjnTmdj71t_UwnbR7fK4BkGO4k25I/edit?usp=sharing\nThis data set is extracted from NLSY79 Cohort, which is a longitudinal project that follows the lives of a sample of American youth born between 1957-64. The cohort originally included 12,686 respondents ages 14-22 when first interviewed in 1979; after two subsamples were dropped, 9,964 respondents remain in the eligible samples. We only extracted data from the year 2020 and focused on healthcare information, such as coverage, health conditions, and income. There are 29 columns and 12,686 rows. The immediate challenge we can forsee is that this dataset has many missing data that need to be cleaned, and every variable is labeled by number, which needs further coding to make it more readable. Although it seems challenging to do, I will be able to clean the data. Also, we need to brainstorm what possible information/correlation are interesting and could be pulled out. The potential question: what is the portion with health issues that are covered by a medicare\nIt includes variables: ASSESSMENT OF R’S GENERAL HEALTH\nHOW MUCH SLEEP R GETS AT NIGHT ON WEEKDAYS-HOURS\nSAMPLE IDENTIFICATION CODE\nR’S RACIAL/ETHNIC COHORT FROM SCREENER\nSEX OF R\nIN THE PAST MONTH, DID R SUFFER FROM CHRONIC PAIN FROM AN ILLNESS OR MEDICAL CONDITION?\nIN THE PAST MONTH, HOW OFTEN DID R SUFFER FROM CHRONIC PAIN FROM AN ILLNESS OR MEDICAL CONDITION?\nANYONE IN R’S HOUSEHOLD BESIDES R DISABLED OR CHRONICALLY ILL?\nR HAVE HEALTH CARE PROVIDER TO SEE WHEN SICK OR NEED HEALTH ADVICE?\nR COVERED BY ANY HEALTH/HOSPITALIZATION\nSOURCE OF HEALTH/HOSPITALIZATION(RESPONDENT) - PRIVATE INSURANCE\nR’S CURRENT/PREVIOUS EMPLOYER\nR COVERED BY MEDICAID\nHOW LONG SINCE R LAST HAD HEALTH CARE COVERAGE\nREASONS R NOT HAVING HEALTH INSURANCE - PERSON WITH INSURANCE LOST JOB OR CHANGED EMPLOYERS\nREASONS R NOT HAVING HEALTH INSURANCE(7 variables about reasons)\nSPOUSE COVERED BY ANY HEALTH/HOSPITALIZATION PLAN\nTOTAL INCOME FROM WAGES AND SALARY IN PAST CALENDAR YEAR\nR MISSED PAYMENT OR BEEN AT LEAST 2 MONTHS LATE SINCE DATE OF LAST INTERVIEW?\nFAMILY POVERTY STATUS IN PREVIOUS CALENDAR YEAR"
+  },
+  {
     "objectID": "posts/2023-12-20-examples/examples.html",
     "href": "posts/2023-12-20-examples/examples.html",
     "title": "Examples",
@@ -81,18 +88,32 @@
     "href": "about.html#yueyi-wang",
     "title": "About",
     "section": "Yueyi Wang",
-    "text": "Yueyi Wang\nYueyi is a senior student in Economics and a member of group 6 in MA415.\nhttps://github.com/yueyiw"
+    "text": "Yueyi Wang\nYueyi is a senior student in Economics and a member of group 6 in MA415. &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD https://github.com/yueyiw"
   },
   {
     "objectID": "about.html#zhenyi-yuan",
     "href": "about.html#zhenyi-yuan",
     "title": "About",
     "section": "Zhenyi Yuan",
-    "text": "Zhenyi Yuan\nZhenyi is a senior studying Economics and Mathematics and a member of group 6.\nhttps://github.com/zyi-yuan"
+    "text": "Zhenyi Yuan\nZhenyi is a senior studying Economics and Mathematics and a member of group 6. https://github.com/zyi-yuan"
   },
   {
     "objectID": "about.html#cindy-frempong",
     "href": "about.html#cindy-frempong",
+    "title": "About",
+    "section": "Cindy Frempong",
+    "text": "Cindy Frempong"
+  },
+  {
+    "objectID": "about.html#zhenyi-yuan-1",
+    "href": "about.html#zhenyi-yuan-1",
+    "title": "About",
+    "section": "Zhenyi Yuan",
+    "text": "Zhenyi Yuan\nZhenyi is a senior studying Economics and Mathematics and a member of group 6.\nhttps://github.com/zyi-yuan"
+  },
+  {
+    "objectID": "about.html#cindy-frempong-1",
+    "href": "about.html#cindy-frempong-1",
     "title": "About",
     "section": "Cindy Frempong",
     "text": "Cindy Frempong\nCindy is a Junior studying Data Science and a member of group 6.\nhttps://github.com/CindyX0"
@@ -109,7 +130,7 @@
     "href": "about.html#turley-duque",
     "title": "About",
     "section": "Turley Duque",
-    "text": "Turley Duque\nTurley is a second year PhD student in Speech, Language and Hearing Sciences and a member of group 6.\nhttps://github.com/turleyduque\n\n\nAbout this Template.\nThis is based off of the standard Quarto website template from RStudio (2023.09.0 Build 463)."
+    "text": "Turley Duque\nTurley is a second year PhD student in Speech, Language and Hearing Sciences and a member of group 6.\nhttps://github.com/turleyduque\n\n\n\n\n\n\n\ne6501b557e20114f8e1331040a2022853329bee4\n\n\n\n\n\n\n\n\n\nAbout this Template.\nThis is based off of the standard Quarto website template from RStudio (2023.09.0 Build 463)."
   },
   {
     "objectID": "big_picture.html",
@@ -137,7 +158,7 @@
     "href": "index.html",
     "title": "MA [46]15 Final Project",
     "section": "",
-    "text": "Final Project due May 7, 2024 at 11:59pm.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 26, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\n\n\n\n\n\n\nGetting started\n\n\n\n\n\n\n\n\nDirections to set up your website and create your first post. \n\n\n\n\n\nFeb 23, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Team Meeting\n\n\n\n\n\n\n\n\nThis post details the steps you’ll take for your first team meeting. \n\n\n\n\n\nFeb 21, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\nNo matching items"
+    "text": "Final Project due May 7, 2024 at 11:59pm.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n33\n\n\n\n\n\n\n\n\n\n\n\nOct 11, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nBlog Post 1\n\n\n\n\n\n\n\n\n\n\n\nOct 11, 2024\n\n\nCindy, Zhenyi, Yueyi, Qizheng, Turley\n\n\n\n\n\n\n\n\n\n\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 26, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\n\n\n\n\n\n\nGetting started\n\n\n\n\n\n\n\n\nDirections to set up your website and create your first post. \n\n\n\n\n\nFeb 23, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Team Meeting\n\n\n\n\n\n\n\n\nThis post details the steps you’ll take for your first team meeting. \n\n\n\n\n\nFeb 21, 2024\n\n\nDaniel Sussman\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/2023-10-15-getting-started/getting-started.html",
