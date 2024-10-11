@@ -1,6 +1,6 @@
 ---
 title: "Blog Post 1"
-author: "Cindy, Zhenyi, Yueyi, Qizheng, Turley"
+author: "Cindy Frempong, Zhenyi Yuan, Yueyi Wang, Qizheng Yang, Turley Duque"
 date: "2024-10-11"
 date-modified: "2024-10-11"
 draft: FALSE
