@@ -1,9 +1,30 @@
 ---
-title: "blogpost1"
-author: ""
+title: "Blogpost 1"
+author: "Cindy, Zhenyi, Yueyi, Qizheng, Turley"
 date: "2024-10-11"
 date-modified: "2024-10-11"
 draft: FALSE
 ---
 
-dataset 1:
+**Data Set 1:**
+
+Original Link: https://www.ciesin.columbia.edu/data/sepher/ 
+
+About Dataset: This Dataset hopes to reveal information about the impacts of climate change on vulnerable populations.
+
+Number of rows and columns: 1664 columns and 86457 rows
+
+
+The dataset  was created by merging multiple publicly available datasets that include socio-economic, climate risk scores, evictions and housing variables, along with census information for the US. Datasets merged include  the CDC vulnerability index dataset, FEMA’s  national risk index dataset, and Evictions and Home mortgage data. The Home Mortgage Dataset  is managed by the Consumer Financial Protection Bureau . The Evictions dataset is compiled and managed by the Eviction Lab at Princeton University.  We also would utilize US census tract data in addition to this dataset. We can load the data and it comes cleaned, but we can clean it further to meet our requirements and needs. 
+
+A theme we want to address is how climate change incidents are impacting different demographics, from a racial and economic standpoint. At what frequency are people being displaced, who are the majority of people being displaced? What are their economic, social, and demographic backgrounds? This is especially relevant because we are currently seeing more extreme natural disasters globally and domestically, this would further inform about  the communities that are at the brunt  of such disasters. Some challenges we might encounter are challenges that often come with manipulating large datasets. When working with a huge mass of data that has numerous variables it can be difficult to come up with an extremely specific research question, also multiple variables can impact the other and correlate with each other although we might only be assessing a few. Being that the data is so detailed we have to be careful in our analysis when describing variables as correlated or not.
+
+
+
+**Data Set 2**
+
+Original Link: https://www.cdc.gov/brfss/annual_data/annual_2023.html
+
+This data set ranges over 48 states, the District of Columbia, Guam, Puerto Rico, and the US Virgin Islands in 2023. It includes self-reported health behaviors (including mental health), chronic health conditions, and use of preventive services survey for 433,323 observations. There are 350 variables detailing characteristics such as race, geography, education levels, marital status, and gender. The data was collected through phone interviews to track trends in behaviors, diseases, and conditions that pose significant risks to health over time and identify different health outcomes across populations. 
+
+By analyzing this data set, we hope to answer questions like how prevalent certain health risk behaviors are across populations, health disparities, and some variables (such as dietary habits or preventative services) that have a significant impact on the health outcomes. We can also look at mental health and find out groups that are most susceptible to mental health disorders. The data set has a clear codebook to it, but we can do some additional cleaning to make it meet our needs. Some challenges we foresee are that because this is a big data set with 350 variables, we may need to clearly select variables that correlate with our questions. 
