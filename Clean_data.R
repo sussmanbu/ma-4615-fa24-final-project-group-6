@@ -4,7 +4,7 @@ library(haven)
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
 
 # cleaned race variable
-data2 <- data2|>
+data2_clean <- data2|>
   mutate(`_RACE` = case_when(`_RACE` == 1 ~ "White",
                               `_RACE` == 2 ~ "Black", 
                              `_RACE` == 3 ~ "American Indian or Alaskan Native", 
@@ -16,7 +16,7 @@ data2 <- data2|>
 
 
 #cleaned education variable
-data2 <- data2 |>
+data2_clean <- data2 |>
   mutate(EDUCA = case_when (
     EDUCA == 1 ~ "None/Kindergarten",
     EDUCA == 2 ~ "Elementary",
