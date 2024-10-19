@@ -1,3 +1,5 @@
+
+```{r}
 library(tidyverse)
 library(haven)
 
@@ -50,4 +52,13 @@ data2_clean <- data2 |>
     EDUCA == 6 ~ "College Graduate",
     EDUCA == 9 ~ "Refused",
   ))
+```
 
+
+
+---
+title: Clean_data.R
+author: yang
+date: '2024-10-18'
+
+---
