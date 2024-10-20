@@ -25,25 +25,9 @@ The members of this team are below.
 ## Yueyi Wang
 
 Yueyi is a senior student in Economics and a member of group 6 in MA415.
-<<<<<<< HEAD
-https://github.com/yueyiw
-
-## Zhenyi Yuan
-
-Zhenyi is a senior studying Economics and Mathematics and a member of group 6.
-https://github.com/zyi-yuan
-
-## Cindy Frempong
-Cindy is a junior studying Data Science and a member of group 6.
-=======
 
 https://github.com/yueyiw
 
-## Zhenyi Yuan
-
-Zhenyi is a senior studying Economics and Mathematics and a member of group 6.
-
-https://github.com/zyi-yuan
 
 ## Cindy Frempong
 
@@ -63,7 +47,6 @@ Turley is a second year PhD student in Speech, Language and Hearing Sciences and
 
 https://github.com/turleyduque
 
->>>>>>> e6501b557e20114f8e1331040a2022853329bee4
 
 <!-- Please leave in the information below -->
 
