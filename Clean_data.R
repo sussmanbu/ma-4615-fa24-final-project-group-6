@@ -1,9 +1,7 @@
 library(tidyverse)
 library(haven)
-<<<<<<< HEAD
-data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
-=======
-
+library(dplyr)
+#HEAD
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
 
 colnames(data2)
@@ -54,4 +52,19 @@ data2_clean <- data2 |>
     EDUCA == 9 ~ "Refused",
   ))
 
->>>>>>> 68ba58c674c852d8f0ba8904044be675b20f03a9
+
+
+#cleaned insurance status variable
+data2_clean <- data2 |>
+  mutate(
+    PRIMINS1 = case_when(
+      PRIMINS1 == 1 ~ "Employer-based Insurance",
+      PRIMINS1 %in% c(3, 4, 5, 6, 7, 8, 9, 10) ~ "Government Insurance", 
+      PRIMINS1 == 2 ~ "Private Insurance", 
+      PRIMINS1 == 88 ~ "No Insurance", 
+      PRIMINS1 %in% c(77, 99) ~ "Uncertain/Refused", 
+      TRUE ~ "Other"
+    )
+  )|>
+  rename(insurace_status = PRIMINS1)
+
