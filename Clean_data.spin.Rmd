@@ -1,16 +1,8 @@
+
+```{r}
 library(tidyverse)
 library(haven)
-<<<<<<< HEAD
-data2 <- read_xpt("LLCP2023.XPT")
 
-#cleaning data
-
-#removing rows with missing values
-
-
-=======
-library(dplyr)
-#HEAD
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
 
 colnames(data2)
@@ -60,21 +52,13 @@ data2_clean <- data2 |>
     EDUCA == 6 ~ "College Graduate",
     EDUCA == 9 ~ "Refused",
   ))
+```
 
 
 
-#cleaned insurance status variable
-data2_clean <- data2 |>
-  mutate(
-    PRIMINS1 = case_when(
-      PRIMINS1 == 1 ~ "Employer-based Insurance",
-      PRIMINS1 %in% c(3, 4, 5, 6, 7, 8, 9, 10) ~ "Government Insurance", 
-      PRIMINS1 == 2 ~ "Private Insurance", 
-      PRIMINS1 == 88 ~ "No Insurance", 
-      PRIMINS1 %in% c(77, 99) ~ "Uncertain/Refused", 
-      TRUE ~ "Other"
-    )
-  )|>
-  rename(insurace_status = PRIMINS1)
+---
+title: Clean_data.R
+author: yang
+date: '2024-10-18'
 
->>>>>>> cf5e5e124ccc5f6851e9b78d6a379769e09f9356
+---
