@@ -5,3 +5,31 @@ date: "2024-10-16"
 date-modified: "2024-10-16"
 draft: FALSE
 ---
+
+**Data Exploration**
+
+We discovered that the dataset Behavioral Risk Factor Surveillance System (BRFSS) included all 50 states, the District of Columbia, and select U.S. territories. The BRFSS gathers standardized state-specific data on health risks, chronic conditions, healthcare access, and preventive services related to leading causes of death and disability in the U.S. Key topics surveyed in 2023 included health status, exercise, chronic conditions, tobacco and alcohol use, immunizations, HIV/AIDS, mental health, seatbelt use, driving behaviors, and COVID. Data is self-reported; proxy interviews are not conducted.
+
+Landline interviews collect data from randomly selected adults in households, while cellular interviews target adults living in private residences or college housing. However, the exclusion of proxy interviews limits data from individuals with disabilities who require guardians to report on their behalf, or people without phones. Additionally, there is no mention of TTY services or accommodations for individuals who are deaf or hard of hearing, potentially excluding these populations.
+
+**Starting Data Cleaning**
+
+ We started the data cleaning process, choosing variables, and forming research questions that we wanted to focus on. For example, we cleaned some of the variables by changing their numerical content into more descriptive labels using the codebook. 
+
+*Example*
+
+data2_clean <- data2 |>
+  mutate(
+    PRIMINS1 = case_when(
+      PRIMINS1 == 1 ~ "Employer-based Insurance",
+      PRIMINS1 %in% c(3, 4, 5, 6, 7, 8, 9, 10) ~ "Government Insurance", 
+      PRIMINS1 == 2 ~ "Private Insurance", 
+      PRIMINS1 == 88 ~ "No Insurance", 
+      PRIMINS1 %in% c(77, 99) ~ "Uncertain/Refused", 
+      TRUE ~ "Other"
+    )
+  )|>
+  rename(insurace_status = PRIMINS1)
+
+  
+We are looking at variables that describe Social Determinants and Health Equity such as LSATISFY which asks respondents their general satisfaction with life.  Additional variables that describe the respondent's identity such as variables that describe race, gender, age, education level, income, and insurance statutes. Potential research questions we are interested in have to do with the relationship between race and different health outcomes/mental health, and how those variables contribute to the participant’s current health state.
