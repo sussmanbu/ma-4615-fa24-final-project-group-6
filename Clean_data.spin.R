@@ -1,8 +1,5 @@
 library(tidyverse)
 library(haven)
-<<<<<<< HEAD
-data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
-=======
 
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
 
@@ -54,4 +51,3 @@ data2_clean <- data2 |>
     EDUCA == 9 ~ "Refused",
   ))
 
->>>>>>> 68ba58c674c852d8f0ba8904044be675b20f03a9
