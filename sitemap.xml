@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2024-10-11-blogpost1/blogpost1.html</loc>
-    <lastmod>2024-10-11T17:33:47.433Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2024-10-16-blog-post-2/blog-post-2.html</loc>
+    <lastmod>2024-10-20T18:24:39.789Z</lastmod>
   </url>
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-10-15-getting-started/getting-started.html</loc>
-    <lastmod>2024-10-07T13:23:29.793Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-12-20-examples/examples.html</loc>
+    <lastmod>2024-10-07T13:23:29.794Z</lastmod>
   </url>
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/index.html</loc>
-    <lastmod>2024-10-07T13:23:29.787Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-10-13-first-team-meeting/first-team-meeting.html</loc>
+    <lastmod>2024-10-07T13:23:29.792Z</lastmod>
+  </url>
+  <url>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/data.html</loc>
+    <lastmod>2024-10-07T13:23:29.778Z</lastmod>
   </url>
   <url>
     <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/big_picture.html</loc>
@@ -18,22 +22,26 @@
   </url>
   <url>
     <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/about.html</loc>
-    <lastmod>2024-10-11T15:33:24.448Z</lastmod>
+    <lastmod>2024-10-21T14:16:02.918Z</lastmod>
   </url>
   <url>
     <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/analysis.html</loc>
     <lastmod>2024-10-07T13:23:29.777Z</lastmod>
   </url>
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/data.html</loc>
-    <lastmod>2024-10-07T13:23:29.778Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/Clean_data.spin.html</loc>
+    <lastmod>2024-10-20T16:57:00.217Z</lastmod>
   </url>
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-10-13-first-team-meeting/first-team-meeting.html</loc>
-    <lastmod>2024-10-07T13:23:29.792Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/index.html</loc>
+    <lastmod>2024-10-07T13:23:29.787Z</lastmod>
   </url>
   <url>
-    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-12-20-examples/examples.html</loc>
-    <lastmod>2024-10-07T13:23:29.794Z</lastmod>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2023-10-15-getting-started/getting-started.html</loc>
+    <lastmod>2024-10-07T13:23:29.793Z</lastmod>
+  </url>
+  <url>
+    <loc>https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/posts/2024-10-11-blogpost1/blogpost1.html</loc>
+    <lastmod>2024-10-11T17:33:47.433Z</lastmod>
   </url>
 </urlset>
