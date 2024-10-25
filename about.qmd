@@ -28,23 +28,36 @@ Yueyi is a senior student in Economics and a member of group 6 in MA415.
 
 https://github.com/yueyiw
 
+
 ## Zhenyi Yuan
 
 Zhenyi is a senior studying Economics and Mathematics and a member of group 6.
 
 https://github.com/zyi-yuan
 
+<<<<<<< HEAD
 ## Cindy Frempong
 Cindy is a junior studying Data Science and a member of group 6.
 
 https://github.com/CindyX0 
 
 
+=======
+
+## Cindy Frempong
+
+Cindy is a Junior studying Data Science and a member of group 6.
+
+https://github.com/CindyX0
+
+
+>>>>>>> 814bf25c53d913140bc85524d38804b55f5422e4
 ## Qizheng Yang
 
 Qizheng is a senior studying applied mathematics and a member of group 6.
 
 https://github.com/YangQiZheng
+
 
 ## Turley Duque
 
