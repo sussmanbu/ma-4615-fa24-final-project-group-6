@@ -1,14 +1,12 @@
 library(tidyverse)
 library(haven)
-<<<<<<< HEAD
-data2 <- read_xpt("LLCP2023.XPT")
+
 
 #cleaning data
 
 #removing rows with missing values
 
 
-=======
 library(dplyr)
 #HEAD
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")
@@ -77,4 +75,3 @@ data2_clean <- data2 |>
   )|>
   rename(insurace_status = PRIMINS1)
 
->>>>>>> cf5e5e124ccc5f6851e9b78d6a379769e09f9356
