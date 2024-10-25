@@ -39,14 +39,66 @@ if ("GENHLTH" %in% colnames(data2)) {
 
 # cleaned race variable
 data2_clean <- data2|>
-  mutate(`_RACE` = case_when(`_RACE` == 1 ~ "White",
-                              `_RACE` == 2 ~ "Black", 
-                             `_RACE` == 3 ~ "American Indian or Alaskan Native", 
-         `_RACE` == 4 ~ "Asian",
-         `_RACE` == 5 ~ "Native Hawaiian or Other Pacific Islander",
-         `_RACE` == 6 ~ "Other", `_RACE` == 7 ~ "Multiracial",
-         `_RACE` == 8 ~ "Hispanic", `_RACE` == 9 ~ "Uncertain/Refused"))|>
+  mutate(`_RACE` = case_when(
+    `_RACE` == 1 ~ "White",
+    `_RACE` == 2 ~ "Black", 
+    `_RACE` == 3 ~ "American Indian or Alaskan Native", 
+    `_RACE` == 4 ~ "Asian",
+    `_RACE` == 5 ~ "Native Hawaiian or Other Pacific Islander",
+    `_RACE` == 6 ~ "Other", `_RACE` == 7 ~ "Multiracial",
+    `_RACE` == 8 ~ "Hispanic", `_RACE` == 9 ~ "Uncertain/Refused"))|>
   rename(RACE = `_RACE`)
+
+# cleaned lonely variable
+data2_clean <- data2|>  
+  mutate(`SDLONELY` = case_when(
+    `SDLONELY` == 1 ~ "Always",
+    `SDLONELY` == 2 ~ "Usually", 
+    `SDLONELY` == 3 ~ "Sometimes", 
+    `SDLONELY` == 4 ~ "Rarely",
+    `SDLONELY` == 5 ~ "Never",
+    `SDLONELY` == 7 ~ "Don’t know/Not sure", 
+    `SDLONELY` == 9 ~ "Refused"))|>
+  rename(loneliness_feeling_frequency = `SDLONELY`)
+
+
+# cleaned stressed variable
+data2_clean <- data2|>  
+  mutate(`SDHSTRE1` = case_when(
+    `SDHSTRE1` == 1 ~ "Always",
+    `SDHSTRE1` == 2 ~ "Usually", 
+    `SDHSTRE1` == 3 ~ "Sometimes", 
+    `SDHSTRE1` == 4 ~ "Rarely",
+    `SDHSTRE1` == 5 ~ "Never",
+    `SDHSTRE1` == 7 ~ "Don’t know/Not sure", 
+    `SDHSTRE1` == 9 ~ "Refused"))|>
+  rename(stress_feeling_frequency = `SDHSTRE1`)
+
+
+# cleaned stressed variable
+data2_clean <- data2|>  
+  mutate(`SDHSTRE1` = case_when(
+    `SDHSTRE1` == 1 ~ "Always",
+    `SDHSTRE1` == 2 ~ "Usually", 
+    `SDHSTRE1` == 3 ~ "Sometimes", 
+    `SDHSTRE1` == 4 ~ "Rarely",
+    `SDHSTRE1` == 5 ~ "Never",
+    `SDHSTRE1` == 7 ~ "Don’t know/Not sure", 
+    `SDHSTRE1` == 9 ~ "Refused"))|>
+  rename(stress_feeling_frequency = `SDHSTRE1`)
+
+
+# cleaned satisfaction variable
+data2_clean <- data2|>  
+  mutate(`EMTSUPRT` = case_when(
+    `EMTSUPRT` == 1 ~ "Always",
+    `EMTSUPRT` == 2 ~ "Usually", 
+    `EMTSUPRT` == 3 ~ "Sometimes", 
+    `EMTSUPRT` == 4 ~ "Rarely",
+    `EMTSUPRT` == 5 ~ "Never",
+    `EMTSUPRT` == 7 ~ "Don’t know/Not sure", 
+    `EMTSUPRT` == 9 ~ "Refused"))|>
+  rename(emotional_support = `EMTSUPRT`)
 
 
 #cleaned education variable
