@@ -6,8 +6,8 @@ library(haven)
 
 #removing rows with missing values
 
-
 library(dplyr)
+
 
 #filtered all incomplete interviews
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
@@ -82,4 +82,65 @@ data2_clean <- data2_clean |>
                                `3` = "Overweight",
                                `4` = "Obese",
                                `9999` = NA_character_))
+
+
+#Cleaning States
+# Recode '_STATE' values into state names
+
+data2_clean <- data2_clean |>
+  mutate(State = case_when(
+    _STATE == 1 ~ "Alabama", 
+    _STATE == 2 ~ "Alaska", 
+    _STATE == 4 ~ "Arizona", 
+    _STATE == 5 ~ "Arkansas", 
+    _STATE == 6 ~ "California", 
+    _STATE == 8 ~ "Colorado", 
+    _STATE == 9 ~ "Connecticut", 
+    _STATE == 10 ~ "Delaware", 
+    _STATE == 11 ~ "District of Columbia", 
+    _STATE == 12 ~ "Florida", 
+    _STATE == 13 ~ "Georgia", 
+    _STATE == 15 ~ "Hawaii", 
+    _STATE == 16 ~ "Idaho", 
+    _STATE == 17 ~ "Illinois", 
+    _STATE == 18 ~ "Indiana", 
+    _STATE == 19 ~ "Iowa", 
+    _STATE == 20 ~ "Kansas", 
+    _STATE == 22 ~ "Louisiana", 
+    _STATE == 23 ~ "Maine", 
+    _STATE == 24 ~ "Maryland", 
+    _STATE == 25 ~ "Massachusetts", 
+    _STATE == 26 ~ "Michigan", 
+    _STATE == 27 ~ "Minnesota", 
+    _STATE == 28 ~ "Mississippi", 
+    _STATE == 29 ~ "Missouri", 
+    _STATE == 30 ~ "Montana", 
+    _STATE == 31 ~ "Nebraska", 
+    _STATE == 32 ~ "Nevada", 
+    _STATE == 33 ~ "New Hampshire", 
+    _STATE == 34 ~ "New Jersey", 
+    _STATE == 35 ~ "New Mexico", 
+    _STATE == 36 ~ "New York", 
+    _STATE == 37 ~ "North Carolina", 
+    _STATE == 38 ~ "North Dakota", 
+    _STATE == 39 ~ "Ohio", 
+    _STATE == 40 ~ "Oklahoma", 
+    _STATE == 41 ~ "Oregon", 
+    _STATE == 44 ~ "Rhode Island", 
+    _STATE == 45 ~ "South Carolina", 
+    _STATE == 46 ~ "South Dakota", 
+    _STATE == 47 ~ "Tennessee", 
+    _STATE == 48 ~ "Texas", 
+    _STATE == 49 ~ "Utah", 
+    _STATE == 50 ~ "Vermont", 
+    _STATE == 51 ~ "Virginia", 
+    _STATE == 53 ~ "Washington", 
+    _STATE == 54 ~ "West Virginia", 
+    _STATE == 55 ~ "Wisconsin", 
+    _STATE == 56 ~ "Wyoming", 
+    _STATE == 66 ~ "Guam", 
+    _STATE == 72 ~ "Puerto Rico", 
+    _STATE == 78 ~ "Virgin Islands"
+  ))
+
 
