@@ -468,6 +468,29 @@ colnames(data2)</code></pre>
 ## #   PVTRESD3 &lt;dbl&gt;, CCLGHOUS &lt;dbl&gt;, CSTATE1 &lt;dbl&gt;, LANDLINE &lt;dbl&gt;,
 ## #   HHADULT &lt;dbl&gt;, SEXVAR &lt;dbl&gt;, `Health Status` &lt;fct&gt;, PHYSHLTH &lt;dbl&gt;,
 ## #   MENTHLTH &lt;dbl&gt;, POORHLTH &lt;dbl&gt;, PRIMINS1 &lt;dbl&gt;, PERSDOC3 &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code># cleaned race variable
+data2_clean &lt;- data2|&gt;
+  mutate(`_RACE` = case_when(`_RACE` == 1 ~ &quot;White&quot;,
+                              `_RACE` == 2 ~ &quot;Black&quot;, 
+                             `_RACE` == 3 ~ &quot;American Indian or Alaskan Native&quot;, 
+         `_RACE` == 4 ~ &quot;Asian&quot;,
+         `_RACE` == 5 ~ &quot;Native Hawaiian or Other Pacific Islander&quot;,
+         `_RACE` == 6 ~ &quot;Other&quot;, `_RACE` == 7 ~ &quot;Multiracial&quot;,
+         `_RACE` == 8 ~ &quot;Hispanic&quot;, `_RACE` == 9 ~ &quot;Uncertain/Refused&quot;))|&gt;
+  rename(RACE = `_RACE`)
+
+
+#cleaned education variable
+data2_clean &lt;- data2 |&gt;
+  mutate(EDUCA = case_when (
+    EDUCA == 1 ~ &quot;None/Kindergarten&quot;,
+    EDUCA == 2 ~ &quot;Elementary&quot;,
+    EDUCA == 3 ~ &quot;Some High School&quot;,
+    EDUCA == 4 ~ &quot;High School Graduate&quot;,
+    EDUCA == 5 ~ &quot;Some College&quot;,
+    EDUCA == 6 ~ &quot;College Graduate&quot;,
+    EDUCA == 9 ~ &quot;Refused&quot;,
+  ))</code></pre>
 
 
 
