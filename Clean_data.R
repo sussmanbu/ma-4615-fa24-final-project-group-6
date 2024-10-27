@@ -72,11 +72,10 @@ data2_clean <- data2|>
                               EXEROFT2 >= 101 & EXEROFT2 <= 199 ~ (EXEROFT2 - 100)*4.33, 
                               EXEROFT2 >= 201 & EXEROFT2 <= 299 ~ EXEROFT2 - 200),
          Exercise_frequency = EXEROFT1 + EXEROFT2)|>
-  select(-EXEROFT1, -EXEROFT2)
+  select(-EXEROFT1, -EXEROFT2)|>
 
 # Cleaning the BMI categories
-data2_clean <- data2_clean |> 
-  mutate(BMI_category = recode(as.factor(_BMI5CAT),
+  mutate(BMI_category = recode(as.factor(`_BMI5CAT`),
                                `1` = "Underweight",
                                `2` = "Normal Weight",
                                `3` = "Overweight",
