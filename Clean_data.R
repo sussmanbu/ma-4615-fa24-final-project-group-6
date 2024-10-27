@@ -194,4 +194,26 @@ mutate(MENTHLTH = case_when(
   MENTHLTH %in% c(77, 99) ~ NA_real_,  
   MENTHLTH == 88 ~ 0,                    
   TRUE ~ MENTHLTH                       
-)) 
+)) |>
+
+# cleaned Employment Status
+
+mutate(EMPLOY1 = case_when(
+  EMPLOY1 %in% c(1, 2) ~ "Employed",
+  EMPLOY1 %in% c(3, 4) ~ "Unemployed", 
+  EMPLOY1 %in% c(5, 6, 7, 8) ~ "Not in labor force",
+  EMPLOY1 == 9 ~ "Uncertain/Refused", 
+  TRUE ~ "Other"
+))|>
+
+
+# cleaned Metropolitan Status Code
+
+mutate(MSCODE = case_when(
+   MSCODE   == 1 ~ "In MSA - Center City",
+   MSCODE %in% c(2, 3) ~ "In MSA - Surrounding Area",
+   MSCODE == 5 ~ "Not in MSA", 
+   TRUE ~ "Other/Unknown" 
+  )
+)
+  
