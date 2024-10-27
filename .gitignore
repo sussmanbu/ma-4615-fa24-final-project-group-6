@@ -2,9 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
-
 /.quarto/
 /dataset-ignore/
 .DS_Store
 Thumbs.db
 /_site/
+Clean_data.spin.R
