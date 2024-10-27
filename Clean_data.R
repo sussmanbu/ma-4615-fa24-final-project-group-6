@@ -195,3 +195,28 @@ mutate(MENTHLTH = case_when(
   MENTHLTH == 88 ~ 0,                    
   TRUE ~ MENTHLTH                       
 )) 
+
+#clean age category
+
+  mutate(
+    AGE_GROUP = case_when(
+      `_AGE_G` == 1 ~ "Age 18 to 24",
+      `_AGE_G` == 2 ~ "Age 25 to 34",
+      `_AGE_G` == 3 ~ "Age 35 to 44",
+      `_AGE_G` == 4 ~ "Age 45 to 54",
+      `_AGE_G` == 5 ~ "Age 55 to 64",
+      `_AGE_G` == 6 ~ "Age 65 or older",
+      TRUE ~ NA_character_ 
+    )) 
+
+#cleaning medical cost
+  mutate(
+    medical_cost = recode(
+      as.factor(`MEDCOST1`),
+      `1` = "Yes",
+      `2` = "No",
+      `7` = "Don’t know/Not sure",
+      `9` = "Refused"
+    ))
+
+  
