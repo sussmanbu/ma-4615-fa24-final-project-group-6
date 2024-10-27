@@ -215,7 +215,7 @@ mutate(MSCODE = case_when(
    MSCODE == 5 ~ "Not in MSA", 
    TRUE ~ "Other/Unknown" 
   )
-)
+)|>
   
 
 
@@ -231,7 +231,7 @@ mutate(MSCODE = case_when(
       `_AGE_G` == 5 ~ "Age 55 to 64",
       `_AGE_G` == 6 ~ "Age 65 or older",
       TRUE ~ NA_character_ 
-    )) 
+    )) |>
 
 #cleaning medical cost
   mutate(
@@ -241,6 +241,6 @@ mutate(MSCODE = case_when(
       `2` = "No",
       `7` = "Don’t know/Not sure",
       `9` = "Refused"
-    ))
+    ))|>
 
 
