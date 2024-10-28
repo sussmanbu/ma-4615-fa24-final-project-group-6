@@ -196,29 +196,6 @@ mutate(MENTHLTH = case_when(
   TRUE ~ MENTHLTH                       
 )) |>
 
-# cleaned Employment Status
-
-mutate(EMPLOY1 = case_when(
-  EMPLOY1 %in% c(1, 2) ~ "Employed",
-  EMPLOY1 %in% c(3, 4) ~ "Unemployed", 
-  EMPLOY1 %in% c(5, 6, 7, 8) ~ "Not in labor force",
-  EMPLOY1 == 9 ~ "Uncertain/Refused", 
-  TRUE ~ "Other"
-))|>
-
-
-# cleaned Metropolitan Status Code
-
-mutate(MSCODE = case_when(
-   MSCODE   == 1 ~ "In MSA - Center City",
-   MSCODE %in% c(2, 3) ~ "In MSA - Surrounding Area",
-   MSCODE == 5 ~ "Not in MSA", 
-   TRUE ~ "Other/Unknown" 
-  )
-)|>
-  
-
-
 
 #clean age category
 
@@ -241,6 +218,44 @@ mutate(MSCODE = case_when(
       `2` = "No",
       `7` = "Don’t know/Not sure",
       `9` = "Refused"
-    ))
+    ))|>
 
+# cleaned Employment Status
 
+mutate(EMPLOY1 = case_when(
+  EMPLOY1 %in% c(1, 2) ~ "Employed",
+  EMPLOY1 %in% c(3, 4) ~ "Unemployed", 
+  EMPLOY1 %in% c(5, 6, 7, 8) ~ "Not in labor force",
+  EMPLOY1 == 9 ~ "Uncertain/Refused", 
+  TRUE ~ "Other"
+  ))|>
+  
+  
+  # cleaned Metropolitan Status Code
+  
+mutate(MSCODE = case_when(
+    MSCODE   == 1 ~ "In MSA - Center City",
+    MSCODE %in% c(2, 3) ~ "In MSA - Surrounding Area",
+    MSCODE == 5 ~ "Not in MSA", 
+    TRUE ~ "Other/Unknown" 
+  )
+  )|>
+
+mutate(
+  Alcohol_Days = case_when(
+    ALCDAY5 %in% 1:30 ~ as.character(ALCDAY5),
+    ALCDAY5 == 77 ~ "Don't know/Not sure",
+    ALCDAY5 == 99 ~ "Refused",
+    is.na(ALCDAY5) ~ "Not asked or Missing",
+    TRUE ~ as.character(ALCDAY5)
+  )) |>
+  
+  
+  mutate(Physical_Activity_Index = case_when(
+    `_PAINDX3` == 1 ~ "Low",
+    `_PAINDX3` == 2 ~ "Moderate",
+    `_PAINDX3` == 3 ~ "High",
+    `_PAINDX3` == 9 ~ "Unknown",
+    is.na(`_PAINDX3`) ~ "Not asked or Missing",
+    TRUE ~ "Other"
+  ))
