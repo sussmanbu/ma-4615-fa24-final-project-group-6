@@ -1,0 +1,33 @@
+---
+title: "Blog Post 3"
+author: ""
+date: "2024-10-27"
+date-modified: "2024-10-27"
+draft: FALSE
+---
+
+We continued cleaning our dataset and identifying variables that should be cleaned. These variables include categories for identity, mental and physical health, life habits, information about substance use, adverse childhood experiences and chronic health conditions. Besides changing some string variables to meaningful representations, we also changed some numerical variables to usable values that we can use in analysis methods such as linear regression.
+```{r}
+# exercise frequency per month
+library(tidyverse)
+library(haven)
+data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
+  filter(DISPCODE == 1100)|>
+ mutate(EXEROFT1 = case_when(EXEROFT1 %in% c(77,99) ~ NA,
+                              EXEROFT1 >= 101 & EXEROFT1 <= 199 ~ (EXEROFT1 - 100)*4.33, 
+                              EXEROFT1 >= 201 & EXEROFT1 <= 299 ~ EXEROFT1 - 200),
+         EXEROFT2 = case_when(EXEROFT2 == 77 ~ 0,
+                              EXEROFT2 == 99 ~ 0,
+                              EXEROFT2 >= 101 & EXEROFT2 <= 199 ~ (EXEROFT2 - 100)*4.33, 
+                              EXEROFT2 >= 201 & EXEROFT2 <= 299 ~ EXEROFT2 - 200),
+         Exercise_frequency = EXEROFT1 + EXEROFT2)|>
+  select(Exercise_frequency)
+print(data2)
+```
+
+We understand that our dataset is large so we may need to clean more variables in the future if needed. 
+
+This week, we also intended to create more specific research questions for our dataset, and are in the process of thinking about them. For instance, do factors like life habits, race, and insurance status contribute to poorer health outcomes? Since there is so much to focus on it will take time to come up with more detailed questions, but this is our general direction.
+
+
+For this survey, proxies were unavailable, and it was only accessible to those that had phones, and this excludes specific groups of people (disabled, hearing disorders, mental disabilities, any disability that requires alternate forms of communication) from the data, especially since this is healthcare data, it's important to be as inclusive as possible. This data could be misused if we are cherry-picking data. It is important to incorporate sub-questions from the data sections so there is an accurate breadth for the questions we are asking. Depending on what variables you include it is possible to skew the information or represent it inaccurately. 
