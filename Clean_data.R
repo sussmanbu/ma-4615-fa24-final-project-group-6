@@ -12,32 +12,32 @@ library(dplyr)
 #filtered all incomplete interviews
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
   filter(DISPCODE == 1100)
-  
+
 
 
 # cleaned general health condition
 data2_clean <- data2|>
-    mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
-                                  `2` = "Very Good",
-                                  `3` = "Good",
-                                  `4` = "Fair",
-                                  `5` = "Poor",
-                                  `7` = "Don’t Know/Not Sure",
-                                  `9` = "Refused"))|>
-
-# cleaned race variable
-
+  mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
+                                `2` = "Very Good",
+                                `3` = "Good",
+                                `4` = "Fair",
+                                `5` = "Poor",
+                                `7` = "Don’t Know/Not Sure",
+                                `9` = "Refused"))|>
+  
+  # cleaned race variable
+  
   mutate(`_RACE` = case_when(`_RACE` == 1 ~ "White",
-                              `_RACE` == 2 ~ "Black", 
+                             `_RACE` == 2 ~ "Black", 
                              `_RACE` == 3 ~ "American Indian or Alaskan Native", 
-         `_RACE` == 4 ~ "Asian",
-         `_RACE` == 5 ~ "Native Hawaiian or Other Pacific Islander",
-         `_RACE` == 6 ~ "Other", `_RACE` == 7 ~ "Multiracial",
-         `_RACE` == 8 ~ "Hispanic", `_RACE` == 9 ~ "Uncertain/Refused"))|>
+                             `_RACE` == 4 ~ "Asian",
+                             `_RACE` == 5 ~ "Native Hawaiian or Other Pacific Islander",
+                             `_RACE` == 6 ~ "Other", `_RACE` == 7 ~ "Multiracial",
+                             `_RACE` == 8 ~ "Hispanic", `_RACE` == 9 ~ "Uncertain/Refused"))|>
   rename(RACE = `_RACE`)|>
-
-
-# cleaned lonely variable
+  
+  
+  # cleaned lonely variable
   mutate(`SDLONELY` = case_when(
     `SDLONELY` == 1 ~ "Always",
     `SDLONELY` == 2 ~ "Usually", 
@@ -47,9 +47,9 @@ data2_clean <- data2|>
     `SDLONELY` == 7 ~ "Don’t know/Not sure", 
     `SDLONELY` == 9 ~ "Refused"))|>
   rename(loneliness_feeling_frequency = `SDLONELY`)|>
-
-
-# cleaned stressed variable
+  
+  
+  # cleaned stressed variable
   mutate(`SDHSTRE1` = case_when(
     `SDHSTRE1` == 1 ~ "Always",
     `SDHSTRE1` == 2 ~ "Usually", 
@@ -59,10 +59,10 @@ data2_clean <- data2|>
     `SDHSTRE1` == 7 ~ "Don’t know/Not sure", 
     `SDHSTRE1` == 9 ~ "Refused"))|>
   rename(stress_feeling_frequency = `SDHSTRE1`)|>
-
-
-
-# cleaned satisfaction variable
+  
+  
+  
+  # cleaned satisfaction variable
   mutate(`EMTSUPRT` = case_when(
     `EMTSUPRT` == 1 ~ "Always",
     `EMTSUPRT` == 2 ~ "Usually", 
@@ -72,9 +72,9 @@ data2_clean <- data2|>
     `EMTSUPRT` == 7 ~ "Don’t know/Not sure", 
     `EMTSUPRT` == 9 ~ "Refused"))|>
   rename(emotional_support = `EMTSUPRT`)|>
-
-
-#cleaned education variable
+  
+  
+  #cleaned education variable
   mutate(EDUCA = case_when (
     EDUCA == 1 ~ "None/Kindergarten",
     EDUCA == 2 ~ "Elementary",
@@ -84,10 +84,10 @@ data2_clean <- data2|>
     EDUCA == 6 ~ "College Graduate",
     EDUCA == 9 ~ "Refused",
   ))|>
-
-
-
-#cleaned insurance status variable
+  
+  
+  
+  #cleaned insurance status variable
   mutate(
     PRIMINS1 = case_when(
       PRIMINS1 == 1 ~ "Employer-based Insurance",
@@ -99,8 +99,8 @@ data2_clean <- data2|>
     )
   )|>
   rename(insurace_status = PRIMINS1)|>
-
-# cleaned frequency of exercise per month
+  
+  # cleaned frequency of exercise per month
   mutate(EXEROFT1 = case_when(EXEROFT1 %in% c(77,99) ~ NA,
                               EXEROFT1 >= 101 & EXEROFT1 <= 199 ~ (EXEROFT1 - 100)*4.33, 
                               EXEROFT1 >= 201 & EXEROFT1 <= 299 ~ EXEROFT1 - 200),
@@ -110,9 +110,9 @@ data2_clean <- data2|>
                               EXEROFT2 >= 201 & EXEROFT2 <= 299 ~ EXEROFT2 - 200),
          Exercise_frequency = EXEROFT1 + EXEROFT2)|>
   select(-EXEROFT1, -EXEROFT2)|>
-
   
-# Cleaning the BMI categories
+  
+  # Cleaning the BMI categories
   mutate(BMI_category = recode(as.factor(`_BMI5CAT`),
                                `1` = "Underweight",
                                `2` = "Normal Weight",
@@ -181,24 +181,24 @@ data2_clean <- data2_clean |>
   ))|>
   
   
-# cleaned number of days physical health unwell last month
+  # cleaned number of days physical health unwell last month
   mutate(PHYSHLTH = case_when(
     PHYSHLTH %in% c(77, 99) ~ NA_real_,  
     PHYSHLTH == 88 ~ 0,                    
     TRUE ~ PHYSHLTH                        
   )) |> 
-
-
-# cleaned number of days mental health unwell last month
-mutate(MENTHLTH = case_when(
-  MENTHLTH %in% c(77, 99) ~ NA_real_,  
-  MENTHLTH == 88 ~ 0,                    
-  TRUE ~ MENTHLTH                       
-)) |>
-
-
-#clean age category
-
+  
+  
+  # cleaned number of days mental health unwell last month
+  mutate(MENTHLTH = case_when(
+    MENTHLTH %in% c(77, 99) ~ NA_real_,  
+    MENTHLTH == 88 ~ 0,                    
+    TRUE ~ MENTHLTH                       
+  )) |>
+  
+  
+  #clean age category
+  
   mutate(
     AGE_GROUP = case_when(
       `_AGE_G` == 1 ~ "Age 18 to 24",
@@ -209,8 +209,8 @@ mutate(MENTHLTH = case_when(
       `_AGE_G` == 6 ~ "Age 65 or older",
       TRUE ~ NA_character_ 
     )) |>
-
-#cleaning medical cost
+  
+  #cleaning medical cost
   mutate(
     medical_cost = recode(
       as.factor(`MEDCOST1`),
@@ -219,37 +219,34 @@ mutate(MENTHLTH = case_when(
       `7` = "Don’t know/Not sure",
       `9` = "Refused"
     ))|>
-
-# cleaned Employment Status
-
-mutate(EMPLOY1 = case_when(
-  EMPLOY1 %in% c(1, 2) ~ "Employed",
-  EMPLOY1 %in% c(3, 4) ~ "Unemployed", 
-  EMPLOY1 %in% c(5, 6, 7, 8) ~ "Not in labor force",
-  EMPLOY1 == 9 ~ "Uncertain/Refused", 
-  TRUE ~ "Other"
+  
+  # cleaned Employment Status
+  
+  mutate(EMPLOY1 = case_when(
+    EMPLOY1 %in% c(1, 2) ~ "Employed",
+    EMPLOY1 %in% c(3, 4) ~ "Unemployed", 
+    EMPLOY1 %in% c(5, 6, 7, 8) ~ "Not in labor force",
+    EMPLOY1 == 9 ~ "Uncertain/Refused", 
+    TRUE ~ "Other"
   ))|>
   
   
   # cleaned Metropolitan Status Code
   
-mutate(MSCODE = case_when(
+  mutate(MSCODE = case_when(
     MSCODE   == 1 ~ "In MSA - Center City",
     MSCODE %in% c(2, 3) ~ "In MSA - Surrounding Area",
     MSCODE == 5 ~ "Not in MSA", 
     TRUE ~ "Other/Unknown" 
   )
   )|>
-
-mutate(
-  Alcohol_Days = case_when(
-    ALCDAY5 %in% 1:30 ~ as.character(ALCDAY5),
-    ALCDAY5 == 77 ~ "Don't know/Not sure",
-    ALCDAY5 == 99 ~ "Refused",
-    is.na(ALCDAY5) ~ "Not asked or Missing",
-    TRUE ~ as.character(ALCDAY5)
-  )) |>
   
+  
+  mutate(AVEDRNK3 = case_when(
+    AVEDRNK3 %in% c(77, 99) ~ NA_real_,  
+    AVEDRNK3 == 88 ~ 0, 
+    TRUE ~ AVEDRNK3)) |> 
+  rename(Alcohol_Drinks_Per_Day = `AVEDRNK3`) |>
   
   mutate(Physical_Activity_Index = case_when(
     `_PAINDX3` == 1 ~ "Low",
