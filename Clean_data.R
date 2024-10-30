@@ -24,6 +24,7 @@ data2_clean <- data2|>
                                   `5` = "Poor",
                                   `7` = "Don’t Know/Not Sure",
                                   `9` = "Refused"))|>
+  
 
 # cleaned race variable
 
@@ -109,7 +110,9 @@ data2_clean <- data2|>
                               EXEROFT2 >= 101 & EXEROFT2 <= 199 ~ (EXEROFT2 - 100)*4.33, 
                               EXEROFT2 >= 201 & EXEROFT2 <= 299 ~ EXEROFT2 - 200),
          Exercise_frequency = EXEROFT1 + EXEROFT2)|>
+  filter(!(is.na(Exercise_frequency)))|>
   select(-EXEROFT1, -EXEROFT2)|>
+  
 
   
 # Cleaning the BMI categories
