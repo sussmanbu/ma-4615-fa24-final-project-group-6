@@ -259,3 +259,11 @@ data2_clean <- data2_clean |>
     is.na(`_PAINDX3`) ~ "Not asked or Missing",
     TRUE ~ "Other"
   ))
+
+data2_clean|>
+  ggplot(aes(as.factor(Health_status)))+
+  geom_histogram(stat = "count")
+
+data2_clean|>
+  ggplot(aes(PHYSHLTH))+
+  geom_histogram(stat = "count")
