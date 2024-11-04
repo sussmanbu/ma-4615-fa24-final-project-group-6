@@ -17,16 +17,16 @@ data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
 
 # cleaned general health condition
 data2_clean <- data2|>
-  mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
-                                `2` = "Very Good",
-                                `3` = "Good",
-                                `4` = "Fair",
-                                `5` = "Poor",
-                                `7` = "Don’t Know/Not Sure",
-                                `9` = "Refused"))|>
+    mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
+                                  `2` = "Very Good",
+                                  `3` = "Good",
+                                  `4` = "Fair",
+                                  `5` = "Poor",
+                                  `7` = "Don’t Know/Not Sure",
+                                  `9` = "Refused"))|>
   
-  # cleaned race variable
-  
+
+# cleaned race variable
   mutate(`_RACE` = case_when(`_RACE` == 1 ~ "White",
                              `_RACE` == 2 ~ "Black", 
                              `_RACE` == 3 ~ "American Indian or Alaskan Native", 
@@ -109,7 +109,9 @@ data2_clean <- data2|>
                               EXEROFT2 >= 101 & EXEROFT2 <= 199 ~ (EXEROFT2 - 100)*4.33, 
                               EXEROFT2 >= 201 & EXEROFT2 <= 299 ~ EXEROFT2 - 200),
          Exercise_frequency = EXEROFT1 + EXEROFT2)|>
+  filter(!(is.na(Exercise_frequency)))|>
   select(-EXEROFT1, -EXEROFT2)|>
+
   
   
   # Cleaning the BMI categories
@@ -241,12 +243,13 @@ data2_clean <- data2_clean |>
   )
   )|>
   
-  
+  # number of drinks per day
   mutate(AVEDRNK3 = case_when(
     AVEDRNK3 %in% c(77, 99) ~ NA_real_,  
     AVEDRNK3 == 88 ~ 0, 
     TRUE ~ AVEDRNK3)) |> 
   rename(Alcohol_Drinks_Per_Day = `AVEDRNK3`) |>
+  
   
   mutate(Physical_Activity_Index = case_when(
     `_PAINDX3` == 1 ~ "Low",
@@ -257,6 +260,7 @@ data2_clean <- data2_clean |>
     TRUE ~ "Other"
   ))
 
+<<<<<<< HEAD
 
 # Turley playing
 anova_data <- data2_clean %>%
@@ -283,3 +287,12 @@ Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = He
 # Print the plot
 print(Phys_Health)
 
+=======
+data2_clean|>
+  ggplot(aes(as.factor(Health_status)))+
+  geom_histogram(stat = "count")
+
+data2_clean|>
+  ggplot(aes(PHYSHLTH))+
+  geom_histogram(stat = "count")
+>>>>>>> 8d7db0d51f43ea4e61da1bef6372733076c4e155
