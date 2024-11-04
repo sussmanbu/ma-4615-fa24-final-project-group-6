@@ -256,3 +256,30 @@ data2_clean <- data2_clean |>
     is.na(`_PAINDX3`) ~ "Not asked or Missing",
     TRUE ~ "Other"
   ))
+
+
+# Turley playing
+anova_data <- data2_clean %>%
+  mutate(Health_status = as.factor(Health_status),
+         stress_feeling_frequency = as.factor(stress_feeling_frequency),
+         emotional_support = as.factor(emotional_support),
+         PHYSHLTH = as.numeric(PHYSHLTH))
+
+interaction <- aov(PHYSHLTH ~ Health_status * stress_feeling_frequency + emotional_support, data = anova_data)
+
+summary(interaction)
+
+
+library(ggplot2)
+
+Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = Health_status)) + 
+  theme_bw() +  
+  geom_boxplot(width=0.1) +
+  scale_fill_brewer(palette = "Accent") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), aspect.ratio = 1) + 
+  labs(x = "Health Status",
+       y = "Days of Physical Health Unwell Last Month")
+
+# Print the plot
+print(Phys_Health)
+
