@@ -287,6 +287,29 @@ Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = He
 # Print the plot
 print(Phys_Health)
 
+
+
+# relationship between exercise and physical health 
+Phys_health_exercise <- ggplot(data2_clean, aes(x = PHYSHLTH, y = Exercise_frequency)) +
+  theme_bw() +
+  geom_point()
+
+print(Phys_health_exercise)
+
+
+# relationship between loneliness feeling frequency and mental health
+ment_health_loneliness <- ggplot(data2_clean, aes(x = factor(loneliness_feeling_frequency, 
+                                                             levels = c("Always", "Usually", "Sometimes", "Rarely", "Never")),
+                                                  y = MENTHLTH)) +
+  theme_bw() +
+  geom_col() + 
+  labs(x = "Frequency of loneliness feeling",
+       y = "Days in past month of unwell mental health")
+
+print(ment_health_loneliness)
+
+
+
 =======
 data2_clean|>
   ggplot(aes(as.factor(Health_status)))+
