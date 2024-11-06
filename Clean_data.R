@@ -1,5 +1,6 @@
 library(tidyverse)
 library(haven)
+library(ggplot2)
 
 
 #cleaning data
@@ -268,6 +269,7 @@ data2_clean|>
   ggplot(aes(PHYSHLTH))+
   geom_histogram(stat = "count")
 
+<<<<<<< HEAD
 data2_regre <- data2_clean|>
   filter(!(Health_status == "Fair"))|>
   mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
@@ -278,3 +280,71 @@ logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day +
                  data2_regre$heart_attack)
 
 summary(logistic)
+=======
+
+# plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
+
+# relationships between exsposure to drug-use at home and current drug use frequency
+
+adverse_drug <- data2_clean %>%
+  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+               names_to = "ExposureType", 
+               values_to = "ExposureLevel") %>%
+  pivot_longer(cols = c(ECIGNOW2, SMOKDAY2), 
+               names_to = "CurrentUseType", 
+               values_to = "CurrentUseFrequency")
+ggplot(adverse_drug, aes(x = ExposureLevel, y = CurrentUseFrequency)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_grid(CurrentUseType ~ ExposureType, scales = "free") + # create facets for current use types and exposure types
+  labs(
+    title = "Relationships Between Early Exposure to Drug Use and Current Drug Use",
+    x = "Exposure to Drugs at Home",
+    y = "Current Drug Use Frequency"
+  ) +
+  theme_minimal()
+
+
+# statistical analysis method
+
+
+## marijuana and drinking frequency w adverse childhood
+mari_alch <- data2_clean |>
+select(ACEDEPRS, ACEDRINK, ACEDRUGS, AVEDRNK3, MARIJAN1)
+mari_alch_combined <- mari_alch |>
+  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+               names_to = "ExposureType", 
+               values_to = "ExposureLevel") |>
+  pivot_longer(cols = c(AVEDRNK3, MARIJAN1), 
+               names_to = "Substance", 
+               values_to = "Frequency")
+
+ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
+  geom_point(alpha = 0.6) + 
+  geom_smooth(method = "lm", se = FALSE) +  
+  facet_wrap(~ Substance) +  
+  labs(
+    title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
+    x = "Exposure Level",
+    y = "Frequency"
+     ) +
+  theme_minimal() 
+  
+
+# linear fitting for both frequencies
+alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = data2_clean)
+summary(alch_model)
+
+
+mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = data2_clean)
+summary(mari_model)
+
+  
+  
+  
+#relationship between abusive childhood experiences and mental health struggles
+
+#%>% select(`ACEHURT1`, `ACESWEAR`,`ACETOUCH`, `ACEADSAF`)
+#mental health 
+
+>>>>>>> ecd77ca7a62c58366628968859d4408bf6adb734
