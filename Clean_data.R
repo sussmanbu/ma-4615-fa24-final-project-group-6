@@ -267,3 +267,14 @@ data2_clean|>
 data2_clean|>
   ggplot(aes(PHYSHLTH))+
   geom_histogram(stat = "count")
+
+data2_regre <- data2_clean|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
+  filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
+  mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
+  
+logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day + 
+                 data2_regre$heart_attack)
+
+summary(logistic)
