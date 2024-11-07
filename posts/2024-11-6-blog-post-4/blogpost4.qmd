@@ -1,0 +1,51 @@
+---
+title: "Blog Post 4"
+author: ""
+date: "2024-11-6"
+date-modified: "2024-11-6"
+draft: FALSE
+---
+
+We explored various relationships including, exercise frequency and physical health, loneliness feeling frequency and mental health, health status and drinks per day, BMI index and smoking frequency, economic standing, race, and insurance access, and early drug exposure and current drug use tendencies using plots and statistical modeling.
+
+In regard to the breadth of the data, we’d like to assess how factors in different areas influence each other. By understanding how categories such as adverse childhood experiences, mental and physical health factors, economic standing, insurance access, interact , overlap and compound. When it comes to the depth of the data, understanding each categories in depth by analyzing the variables for each category creates a better representation and understanding of the data in all its complexities. For example, for breadth, we can see how physical health factors interact with variables outside of that category (like mental health for instance) and for breadth we can relay and compare variables within the category (BMI, physical activity frequency, and smoking Patterns)
+
+We built a model that visualized the relationship between early drug exposure in the home which is categorized as an adverse childhood experience, and current drug use tendencies. Tendencies include the use of e-cigarettes and smoking on one plot and marijuana and alcohol usage frequency on another plot. A linear fitting was performed for both models in order to understand correlations between response and predictor variables.
+
+```{r}
+source(
+  "scripts/load_and_clean_data.R",
+  echo = FALSE 
+)
+adverse_drug <- data2_clean %>%
+  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+               names_to = "ExposureType", 
+               values_to = "ExposureLevel") %>%
+  pivot_longer(cols = c(ECIGNOW2, SMOKDAY2), 
+               names_to = "CurrentUseType", 
+               values_to = "CurrentUseFrequency")
+ggplot(adverse_drug, aes(x = ExposureLevel, y = CurrentUseFrequency)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_grid(CurrentUseType ~ ExposureType) + 
+  labs(
+    title = "Relationships Between Early Exposure to Drug Use and Current Drug Use",
+    x = "Exposure to Drugs at Home",
+    y = "Current Drug Use Frequency"
+  ) 
+```
+
+We started building a logistic model between physical health status and alcohol they drink per day along with a binary variable heart attack as fixed effect. The first step we made was to transfer our dependent variable, which is `health_statuts` (categorical variable) into a binary variable that only indicates people's health status as well or unwell. We then filtered the answers of “fair” in this variable to make it more indicative. We found that there is a positive correlation between health status and drinks per day, which indicates a potentially reversed causality relationship. People with better health status tend to drink more.
+
+```{r}
+data2_regre <- data2_clean|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
+  filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
+  mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
+  
+logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day + 
+                 data2_regre$heart_attack)
+
+print(logistic)
+```

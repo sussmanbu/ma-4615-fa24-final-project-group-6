@@ -269,7 +269,8 @@ data2_clean|>
   ggplot(aes(PHYSHLTH))+
   geom_histogram(stat = "count")
 
-<<<<<<< HEAD
+
+#logistic regression on health status vs alcohol drinks per day and heart attack
 data2_regre <- data2_clean|>
   filter(!(Health_status == "Fair"))|>
   mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
@@ -280,7 +281,7 @@ logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day +
                  data2_regre$heart_attack)
 
 summary(logistic)
-=======
+
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
 
@@ -346,5 +347,3 @@ summary(mari_model)
 
 #%>% select(`ACEHURT1`, `ACESWEAR`,`ACETOUCH`, `ACEADSAF`)
 #mental health 
-
->>>>>>> ecd77ca7a62c58366628968859d4408bf6adb734
