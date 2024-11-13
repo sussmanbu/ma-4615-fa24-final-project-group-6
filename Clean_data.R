@@ -261,6 +261,56 @@ data2_clean <- data2_clean |>
     TRUE ~ "Other"
   ))
 
+
+# Turley playing
+anova_data <- data2_clean %>%
+  mutate(Health_status = as.factor(Health_status),
+         stress_feeling_frequency = as.factor(stress_feeling_frequency),
+         emotional_support = as.factor(emotional_support),
+         PHYSHLTH = as.numeric(PHYSHLTH))
+
+interaction <- aov(PHYSHLTH ~ Health_status * stress_feeling_frequency + emotional_support, data = anova_data)
+
+summary(interaction)
+
+
+library(ggplot2)
+
+Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = Health_status)) + 
+  theme_bw() +  
+  geom_boxplot(width=0.1) +
+  scale_fill_brewer(palette = "Accent") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), aspect.ratio = 1) + 
+  labs(x = "Health Status",
+       y = "Days of Physical Health Unwell Last Month")
+
+# Print the plot
+print(Phys_Health)
+
+
+
+# relationship between exercise and physical health 
+Phys_health_exercise <- ggplot(data2_clean, aes(x = PHYSHLTH, y = Exercise_frequency)) +
+  theme_bw() +
+  geom_point()
+
+print(Phys_health_exercise)
+
+
+# relationship between loneliness feeling frequency and mental health
+ment_health_loneliness <- ggplot(data2_clean, aes(x = factor(loneliness_feeling_frequency, 
+                                                             levels = c("Always", "Usually", "Sometimes", "Rarely", "Never")),
+                                                  y = MENTHLTH)) +
+  theme_bw() +
+  geom_col() + 
+  labs(x = "Frequency of loneliness feeling",
+       y = "Days in past month of unwell mental health")
+
+print(ment_health_loneliness)
+
+
+
+
 data2_clean|>
   ggplot(aes(as.factor(Health_status)))+
   geom_histogram(stat = "count")
@@ -268,6 +318,20 @@ data2_clean|>
 data2_clean|>
   ggplot(aes(PHYSHLTH))+
   geom_histogram(stat = "count")
+
+
+
+#logistic regression on health status vs alcohol drinks per day and heart attack
+data2_regre <- data2_clean|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
+  filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
+  mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
+  
+logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day + 
+                 data2_regre$heart_attack)
+
+summary(logistic)
 
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
