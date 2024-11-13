@@ -11,7 +11,7 @@ library(dplyr)
 
 
 #filtered all incomplete interviews
-data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
+data2 <- read_xpt("dataset-ignore/LLCP2023.XPT ")|>
   filter(DISPCODE == 1100)
 
 
@@ -329,9 +329,9 @@ summary(mari_model)
 
   
   
-  
 #relationship between abusive childhood experiences and mental health struggles
 
 #%>% select(`ACEHURT1`, `ACESWEAR`,`ACETOUCH`, `ACEADSAF`)
 #mental health 
+
 
