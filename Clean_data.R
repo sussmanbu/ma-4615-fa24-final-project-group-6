@@ -298,7 +298,7 @@ interaction <- aov(PHYSHLTH ~ Health_status * stress_feeling_frequency + emotion
 summary(interaction)
 
 
-library(ggplot2)
+library(ggplot2) 
 
 Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = Health_status)) + 
   theme_bw() +  
