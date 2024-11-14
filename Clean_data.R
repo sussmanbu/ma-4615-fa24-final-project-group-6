@@ -1,7 +1,7 @@
 library(tidyverse)
 library(haven)
 library(ggplot2)
-
+library(readxl)
 
 #cleaning data
 
@@ -11,13 +11,33 @@ library(dplyr)
 
 
 #filtered all incomplete interviews
+<<<<<<< HEAD
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT ")|>
+=======
+brfss <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
+>>>>>>> 2b582afc304a4b66f9866827101200d7e221be50
   filter(DISPCODE == 1100)
+
+
+#new dataset
+income_data <- read_excel("dataset-ignore/Table.xlsx", skip = 4)
+income_clean <- income_data|>
+  select(-LineCode)|>
+  mutate(`2023` = if_else(`2023` == "(NA)", NA, `2023`))|>
+  pivot_wider(names_from = Description, values_from = `2023`)|>
+  head(-13)|>
+  select_if(~ !any(is.na(.)))|>
+  filter(GeoFips != "00000")|>
+  mutate(across(`Real GDP (millions of chained 2017 dollars) 1` :
+                  `Total employment (number of jobs)`, as.numeric))
+  
+  
+  
 
 
 
 # cleaned general health condition
-data2_clean <- data2|>
+brfss_clean <- brfss|>
     mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
                                   `2` = "Very Good",
                                   `3` = "Good",
@@ -127,7 +147,7 @@ data2_clean <- data2|>
 #Cleaning States
 # Recode '`_STATE`' values into state names
 
-data2_clean <- data2_clean |>
+brfss_clean <- brfss_clean |>
   mutate(State = case_when(
     `_STATE` == 1 ~ "Alabama", 
     `_STATE` == 2 ~ "Alaska", 
@@ -263,7 +283,7 @@ data2_clean <- data2_clean |>
 
 
 # Turley playing
-anova_data <- data2_clean %>%
+anova_data <- brfss_clean %>%
   mutate(Health_status = as.factor(Health_status),
          stress_feeling_frequency = as.factor(stress_feeling_frequency),
          emotional_support = as.factor(emotional_support),
@@ -290,7 +310,7 @@ print(Phys_Health)
 
 
 # relationship between exercise and physical health 
-Phys_health_exercise <- ggplot(data2_clean, aes(x = PHYSHLTH, y = Exercise_frequency)) +
+Phys_health_exercise <- ggplot(brfss_clean, aes(x = PHYSHLTH, y = Exercise_frequency)) +
   theme_bw() +
   geom_point()
 
@@ -298,7 +318,7 @@ print(Phys_health_exercise)
 
 
 # relationship between loneliness feeling frequency and mental health
-ment_health_loneliness <- ggplot(data2_clean, aes(x = factor(loneliness_feeling_frequency, 
+ment_health_loneliness <- ggplot(brfss_clean, aes(x = factor(loneliness_feeling_frequency, 
                                                              levels = c("Always", "Usually", "Sometimes", "Rarely", "Never")),
                                                   y = MENTHLTH)) +
   theme_bw() +
@@ -311,25 +331,25 @@ print(ment_health_loneliness)
 
 
 
-data2_clean|>
+brfss_clean|>
   ggplot(aes(as.factor(Health_status)))+
   geom_histogram(stat = "count")
 
-data2_clean|>
+brfss_clean|>
   ggplot(aes(PHYSHLTH))+
   geom_histogram(stat = "count")
 
 
 
 #logistic regression on health status vs alcohol drinks per day and heart attack
-data2_regre <- data2_clean|>
+brfss_regre <- brfss_clean|>
   filter(!(Health_status == "Fair"))|>
   mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
   filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
   mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
   
-logistic <- glm(data2_regre$Binary_health~ data2_regre$Alcohol_Drinks_Per_Day + 
-                 data2_regre$heart_attack)
+logistic <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
+                 brfss_regre$heart_attack)
 
 summary(logistic)
 
@@ -338,7 +358,7 @@ summary(logistic)
 
 # relationships between exsposure to drug-use at home and current drug use frequency
 
-adverse_drug <- data2_clean %>%
+adverse_drug <- brfss_clean %>%
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
                values_to = "ExposureLevel") %>%
@@ -361,7 +381,7 @@ ggplot(adverse_drug, aes(x = ExposureLevel, y = CurrentUseFrequency)) +
 
 
 ## marijuana and drinking frequency w adverse childhood
-mari_alch <- data2_clean |>
+mari_alch <- brfss_clean |>
 select(ACEDEPRS, ACEDRINK, ACEDRUGS, AVEDRNK3, MARIJAN1)
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
@@ -384,11 +404,11 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = Exposur
   
 
 # linear fitting for both frequencies
-alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = data2_clean)
+alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
 
 
-mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = data2_clean)
+mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
 summary(mari_model)
 
   
