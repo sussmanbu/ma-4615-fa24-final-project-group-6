@@ -14,6 +14,8 @@ library(dplyr)
 brfss <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
   filter(DISPCODE == 1100)
 
+
+#new dataset
 income_data <- read_excel("dataset-ignore/Table.xlsx", skip = 4)
 income_clean <- income_data|>
   select(-LineCode)|>
