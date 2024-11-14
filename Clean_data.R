@@ -24,7 +24,6 @@ income_clean <- income_data|>
   head(-13)|>
   select_if(~ !any(is.na(.)))|>
   filter(GeoFips != "00000")|>
-  rename()|>
   mutate(across(`Real GDP (millions of chained 2017 dollars) 1` :
                   `Total employment (number of jobs)`, as.numeric))
   
