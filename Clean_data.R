@@ -11,15 +11,13 @@ library(dplyr)
 
 
 #filtered all incomplete interviews
-<<<<<<< HEAD
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT ")|>
-=======
-brfss <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
->>>>>>> 2b582afc304a4b66f9866827101200d7e221be50
-  filter(DISPCODE == 1100)
 
+brfss <- read_xpt("dataset-ignore/LLCP2023.XPT ") %>%
+ filter(DISPCODE == 1100)
 
-#new dataset
+  
+#new dataset-income_clean
 income_data <- read_excel("dataset-ignore/Table.xlsx", skip = 4)
 income_clean <- income_data|>
   select(-LineCode)|>
@@ -31,9 +29,8 @@ income_clean <- income_data|>
   mutate(across(`Real GDP (millions of chained 2017 dollars) 1` :
                   `Total employment (number of jobs)`, as.numeric))
   
-  
-  
 
+  #merging income_clean with  brffs  after it is cleaned
 
 
 # cleaned general health condition
@@ -203,6 +200,7 @@ brfss_clean <- brfss_clean |>
     `_STATE` == 78 ~ "Virgin Islands"
   ))|>
   
+
   
   # cleaned number of days physical health unwell last month
   mutate(PHYSHLTH = case_when(
@@ -280,6 +278,12 @@ brfss_clean <- brfss_clean |>
     is.na(`_PAINDX3`) ~ "Not asked or Missing",
     TRUE ~ "Other"
   ))
+
+
+#creating merged_dataset that is a merge of bffrs and economic_table
+
+merged_data <- merge(brfss_clean, income_clean, by.x = "State", by.y = "GeoName", all = FALSE) 
+head(merged_data) 
 
 
 # Turley playing
