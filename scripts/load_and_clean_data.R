@@ -1,6 +1,7 @@
 library(tidyverse)
 library(haven)
-
+library(ggplot2)
+library(readxl)
 
 #cleaning data
 
@@ -10,13 +11,29 @@ library(dplyr)
 
 
 #filtered all incomplete interviews
-data2 <- read_xpt("dataset-ignore/LLCP2023.XPT")|>
+
+brfss <- read_xpt("dataset-ignore/LLCP2023.XPT ") |>
   filter(DISPCODE == 1100)
 
 
+#new dataset-income_clean
+income_data <- read_excel("dataset-ignore/Table.xlsx", skip = 4)
+income_clean <- income_data|>
+  select(-LineCode)|>
+  mutate(`2023` = if_else(`2023` == "(NA)", NA, `2023`))|>
+  pivot_wider(names_from = Description, values_from = `2023`)|>
+  head(-13)|>
+  select_if(~ !any(is.na(.)))|>
+  filter(GeoFips != "00000")|>
+  mutate(across(`Real GDP (millions of chained 2017 dollars) 1` :
+                  `Total employment (number of jobs)`, as.numeric))
+
+
+#merging income_clean with  brffs  after it is cleaned
+
 
 # cleaned general health condition
-data2_clean <- data2|>
+brfss_clean <- brfss|>
   mutate(Health_status = recode(as.factor(GENHLTH), `1` = "Excellent",
                                 `2` = "Very Good",
                                 `3` = "Good",
@@ -98,7 +115,7 @@ data2_clean <- data2|>
       TRUE ~ "Other"
     )
   )|>
-  rename(insurace_status = PRIMINS1)|>
+  rename(insurance_status = PRIMINS1)|>
   
   # cleaned frequency of exercise per month
   mutate(EXEROFT1 = case_when(EXEROFT1 %in% c(77,99) ~ NA,
@@ -126,7 +143,7 @@ data2_clean <- data2|>
 #Cleaning States
 # Recode '`_STATE`' values into state names
 
-data2_clean <- data2_clean |>
+brfss_clean <- brfss_clean |>
   mutate(State = case_when(
     `_STATE` == 1 ~ "Alabama", 
     `_STATE` == 2 ~ "Alaska", 
@@ -181,7 +198,7 @@ data2_clean <- data2_clean |>
     `_STATE` == 72 ~ "Puerto Rico", 
     `_STATE` == 78 ~ "Virgin Islands"
   ))|>
-  select(-`_STATE`)|>
+  
   
   
   # cleaned number of days physical health unwell last month
@@ -262,4 +279,8 @@ data2_clean <- data2_clean |>
   ))
 
 
-#write_rds
+#creating merged_dataset that is a merge of bffrs and economic_table
+
+merged_data <- merge(brfss_clean, income_clean, by.x = "State", by.y = "GeoName", all = FALSE) 
+head(merged_data) 
+
