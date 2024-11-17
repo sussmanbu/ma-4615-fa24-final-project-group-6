@@ -267,7 +267,7 @@ brfss_clean <- brfss_clean |>
     AVEDRNK3 %in% c(77, 99) ~ NA_real_,  
     AVEDRNK3 == 88 ~ 0, 
     TRUE ~ AVEDRNK3)) |> 
-  rename(Alcohol_Drinks_Per_Day = `AVEDRNK3`) |>
+  rename(Alcohol_Drinks_Per_Day = `AVEDRNK3`) |> 
   
   
   mutate(Physical_Activity_Index = case_when(
@@ -283,7 +283,7 @@ brfss_clean <- brfss_clean |>
 #creating merged_dataset that is a merge of bffrs and economic_table
 
 merged_data <- merge(brfss_clean, income_clean, by.x = "State", by.y = "GeoName", all = FALSE) 
-head(merged_data) 
+head(merged_data)  
 
 
 # Turley playing
