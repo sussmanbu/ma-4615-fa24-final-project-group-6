@@ -188,4 +188,16 @@ mod1 <- glm(
   
 summary(mod1)
 
+
+#Alcohol_Drinks_Per_Day on Employment number 
+plot_alco_employ<-
+  ggplot(data = merged_data, aes(x= Alcohol_Drinks_Per_Day, y = `Total employment (number of jobs)`))+
+  geom_point()+  
+  geom_smooth(method = "lm", color = "red", se = FALSE) + 
+  labs(title = "Alcohol Drinks Per Day vs Employment",
+       x = "Alcohol Drinks Per Day",
+       y = "Employment Quantity") +
+  theme_minimal()
+
+plot_alco_employ
   
