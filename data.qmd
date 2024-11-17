@@ -38,7 +38,7 @@ source(
   echo = FALSE 
 )
 
-data2_clean|>
+brfss_clean|>
   select(RACE, State,Health_status, Exercise_frequency, insurace_status)|>
   head(5)
 ```
