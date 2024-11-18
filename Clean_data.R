@@ -532,3 +532,26 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
       y = "Per capita personal income 6"
     )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
   
+  # Fit the negative binomial regression model
+  data2_clean_filtered <- data2_clean %>%
+    filter(!is.na(Alcohol_Drinks_Per_Day), !is.na(BMI_category))
+  
+  # Fit the negative binomial regression model on the filtered dataset
+  nb_model <- glm.nb(Alcohol_Drinks_Per_Day ~ BMI_category, data = data2_clean_filtered)
+  
+  # Display model summary
+  summary(nb_model)
+  
+  # Generate predictions on the filtered dataset
+  data2_clean_filtered <- data2_clean_filtered %>%
+    mutate(predicted_drinks = predict(nb_model, type = "response"))
+  
+  # Visualization of observed vs. predicted alcohol drinks per day across BMI categories
+  ggplot(data2_clean_filtered, aes(x = BMI_category, y = Alcohol_Drinks_Per_Day)) +
+    geom_boxplot(aes(fill = BMI_category)) +
+    geom_point(aes(y = predicted_drinks), color = "blue", size = 2, position = position_jitter(width = 0.2)) +
+    labs(title = "Negative Binomial Regression: Alcohol Consumption by BMI Category",
+         x = "BMI Category",
+         y = "Average Alcohol Drinks per Day") +
+    theme_minimal()
+  
