@@ -478,6 +478,38 @@ plot_alco_employ<-
   theme_minimal()
 
 plot_alco_employ
+
+
+# Race (in minority:white ratio) and income
+
+min_ratio <- merged_data |> 
+  group_by(State, RACE) |> 
+  summarise(count = n(), .groups = "drop") |> 
+  group_by(State) |> 
+  mutate(total_population = sum(count)) |> 
+  ungroup() |> 
+  pivot_wider(names_from = RACE, values_from = count, values_fill = 0) |> 
+  mutate(minority_to_white_ratio = (total_population - White) / White )
+
+merged_data <- merged_data |> 
+  left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
+
+income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
+
+summary(income_model)
+
+# Visualization
+
+ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "blue") +
+  theme_minimal() +
+  labs(
+    title = "Relationship Between Minority-to-White Ratio per Sate and Income",
+    x = "Minority-to-White Ratio",
+    y = "Personal Income"
+  )
+
   
 
 
