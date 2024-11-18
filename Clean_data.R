@@ -10,10 +10,11 @@ library(readxl)
 library(dplyr)
 
 
+
 #filtered all incomplete interviews
 data2 <- read_xpt("dataset-ignore/LLCP2023.XPT ")|>
 
-brfss <- read_xpt("dataset-ignore/LLCP2023.XPT ") %>%
+brfss <- read_xpt("dataset-ignore/LLCP2023.XPT ")|>
  filter(DISPCODE == 1100)
 
   
@@ -31,7 +32,6 @@ income_clean <- income_data|>
   
 
   #merging income_clean with  brffs  after it is cleaned
-
 
 # cleaned general health condition
 brfss_clean <- brfss|>
@@ -285,7 +285,6 @@ brfss_clean <- brfss_clean |>
 merged_data <- merge(brfss_clean, income_clean, by.x = "State", by.y = "GeoName", all = FALSE) 
 head(merged_data)  
 
-
 # Turley playing
 anova_data <- brfss_clean %>%
   mutate(Health_status = as.factor(Health_status),
@@ -333,7 +332,6 @@ print(ment_health_loneliness)
 
 
 
-
 brfss_clean|>
   ggplot(aes(as.factor(Health_status)))+
   geom_histogram(stat = "count")
@@ -347,14 +345,14 @@ brfss_clean|>
 #logistic regression on health status vs alcohol drinks per day and heart attack
 brfss_regre <- brfss_clean|>
   filter(!(Health_status == "Fair"))|>
-  mutate(Binary_health = if_else(Health_status %in% c("Execellent", "Very Good", "Good"), 1, 0))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
   filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
   mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
   
-logistic <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
+binary <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
                  brfss_regre$heart_attack)
 
-summary(logistic)
+summary(binary)
 
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
@@ -414,11 +412,94 @@ summary(alch_model)
 mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
 summary(mari_model)
 
+
+#relationship between abusive childhood experiences+ one posiitve childhood experience  and mental health struggles via correlation matrix
+
+childhood_mental <- brfss_clean %>% select(ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN,ACEDEPRS, ADDEPEV3)
+cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
+print(cor_matrix)
+
+colnames(brfss_clean)
+
+# medcost, race, health status
+ggplot(data = brfss_clean, aes(x = "Health_status", y = "medical_cost")) +
+  geom_point() +
+  labs(
+    title = "Medical Cost by Health Status and Race",
+    x = "Health Status",
+    y = "Medical Cost"
+  ) +
+  facet_wrap(~ RACE) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+#merged data analysis
+merged_data|>
+  ggplot(aes(x = log(`Personal income`)))+ geom_histogram()
+
+merged_data|>
+  ggplot(aes(x = AGE_GROUP))+ geom_histogram(stat = "count")
+
+
+# correlation between state income and health -> very little
+income_on_health <- merged_data|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
+  select(`Personal income`, AGE_GROUP, Binary_health, EDUCA, State)
+
+cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
+
+
+#state gdp level on overall loneliness 
+loneliness <- merged_data|>
+  filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
+           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
+  mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
+  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`)
+
+mod1 <- glm(
+  Binary_lonely ~  log10(`Gross domestic product (GDP)`)+ as.factor(AGE_GROUP),
+  data = loneliness,
+  family = "binomial"
+)
   
+summary(mod1)
+
+#Alcohol_Drinks_Per_Day on Employment number 
+plot_alco_employ<-
+  ggplot(data = merged_data, aes(x= Alcohol_Drinks_Per_Day, y = `Total employment (number of jobs)`))+
+  geom_point()+  
+  geom_smooth(method = "lm", color = "red", se = FALSE) + 
+  labs(title = "Alcohol Drinks Per Day vs Employment",
+       x = "Alcohol Drinks Per Day",
+       y = "Employment Quantity") +
+  theme_minimal()
+
+plot_alco_employ
   
-#relationship between abusive childhood experiences and mental health struggles
-
-#%>% select(`ACEHURT1`, `ACESWEAR`,`ACETOUCH`, `ACEADSAF`)
-#mental health 
 
 
+# the below dont really look interpretable?
+#insurace_status,  Per capita disposable personal income 7
+  
+  ggplot(data = merged_data, aes(x = insurace_status, y = "Per capita disposable personal income 7", fill = insurace_status)) +
+  geom_boxplot() +
+  labs(
+    title = "Per Capita Disposable Personal Income by Insurance Status",
+    x = "Insurance Status",
+    y = "Per Capita Disposable Personal Income"
+  )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  #insurance status, Per capita personal income 
+
+  ggplot(data = merged_data, aes(x = insurace_status, y = "Per capita personal income 6"   
+   , fill = insurace_status)) +
+    geom_boxplot() +
+    labs(
+      title = "Per Capita  Personal Income by Insurance Status",
+      x = "Insurance Status",
+      y = "Per capita personal income 6"
+    )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
