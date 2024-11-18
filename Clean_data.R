@@ -516,7 +516,7 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
 # the below dont really look interpretable?
 #insurace_status,  Per capita disposable personal income 7
   
-  ggplot(data = merged_data, aes(x = insurace_status, y = "Per capita disposable personal income 7", fill = insurace_status)) +
+  ggplot(data = merged_data, aes(x = insurace_status, y = `Per capita disposable personal income 7`, fill = insurace_status)) +
   geom_boxplot() +
   labs(
     title = "Per Capita Disposable Personal Income by Insurance Status",
@@ -533,5 +533,5 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
       title = "Per Capita  Personal Income by Insurance Status",
       x = "Insurance Status",
       y = "Per capita personal income 6"
-    )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
   
