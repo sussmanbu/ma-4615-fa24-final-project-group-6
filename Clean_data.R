@@ -422,7 +422,7 @@ print(cor_matrix)
 colnames(brfss_clean)
 
 # medcost, race, health status
-ggplot(data = brfss_clean, aes(x = "Health_status", y = "medical_cost")) +
+ggplot(data = brfss_clean, aes(x = `Health_status`, y = `medical_cost`)) +
   geom_point() +
   labs(
     title = "Medical Cost by Health Status and Race",
