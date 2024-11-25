@@ -73,17 +73,17 @@ brfss_clean|>
 
 
 
-#logistic regression on health status vs alcohol drinks per day and heart attack
+#logistic regression on health status vs alcohol drinks per day and cholesterol status
 brfss_regre <- brfss_clean|>
-  filter(!(Health_status == "Fair"))|>
-  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
-  filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
-  mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
+  filter(!(Health_status %in% c("Fair", "Don’t Know/Not Sure", "Refused")))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 0, 1))|>
+  filter((TOLDHI3 == 1| TOLDHI3 ==2))|>
+  mutate(high_cholesterol = if_else(TOLDHI3 == 1, 1, 0))
   
 binary <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
-                 brfss_regre$heart_attack)
-
+                 brfss_regre$high_cholesterol * brfss_regre$Alcohol_Drinks_Per_Day)
 summary(binary)
+
 
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
@@ -171,6 +171,8 @@ income_on_health <- merged_data|>
 
 cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
 
+cor(merged_data$`Gross domestic product (GDP)`, merged_data$MENTHLTH, use = "complete.obs")
+
 
 
 #state gdp level on overall loneliness 
@@ -178,15 +180,32 @@ loneliness <- merged_data|>
   filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
            loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
   mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
-  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`)
+  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH)|>
+  rename(GDP = `Gross domestic product (GDP)`)
 
 mod1 <- glm(
-  Binary_lonely ~  log10(`Gross domestic product (GDP)`)+ as.factor(AGE_GROUP),
+  Binary_lonely ~  log10(GDP)+ as.factor(AGE_GROUP),
   data = loneliness,
   family = "binomial"
 )
   
 summary(mod1)
+mod1_df <- broom::augment(mod1, new_data = loneliness)
+mod1_df |>
+  mutate(`Gross domestic product (GDP)` = 10^`log10(GDP)`) |>
+  ggplot(aes(
+    x = `Gross domestic product (GDP)`,
+    y = Binary_lonely
+  )) +
+  geom_line(aes(y = exp(.fitted) / (1 + exp(.fitted)))) +
+  geom_point(alpha = .1) +
+  geom_smooth(method = "gam", method.args = list(family = "binomial")) +
+  scale_x_log10()
+
+
+poisson_model <- glm(MENTHLTH ~ log(`Gross domestic product (GDP)`) + Binary_lonely, 
+                     family = poisson, data = loneliness)
+summary(poisson_model)
 
 
 #Alcohol_Drinks_Per_Day on Employment number 
@@ -217,6 +236,8 @@ merged_data <- merged_data |>
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
 income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
+merged_data|>
+  select(minority_to_white_ratio)
 
 summary(income_model)
 
