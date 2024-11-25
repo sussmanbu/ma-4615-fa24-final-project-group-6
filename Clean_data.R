@@ -2,6 +2,7 @@ library(tidyverse)
 library(haven)
 library(ggplot2)
 library(readxl)
+library(tidycensus)
 
 #cleaning data
 
@@ -190,7 +191,7 @@ loneliness <- merged_data|>
   filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
            loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
   mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
-  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH)|>
+  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH, State)|>
   rename(GDP = `Gross domestic product (GDP)`)
 
 mod1 <- glm(
@@ -201,8 +202,11 @@ mod1 <- glm(
 summary(mod1)
 
 poisson_model <- glm(MENTHLTH ~ log(GDP) + Binary_lonely, 
-                     family = poisson, data = loneliness)
+                     family = quasipoisson, data = loneliness)
 summary(poisson_model)
+(exp(coefficients(poisson_model))-1)*100
+
+
 
 
 
@@ -295,3 +299,12 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
       x = "Insurance Status",
       y = "Per capita personal income 6"
     )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  
+
+# map data
+US_map <- get_acs(geography = "state",
+                            variables = "B01003_001E",
+                            year =2020,
+                            geometry = TRUE)|>
+  rename(State = NAME)
+
