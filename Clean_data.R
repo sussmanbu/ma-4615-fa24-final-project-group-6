@@ -431,7 +431,7 @@ ggplot(data = brfss_clean, aes(x = `Health_status`, y = `medical_cost`)) +
   ) +
   facet_wrap(~ RACE) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 
 
@@ -481,7 +481,6 @@ plot_alco_employ
 
 
 # Race (in minority:white ratio) and income
-
 min_ratio <- merged_data |> 
   group_by(State, RACE) |> 
   summarise(count = n(), .groups = "drop") |> 
@@ -531,4 +530,26 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
       x = "Insurance Status",
       y = "Per capita personal income 6"
     )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  
+  # general map with medical cost as a heatmap on US map
+  
+  library(sf) 
+  library(tidycensus)
+  census_api_key("5a8a3a9ca4b4a50d99bf688c99d07b75b051129f", overwrite = TRUE)
+  states_census <- get_acs(geography = "state", variables = "B01003_001", geometry = TRUE)
+  states_census <- states_census %>%
+    left_join(merged_data, by = c(state = "state")) 
+
+  #map 
+  ggplot(data = states_census) +
+    geom_sf(aes(fill = `medical_cost`)) +
+    scale_fill_continuous(name = "Medical Cost", 
+                          low = "lightblue", high = "darkblue", 
+                          na.value = "grey50") +
+    theme_void() +
+    labs(title = "Medical Costs by State in the US")
+  
+  
+  colnames(merged_data)
+
   
