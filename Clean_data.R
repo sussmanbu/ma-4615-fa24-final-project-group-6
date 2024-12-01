@@ -108,18 +108,30 @@ ggplot(adverse_drug, aes(x = ExposureLevel, y = CurrentUseFrequency)) +
   ) +
   theme_minimal()
 
+# box plot version (updated version)
+ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
+  geom_boxplot(aes(fill = factor(ExposureLevel))) +
+  facet_grid(CurrentUseType ~ ExposureType, scales = "free") +
+  labs(
+    title = "Box Plot: Early Exposure to Drug Use and Current Frequency",
+    x = "Exposure to Drugs at Home",
+    y = "Current Drug Use Frequency"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set3")
+
 
 # statistical analysis method
 
 
-## marijuana and drinking frequency w adverse childhood
+## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
-select(ACEDEPRS, ACEDRINK, ACEDRUGS, AVEDRNK3, MARIJAN1)
+select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
                values_to = "ExposureLevel") |>
-  pivot_longer(cols = c(AVEDRNK3, MARIJAN1), 
+  pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
                values_to = "Frequency")
 
@@ -144,17 +156,41 @@ mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
 summary(mari_model)
 
 
-#relationship between abusive childhood experiences+ one posiitve childhood experience  and mental health struggles via correlation matrix
+#relationship between abusive childhood experiences+ one positve childhood experience  and mental health struggles via correlation matrix
 
-childhood_mental <- brfss_clean %>% select(ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN,ACEDEPRS, ADDEPEV3)
+childhood_mental <- brfss_clean %>% select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN,ACEDEPRS, ADDEPEV3)
 cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
 colnames(brfss_clean)
 
-# medcost, race, health status
-ggplot(data = brfss_clean, aes(x = `Health_status`, y = `medical_cost`)) +
-  geom_point() +
+
+# relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
+
+
+childhood_mental_filtered <- brfss_clean %>%
+  select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN, ACEDEPRS, ADDEPEV3) %>%
+  filter(across(everything(), ~ is.finite(.)))
+childhood_mental_long <- childhood_mental_filtered %>%
+  pivot_longer(cols = ACEHURT1:ADDEPEV3, names_to = "ACE_Variable", values_to = "ACE_Value")
+
+# scatter plot
+ggplot(childhood_mental_long, aes(x = ACE_Value, y = `_MENT14D`)) +
+  geom_point(alpha = 0.6, color = "lightblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "yellow") +
+  facet_wrap(~ ACE_Variable, scales = "free_x") +
+  labs(
+    title = "Relationship Between Childhood Adversities and Mental Health Days",
+    x = "Adverse Childhood Experience Level",
+    y = "Mental Health Days in Last 14 Days"
+  ) +
+  theme_minimal()
+
+
+# medical cost, race, health status, lm
+ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
+  geom_point(alpha = 0.6, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
   labs(
     title = "Medical Cost by Health Status and Race",
     x = "Health Status",
@@ -162,8 +198,7 @@ ggplot(data = brfss_clean, aes(x = `Health_status`, y = `medical_cost`)) +
   ) +
   facet_wrap(~ RACE) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 
@@ -299,34 +334,32 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
       y = "Per capita personal income 6"
     )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
-  # general map with medical cost as a heatmap on US map
-  
-  library(sf) 
-  library(tidycensus)
-  census_api_key("5a8a3a9ca4b4a50d99bf688c99d07b75b051129f", overwrite = TRUE)
-  states_census <- get_acs(geography = "state", variables = "B01003_001", geometry = TRUE)
-  states_census <- states_census %>%
-    left_join(merged_data, by = c(state = "state")) 
-
-  #map 
-  ggplot(data = states_census) +
-    geom_sf(aes(fill = `medical_cost`)) +
-    scale_fill_continuous(name = "Medical Cost", 
-                          low = "lightblue", high = "darkblue", 
-                          na.value = "grey50") +
-    theme_void() +
-    labs(title = "Medical Costs by State in the US")
-  
-  
-  colnames(merged_data)
-
-  
 
 
+#possible variables: "loneliness_feeling_frequency", "insurance_status" , `medical_cost`
 # map data
+library(tidycensus)
+library(sf)
+
 US_map <- get_acs(geography = "state",
                             variables = "B01003_001E",
                             year =2020,
                             geometry = TRUE)|>
   rename(State = NAME)
 
+# map visualization
+
+map_data <- merged_data %>%
+  select(State, `medical_cost`, "loneliness_feeling_frequency")
+
+map_dataset <- merge(US_map, merged_data, by = "State", all.x = TRUE)
+
+ggplot(map_dataset) +
+  geom_sf(aes(fill = medical_cost), color = "pink") +
+  scale_fill_viridis_ +
+  labs(
+    title = "Heatmap of Medical Costs by State",
+    fill = "Medical Cost"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
