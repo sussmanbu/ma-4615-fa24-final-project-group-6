@@ -315,7 +315,7 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
   
 #insurace_status,  Per capita disposable personal income 
   
-  ggplot(data = merged_data, aes(x = insurace_status, y = `Per capita disposable personal income 7`, fill = insurace_status)) +
+  ggplot(data = merged_data, aes(x = `insurance_status`, y = `Per capita disposable personal income 7`, fill = `insurance_status`)) +
   geom_boxplot() +
   labs(
     title = "Per Capita Disposable Personal Income by Insurance Status",
@@ -325,8 +325,8 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
   
   #insurance status, Per capita personal income 
 
-  ggplot(data = merged_data, aes(x = insurace_status, y = `Per capita personal income 6`   
-   , fill = insurace_status)) +
+  ggplot(data = merged_data, aes(x = `insurance_status`, y = `Per capita personal income 6`   
+   , fill = `insurance_status`)) +
     geom_boxplot() +
     labs(
       title = "Per Capita  Personal Income by Insurance Status",
@@ -340,6 +340,8 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
 # map data
 library(tidycensus)
 library(sf)
+library(viridis)
+
 
 US_map <- get_acs(geography = "state",
                             variables = "B01003_001E",
@@ -349,17 +351,23 @@ US_map <- get_acs(geography = "state",
 
 # map visualization
 
-map_data <- merged_data %>%
-  select(State, `medical_cost`, "loneliness_feeling_frequency")
+# could afford to see doctor, 1yes, 2 no
+mean_medical_costs_data <- brfss_clean %>%
+  filter(!`MEDCOST1` %in% c(7, 9)) %>%  
+  group_by(State) %>%  
+  summarize(mean_medical_cost = mean(`MEDCOST1`, na.rm = TRUE))
 
-map_dataset <- merge(US_map, merged_data, by = "State", all.x = TRUE)
+map_dataset <- merge(US_map, mean_medical_costs_data, by = "State", all.x = TRUE)
 
+#  heatmap with the mean medical costs
 ggplot(map_dataset) +
-  geom_sf(aes(fill = medical_cost), color = "pink") +
-  scale_fill_viridis_ +
+  geom_sf(aes(fill = mean_medical_cost), color = "pink") +
+  scale_fill_viridis() +
   labs(
-    title = "Heatmap of Medical Costs by State",
-    fill = "Medical Cost"
+    title = " Mean Medical Cost Affordability by State",
+    fill = "Mean Medical Cost Affordability"
   ) +
   theme_minimal() +
   theme(legend.position = "bottom")
+
+
