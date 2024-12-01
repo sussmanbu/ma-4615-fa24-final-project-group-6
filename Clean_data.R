@@ -359,13 +359,36 @@ mean_medical_costs_data <- brfss_clean %>%
 
 map_dataset <- merge(US_map, mean_medical_costs_data, by = "State", all.x = TRUE)
 
-#  heatmap with the mean medical costs
+#  heatmap with the mean medical costs affordability
 ggplot(map_dataset) +
   geom_sf(aes(fill = mean_medical_cost), color = "pink") +
   scale_fill_viridis() +
   labs(
     title = " Mean Medical Cost Affordability by State",
     fill = "Mean Medical Cost Affordability"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+#heatmap with mean mental health by state
+#now thinking about your mental health, which includes stress, depression, and problems with emotions, 
+#for how many days during the past 30 days was your mental health not good?
+
+mean_mental_data <- brfss_clean %>%
+  filter(!`MENTHLTH` %in% c(77, 99, 88)) %>%  
+  group_by(State) %>%  
+  summarize(mean_mental = mean(`MENTHLTH`, na.rm = TRUE))
+
+map_dataset2 <- merge(US_map, mean_mental_data, by = "State", all.x = TRUE)
+
+#  heatmap with the mean medical costs affordability
+ggplot(map_dataset2) +
+  geom_sf(aes(fill = mean_mental), color = "pink") +
+  scale_fill_viridis() +
+  labs(
+    title = " Number of Days With Poor Mental Health",
+    fill = "Mean Amount of Days"
   ) +
   theme_minimal() +
   theme(legend.position = "bottom")
