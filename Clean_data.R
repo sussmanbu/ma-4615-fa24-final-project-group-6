@@ -417,7 +417,7 @@ ggplot(map_dataset3) +
     fill = "Access Mean"
   ) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") 
 
 
   
