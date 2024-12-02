@@ -384,7 +384,7 @@ map_dataset2 <- merge(US_map, mean_mental_data, by = "State", all.x = TRUE)
 
 #  heatmap with the mean medical costs affordability
 ggplot(map_dataset2) +
-  geom_sf(aes(fill = mean_mental), color = "pink") +
+  geom_sf(aes(fill = mean_mental), color = "pink") + 
   scale_fill_viridis() +
   labs(
     title = " Number of Days With Poor Mental Health",
@@ -393,4 +393,29 @@ ggplot(map_dataset2) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
+#heat map with insurance access, calculating mean, #1 is have some form and 2 is not
+mean_insurance_data <- brfss_clean%>%
+  filter(!`_HLTHPL1` %in% c(9)) %>%  
+  group_by(State) %>%  
+  summarize(mean_insurance = mean(`_HLTHPL1`, na.rm = TRUE))
+map_dataset3 <- merge(US_map, mean_insurance_data, by = "State", all.x = TRUE)
+
+ggplot(map_dataset3) +
+  geom_sf(aes(fill = mean_insurance), color = "pink") + 
+  scale_fill_viridis() +
+  labs(
+    title = " Access to Insurance",
+    fill = "Access Mean"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+  
+  
+
+
+
+
+#heatnmap with mean physical health
 
