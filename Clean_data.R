@@ -76,14 +76,23 @@ brfss_clean|>
 #logistic regression on health status vs alcohol drinks per day and cholesterol status
 brfss_regre <- brfss_clean|>
   filter(!(Health_status %in% c("Fair", "Don’t Know/Not Sure", "Refused")))|>
+  filter((TOLDHI3 == 1| TOLDHI3 ==2), !(is.na(Alcohol_Drinks_Per_Day)))|>
   mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 0, 1))|>
-  filter((TOLDHI3 == 1| TOLDHI3 ==2))|>
-  mutate(high_cholesterol = if_else(TOLDHI3 == 1, 1, 0))
-  
-binary <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
-                 brfss_regre$high_cholesterol * brfss_regre$Alcohol_Drinks_Per_Day)
-summary(binary)
+  mutate(high_cholesterol = if_else(TOLDHI3 == 1, 1, 0))|>
+  select(Binary_health, Alcohol_Drinks_Per_Day, high_cholesterol)
 
+  
+binary <- glm(Binary_health~ Alcohol_Drinks_Per_Day + 
+                 high_cholesterol * Alcohol_Drinks_Per_Day, data = brfss_regre, family= binomial)
+summary(binary)
+brfss_regre$predicted <- predict(binary, type = "response")
+ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted)) +
+  geom_smooth() +
+  labs(title = "Predicted Probability of Bad Health vs Alcohol Drinks Per Day",
+       x = "Alcohol Drinks Per Day",
+       y = "Predicted Probability of Poor Health (1 = Poor, 0 = Good)",
+       color = "Health Status") +
+  theme_minimal()
 
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
