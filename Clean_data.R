@@ -83,15 +83,17 @@ brfss_regre <- brfss_clean|>
 
   
 binary <- glm(Binary_health~ Alcohol_Drinks_Per_Day + 
-                 high_cholesterol * Alcohol_Drinks_Per_Day, data = brfss_regre, family= binomial)
+                 high_cholesterol, data = brfss_regre, family= binomial)
 summary(binary)
 brfss_regre$predicted <- predict(binary, type = "response")
-ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted)) +
-  geom_smooth() +
-  labs(title = "Predicted Probability of Bad Health vs Alcohol Drinks Per Day",
+ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_factor(high_cholesterol))) +
+  geom_line() +
+  labs(title = "Probability of Bad Health Based on Alcohol Drinks Per Day",
        x = "Alcohol Drinks Per Day",
-       y = "Predicted Probability of Poor Health (1 = Poor, 0 = Good)",
+       y = "Predicted Probability of Poor Health",
        color = "Health Status") +
+  scale_y_continuous(labels = scales::percent)+
+  scale_color_manual(values = c("red", "blue"), labels = c("normal cholesterol", "high cholesterol"))+
   theme_minimal()
 
 
