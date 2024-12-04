@@ -2,12 +2,14 @@ library(tidyverse)
 library(haven)
 library(ggplot2)
 library(readxl)
+library(tidycensus)
 
 #cleaning data
 
 #removing rows with missing values
 
 library(dplyr)
+
 
 
 source(
@@ -26,7 +28,6 @@ interaction <- aov(PHYSHLTH ~ Health_status * stress_feeling_frequency + emotion
 
 summary(interaction)
 
-library(ggplot2) 
 
 Phys_Health <- ggplot(anova_data, aes(x = Health_status, y = PHYSHLTH, fill = Health_status)) + 
   theme_bw() +  
@@ -62,7 +63,6 @@ print(ment_health_loneliness)
 
 
 
-
 brfss_clean|>
   ggplot(aes(as.factor(Health_status)))+
   geom_histogram(stat = "count")
@@ -73,17 +73,28 @@ brfss_clean|>
 
 
 
-#logistic regression on health status vs alcohol drinks per day and heart attack
+#logistic regression on health status vs alcohol drinks per day and cholesterol status
 brfss_regre <- brfss_clean|>
-  filter(!(Health_status == "Fair"))|>
-  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
-  filter((CVDINFR4 == 1| CVDINFR4 ==2))|>
-  mutate(heart_attack = if_else(CVDINFR4 == 1, 1, 0))
-  
-binary <- glm(brfss_regre$Binary_health~ brfss_regre$Alcohol_Drinks_Per_Day + 
-                 brfss_regre$heart_attack)
+  filter(!(Health_status %in% c("Fair", "Don’t Know/Not Sure", "Refused")))|>
+  filter((TOLDHI3 == 1| TOLDHI3 ==2), !(is.na(Alcohol_Drinks_Per_Day)))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 0, 1))|>
+  mutate(high_cholesterol = if_else(TOLDHI3 == 1, 1, 0))|>
+  select(Binary_health, Alcohol_Drinks_Per_Day, high_cholesterol)
 
+  
+binary <- glm(Binary_health~ Alcohol_Drinks_Per_Day + 
+                 high_cholesterol, data = brfss_regre, family= binomial)
 summary(binary)
+brfss_regre$predicted <- predict(binary, type = "response")
+ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_factor(high_cholesterol))) +
+  geom_line() +
+  labs(title = "Probability of Bad Health Based on Alcohol Drinks Per Day",
+       x = "Alcohol Drinks Per Day",
+       y = "Predicted Probability of Poor Health",
+       color = "Health Status") +
+  scale_y_continuous(labels = scales::percent)+
+  scale_color_manual(values = c("red", "blue"), labels = c("normal cholesterol", "high cholesterol"))+
+  theme_minimal()
 
 
 # plotting relationships between substance use, adverse childhood experiences, and mental health (can plot all three tbd)
@@ -108,18 +119,30 @@ ggplot(adverse_drug, aes(x = ExposureLevel, y = CurrentUseFrequency)) +
   ) +
   theme_minimal()
 
+# box plot version (updated version)
+ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
+  geom_boxplot(aes(fill = factor(ExposureLevel))) +
+  facet_grid(CurrentUseType ~ ExposureType, scales = "free") +
+  labs(
+    title = "Box Plot: Early Exposure to Drug Use and Current Frequency",
+    x = "Exposure to Drugs at Home",
+    y = "Current Drug Use Frequency"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set3")
+
 
 # statistical analysis method
 
 
-## marijuana and drinking frequency w adverse childhood
+## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
-select(ACEDEPRS, ACEDRINK, ACEDRUGS, AVEDRNK3, MARIJAN1)
+select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
                values_to = "ExposureLevel") |>
-  pivot_longer(cols = c(AVEDRNK3, MARIJAN1), 
+  pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
                values_to = "Frequency")
 
@@ -143,19 +166,54 @@ summary(alch_model)
 mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
 summary(mari_model)
 
-  
-  
-#relationship between abusive childhood experiences and mental health struggles
 
-#%>% select(`ACEHURT1`, `ACESWEAR`,`ACETOUCH`, `ACEADSAF`)
-#mental health 
+#relationship between abusive childhood experiences+ one positve childhood experience  and mental health struggles via correlation matrix
 
+childhood_mental <- brfss_clean %>% select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN,ACEDEPRS, ADDEPEV3)
+cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
+print(cor_matrix)
 
-
-
+colnames(brfss_clean)
 
 
-###merged data analysis
+# relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
+
+
+childhood_mental_filtered <- brfss_clean %>%
+  select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN, ACEDEPRS, ADDEPEV3) %>%
+  filter(across(everything(), ~ is.finite(.)))
+childhood_mental_long <- childhood_mental_filtered %>%
+  pivot_longer(cols = ACEHURT1:ADDEPEV3, names_to = "ACE_Variable", values_to = "ACE_Value")
+
+# scatter plot
+ggplot(childhood_mental_long, aes(x = ACE_Value, y = `_MENT14D`)) +
+  geom_point(alpha = 0.6, color = "lightblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "yellow") +
+  facet_wrap(~ ACE_Variable, scales = "free_x") +
+  labs(
+    title = "Relationship Between Childhood Adversities and Mental Health Days",
+    x = "Adverse Childhood Experience Level",
+    y = "Mental Health Days in Last 14 Days"
+  ) +
+  theme_minimal()
+
+
+# medical cost, race, health status, lm
+ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
+  geom_point(alpha = 0.6, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +
+  labs(
+    title = "Medical Cost by Health Status and Race",
+    x = "Health Status",
+    y = "Medical Cost"
+  ) +
+  facet_wrap(~ RACE) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+### merged data analysis
 merged_data|>
   ggplot(aes(x = log(`Personal income`)))+ geom_histogram()
 
@@ -171,23 +229,55 @@ income_on_health <- merged_data|>
 
 cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
 
+cor(merged_data$`Gross domestic product (GDP)`, merged_data$MENTHLTH, use = "complete.obs")
 
 
-#state gdp level on overall loneliness 
+#state gdp level on overall loneliness, mental health 
 loneliness <- merged_data|>
   filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
            loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
   mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
-  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`)
+  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH, State)|>
+  rename(GDP = `Gross domestic product (GDP)`)
 
 mod1 <- glm(
-  Binary_lonely ~  log10(`Gross domestic product (GDP)`)+ as.factor(AGE_GROUP),
+  Binary_lonely ~  log10(GDP)+ as.factor(AGE_GROUP),
   data = loneliness,
   family = "binomial"
 )
-  
 summary(mod1)
 
+poisson_model <- glm(MENTHLTH ~ log(GDP) + Binary_lonely, 
+                     family = quasipoisson, data = loneliness)
+summary(poisson_model)
+(exp(coefficients(poisson_model))-1)*100
+
+
+
+
+
+# Fit the negative binomial regression model
+data2_clean_filtered <- data2_clean %>%
+  filter(!is.na(Alcohol_Drinks_Per_Day), !is.na(BMI_category))
+
+# Fit the negative binomial regression model on the filtered dataset
+nb_model <- glm.nb(Alcohol_Drinks_Per_Day ~ BMI_category, data = data2_clean_filtered)
+
+# Display model summary
+summary(nb_model)
+
+# Generate predictions on the filtered dataset
+data2_clean_filtered <- data2_clean_filtered %>%
+  mutate(predicted_drinks = predict(nb_model, type = "response"))
+
+# Visualization of observed vs. predicted alcohol drinks per day across BMI categories
+ggplot(data2_clean_filtered, aes(x = BMI_category, y = Alcohol_Drinks_Per_Day)) +
+  geom_boxplot(aes(fill = BMI_category)) +
+  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, position = position_jitter(width = 0.2)) +
+  labs(title = "Negative Binomial Regression: Alcohol Consumption by BMI Category",
+       x = "BMI Category",
+       y = "Average Alcohol Drinks per Day") +
+  theme_minimal()
 
 #Alcohol_Drinks_Per_Day on Employment number 
 plot_alco_employ<-
@@ -203,7 +293,6 @@ plot_alco_employ
 
 
 # Race (in minority:white ratio) and income
-
 min_ratio <- merged_data |> 
   group_by(State, RACE) |> 
   summarise(count = n(), .groups = "drop") |> 
@@ -216,7 +305,13 @@ min_ratio <- merged_data |>
 merged_data <- merged_data |> 
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
+<<<<<<< HEAD
 income_model <- glm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
+=======
+income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
+merged_data|>
+  select(minority_to_white_ratio)
+>>>>>>> 2923ce9f7e7adb960b0bd59aec69f0df24dbbfaf
 
 summary(income_model)
 
@@ -245,3 +340,109 @@ income_on_health <- merged_data|>
 cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
 
   
+#insurace_status,  Per capita disposable personal income 
+  
+  ggplot(data = merged_data, aes(x = `insurance_status`, y = `Per capita disposable personal income 7`, fill = `insurance_status`)) +
+  geom_boxplot() +
+  labs(
+    title = "Per Capita Disposable Personal Income by Insurance Status",
+    x = "Insurance Status",
+    y = "Per Capita Disposable Personal Income"
+  )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  
+  #insurance status, Per capita personal income 
+
+  ggplot(data = merged_data, aes(x = `insurance_status`, y = `Per capita personal income 6`   
+   , fill = `insurance_status`)) +
+    geom_boxplot() +
+    labs(
+      title = "Per Capita  Personal Income by Insurance Status",
+      x = "Insurance Status",
+      y = "Per capita personal income 6"
+    )  + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+
+
+#possible variables: "loneliness_feeling_frequency", "insurance_status" , `medical_cost`
+# map data
+library(tidycensus)
+library(sf)
+library(viridis)
+
+
+US_map <- get_acs(geography = "state",
+                            variables = "B01003_001E",
+                            year =2020,
+                            geometry = TRUE)|>
+  rename(State = NAME)
+
+# map visualization
+
+# could afford to see doctor, 1yes, 2 no
+mean_medical_costs_data <- brfss_clean %>%
+  filter(!`MEDCOST1` %in% c(7, 9)) %>%  
+  group_by(State) %>%  
+  summarize(mean_medical_cost = mean(`MEDCOST1`, na.rm = TRUE))
+
+map_dataset <- merge(US_map, mean_medical_costs_data, by = "State", all.x = TRUE)
+
+#  heatmap with the mean medical costs affordability
+ggplot(map_dataset) +
+  geom_sf(aes(fill = mean_medical_cost), color = "pink") +
+  scale_fill_viridis() +
+  labs(
+    title = " Mean Medical Cost Affordability by State",
+    fill = "Mean Medical Cost Affordability"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+#heatmap with mean mental health by state
+#now thinking about your mental health, which includes stress, depression, and problems with emotions, 
+#for how many days during the past 30 days was your mental health not good?
+
+mean_mental_data <- brfss_clean %>%
+  filter(!`MENTHLTH` %in% c(77, 99, 88)) %>%  
+  group_by(State) %>%  
+  summarize(mean_mental = mean(`MENTHLTH`, na.rm = TRUE))
+
+map_dataset2 <- merge(US_map, mean_mental_data, by = "State", all.x = TRUE)
+
+#  heatmap with the mean medical costs affordability
+ggplot(map_dataset2) +
+  geom_sf(aes(fill = mean_mental), color = "pink") + 
+  scale_fill_viridis() +
+  labs(
+    title = " Number of Days With Poor Mental Health",
+    fill = "Mean Amount of Days"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+#heat map with insurance access, calculating mean, #1 is have some form and 2 is not
+mean_insurance_data <- brfss_clean%>%
+  filter(!`_HLTHPL1` %in% c(9)) %>%  
+  group_by(State) %>%  
+  summarize(mean_insurance = mean(`_HLTHPL1`, na.rm = TRUE))
+map_dataset3 <- merge(US_map, mean_insurance_data, by = "State", all.x = TRUE)
+
+ggplot(map_dataset3) +
+  geom_sf(aes(fill = mean_insurance), color = "pink") + 
+  scale_fill_viridis() +
+  labs(
+    title = " Access to Insurance",
+    fill = "Access Mean"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom") 
+
+
+  
+  
+
+
+
+
+#heatnmap with mean physical health
+

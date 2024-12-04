@@ -12,7 +12,7 @@ library(dplyr)
 
 #filtered all incomplete interviews
 
-brfss <- read_xpt("dataset-ignore/LLCP2023.XPT ") |>
+brfss <- read_xpt("dataset-ignore/LLCP2023.XPT") |>
   filter(DISPCODE == 1100)
 
 
