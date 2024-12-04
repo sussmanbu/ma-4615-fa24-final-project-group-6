@@ -254,29 +254,30 @@ summary(poisson_model)
 
 
 
-
-
-# Fit the negative binomial regression model
-data2_clean_filtered <- data2_clean %>%
+# Filter the dataset to remove missing values for relevant variables
+data2_clean_filtered <- merged_data %>%
   filter(!is.na(Alcohol_Drinks_Per_Day), !is.na(BMI_category))
 
-# Fit the negative binomial regression model on the filtered dataset
+# Fit the negative binomial regression model
 nb_model <- glm.nb(Alcohol_Drinks_Per_Day ~ BMI_category, data = data2_clean_filtered)
 
-# Display model summary
+# Display the model summary
 summary(nb_model)
 
-# Generate predictions on the filtered dataset
+# Generate predictions and add them to the dataset
 data2_clean_filtered <- data2_clean_filtered %>%
   mutate(predicted_drinks = predict(nb_model, type = "response"))
 
-# Visualization of observed vs. predicted alcohol drinks per day across BMI categories
+# Create a visualization of observed vs. predicted values
 ggplot(data2_clean_filtered, aes(x = BMI_category, y = Alcohol_Drinks_Per_Day)) +
-  geom_boxplot(aes(fill = BMI_category)) +
-  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, position = position_jitter(width = 0.2)) +
+  geom_boxplot(aes(fill = BMI_category), outlier.shape = NA) +  # Boxplot for observed data
+  geom_jitter(aes(y = Alcohol_Drinks_Per_Day), width = 0.2, alpha = 0.5) +  # Add jitter for observed points
+  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, 
+             position = position_jitter(width = 0.2)) +  # Add predicted values
   labs(title = "Negative Binomial Regression: Alcohol Consumption by BMI Category",
        x = "BMI Category",
        y = "Average Alcohol Drinks per Day") +
+  scale_fill_brewer(palette = "Set2") +  # Optional: adjust color palette
   theme_minimal()
 
 #Alcohol_Drinks_Per_Day on Employment number 
@@ -305,13 +306,10 @@ min_ratio <- merged_data |>
 merged_data <- merged_data |> 
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
-<<<<<<< HEAD
 income_model <- glm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
-=======
 income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
 merged_data|>
   select(minority_to_white_ratio)
->>>>>>> 2923ce9f7e7adb960b0bd59aec69f0df24dbbfaf
 
 summary(income_model)
 
