@@ -216,9 +216,12 @@ min_ratio <- merged_data |>
 merged_data <- merged_data |> 
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
-income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
+income_model <- glm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
 
 summary(income_model)
+
+cor(merged_data$`Personal income`, merged_data$minority_to_white_ratio)
+
 
 # Visualization
 
@@ -231,5 +234,14 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
     x = "Minority-to-White Ratio",
     y = "Personal Income"
   )
+
+
+# correlation between state income and mental health 
+income_on_health <- merged_data|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
+  select(`Personal income`, AGE_GROUP, Binary_health, EDUCA, State)
+
+cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
 
   
