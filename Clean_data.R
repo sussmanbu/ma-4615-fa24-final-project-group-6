@@ -264,29 +264,30 @@ scale_color_manual(values = c("red", "blue"), labels = c("Not Lonely", "Feeling 
   scale_x_log10()+
 theme_minimal()
 
-
-
-# Fit the negative binomial regression model
-data2_clean_filtered <- data2_clean %>%
+# Filter the dataset to remove missing values for relevant variables
+data2_clean_filtered <- merged_data %>%
   filter(!is.na(Alcohol_Drinks_Per_Day), !is.na(BMI_category))
 
-# Fit the negative binomial regression model on the filtered dataset
+# Fit the negative binomial regression model
 nb_model <- glm.nb(Alcohol_Drinks_Per_Day ~ BMI_category, data = data2_clean_filtered)
 
-# Display model summary
+# Display the model summary
 summary(nb_model)
 
-# Generate predictions on the filtered dataset
+# Generate predictions and add them to the dataset
 data2_clean_filtered <- data2_clean_filtered %>%
   mutate(predicted_drinks = predict(nb_model, type = "response"))
 
-# Visualization of observed vs. predicted alcohol drinks per day across BMI categories
+# Create a visualization of observed vs. predicted values
 ggplot(data2_clean_filtered, aes(x = BMI_category, y = Alcohol_Drinks_Per_Day)) +
-  geom_boxplot(aes(fill = BMI_category)) +
-  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, position = position_jitter(width = 0.2)) +
+  geom_boxplot(aes(fill = BMI_category), outlier.shape = NA) +  # Boxplot for observed data
+  geom_jitter(aes(y = Alcohol_Drinks_Per_Day), width = 0.2, alpha = 0.5) +  # Add jitter for observed points
+  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, 
+             position = position_jitter(width = 0.2)) +  # Add predicted values
   labs(title = "Negative Binomial Regression: Alcohol Consumption by BMI Category",
        x = "BMI Category",
        y = "Average Alcohol Drinks per Day") +
+  scale_fill_brewer(palette = "Set2") +  # Optional: adjust color palette
   theme_minimal()
 
 #Alcohol_Drinks_Per_Day on Employment number 
@@ -315,11 +316,15 @@ min_ratio <- merged_data |>
 merged_data <- merged_data |> 
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
+income_model <- glm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
 income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
 merged_data|>
   select(minority_to_white_ratio)
 
 summary(income_model)
+
+cor(merged_data$`Personal income`, merged_data$minority_to_white_ratio)
+
 
 # Visualization
 
@@ -332,6 +337,15 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
     x = "Minority-to-White Ratio",
     y = "Personal Income"
   )
+
+
+# correlation between state income and mental health 
+income_on_health <- merged_data|>
+  filter(!(Health_status == "Fair"))|>
+  mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 1, 0))|>
+  select(`Personal income`, AGE_GROUP, Binary_health, EDUCA, State)
+
+cor(income_on_health$`Personal income`, income_on_health$Binary_health, use = "complete.obs")
 
   
 #insurace_status,  Per capita disposable personal income 
