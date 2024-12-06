@@ -235,7 +235,7 @@ cor(merged_data$`Gross domestic product (GDP)`, merged_data$MENTHLTH, use = "com
 #state gdp level on overall loneliness, mental health 
 loneliness <- merged_data|>
   filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
-           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
+           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never", !is.na(MENTHLTH))|>
   mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
   select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH, State)|>
   rename(GDP = `Gross domestic product (GDP)`)
@@ -252,7 +252,17 @@ poisson_model <- glm(MENTHLTH ~ log(GDP) + Binary_lonely,
 summary(poisson_model)
 (exp(coefficients(poisson_model))-1)*100
 
+loneliness$predicted <- predict(poisson_model, type = "response")
 
+ggplot(loneliness, aes(x = GDP, y = predicted, color = as_factor(Binary_lonely))) +
+geom_line() +
+labs(title = "Number of Days with Bad Mental Health Based on Your State GDP",
+     x = "State GDP",
+     y = "Number of Poor Mental Health Days",
+     color = "Emotional Status") +
+scale_color_manual(values = c("red", "blue"), labels = c("Not Lonely", "Feeling Lonely"))+
+  scale_x_log10()+
+theme_minimal()
 
 
 
