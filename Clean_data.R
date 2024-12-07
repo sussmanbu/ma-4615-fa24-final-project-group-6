@@ -17,6 +17,42 @@ source(
   echo = FALSE 
 )
 
+# relationship between education and loneliness, faceted by race
+brfss_clean|>
+  count(Health_status)
+summary <- brfss_clean|>
+  filter(loneliness_feeling_frequency != "Don’t know/Not sure" & loneliness_feeling_frequency != "Refused" 
+         & !is.na(RACE) & RACE != "Uncertain/Refused" & !is.na(EDUCA) & EDUCA != "Refused")|>
+  group_by(EDUCA, RACE)|>
+  summarize(lonely = mean(loneliness_feeling_frequency == "Usually" | loneliness_feeling_frequency == "Always", na.rm = TRUE))
+
+summary$EDUCA_factor <- factor(summary$EDUCA,levels = c("None/Kindergarten", "Elementary", "Some High School", 
+                                         "High School Graduate","Some College", "College Graduate"))
+
+ggplot(summary, aes(x = reorder(EDUCA_factor, desc(EDUCA_factor)), 
+                    y = lonely, fill = EDUCA_factor)) +
+  geom_col() +
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~RACE)+
+  coord_flip()+
+  theme(             
+    axis.text.y = element_blank(),                        
+    axis.title.y = element_blank(),                      
+  )+
+  labs(fill = "Education level")+
+  scale_fill_viridis_d()
+
+brfss_clean|>
+  filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
+  group_by(EDUCA)|>
+  summarize(higher_income = mean(`_INCOMG1` == 6 |`_INCOMG1` == 7))
+  
+
+ggplot(brfss_clean,aes(x = stress_feeling_frequency, y = MENTHLTH))+
+  geom_boxplot()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 # Turley playing
 anova_data <- brfss_clean %>%
   mutate(Health_status = as.factor(Health_status),
