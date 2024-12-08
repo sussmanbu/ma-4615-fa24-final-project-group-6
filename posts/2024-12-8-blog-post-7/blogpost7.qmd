@@ -1,0 +1,20 @@
+---
+title: "Blog Post 7"
+author: ""
+date: "2024-12-8"
+date-modified: "2024-12-8"
+draft: FALSE
+---
+After our initial exploratory analysis, we identified plots that had strong correlations and had interesting observations that we could use to build our story and incorporate well together. We wanted to get a deeper interpretation for some plots and ended up tweaking models, and variables in order to be more concise. We also paired each of our plots with a linear model to provide more context and a more in depth understanding of the data that we have. For example, we had an initial plot that measured the correlation between drug exposure and marijuana use frequency, and we decided to view that frequency for alcohol use and pair it with another graph that showed insights on alcohol use to get a more comprehensive and detailed model. From discussing our observations we are interested in looking at plots that show the relationship between education and loneliness, health status and medical cost affordability, drug exposure to drug use, alcohol use/exposure on physical health, and personal income to a state’s diversity.
+
+
+We also looked at the relationship between one’s health status and its predicted probability of not being able to afford medical costs. The plot shows that there is a steep downward trend in people’s unaffordability of medical costs as their health status increases. This relationship makes sense that people who are in poor health status are less likely to afford medical costs.
+
+
+We also do the plot about the relationship between the alcohol assumption/smoke assumption and BMI category. Unfortunately, both of them have too weak a correlation to show their relationship. The statement we can do now is that: There is no relationship between the alcohol assumption/smoke assumption and BMI category. When we plan to polish your visualizations and tables, we use the bar chart graph in this part, because the BMI has four categories: Underweight, Normal Weight, Overweight, Obese. The X-axis should be four BMI categories, and the Y-axis is the average alcohol drinks per day.
+
+
+ Another plot we chose explores the relationship between the diversity of races of the state and how that relates to the average personal income of the state. This plot had a strong correlation and showed the non-surprising relationship that more diverse states have higher average personal income. To finalize this graph, we will polish the themes and colors to ensure ease of understanding for an unfamiliar reader. Furthermore, we will try to contextualize our findings and link the story together. 
+ 
+
+Additionally in our exploratory analysis  for some plots, we didn’t worry the most about header names but for the plots we chose, we wanted to really specify what the plots were visualizing, renaming variables used in the data to actual text ( MARJI1 frequency to Marijuana Use Frequency). 
