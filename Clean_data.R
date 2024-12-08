@@ -248,7 +248,7 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-#new version for the medical cost, race, health status, lm
+#new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
   mutate(
     medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
@@ -259,7 +259,7 @@ ht_mc<-brfss_clean|>
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
                            "Refused"=9)
-  )%>%drop_na(medical_cost, Health_status)
+  )%>%drop_na(medical_cost, Health_status,)
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
@@ -269,14 +269,15 @@ predicted_prob <- predict(ht_mc_model, type = "response")
 ht_mc$Y_hat <- predicted_prob
 
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
-  geom_point(aes(color = Health_status), alpha = 0.6) +  # 绘制预测概率点
-  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  # 添加回归线
+  geom_point( alpha = 0.6,color = "blue") + 
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
   labs(title = "Predicted Probability of Medical Cost by Health Status and Race",
        x = "Health Status",
-       y = "Predicted Probability of 'Yes' for Medical Cost") +
+       y = "Predicted Probability of 'No' for Medical Cost") +
 
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  guides(color = "none")
 
 ### merged data analysis
 merged_data|>
