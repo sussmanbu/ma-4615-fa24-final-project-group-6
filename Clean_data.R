@@ -534,3 +534,20 @@ ggplot(map_dataset3) +
 
 #heatnmap with mean physical health
 
+
+
+# shiny live data prep
+
+shiny_table <- merged_data |>
+  group_by(State) |>
+  summarize(
+    avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
+    avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
+    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)) * 100,  # Percentage who could not afford health costs
+    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n() * 100
+  )|>
+  arrange(State) 
+
+
+saveRDS(shiny_table, file = "shiny_table.rds")
+saveRDS(shiny_table, file = "https://sussmanbu.github.io/ma4615-final-project-group6/shiny_table.rds")
