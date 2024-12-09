@@ -22,6 +22,42 @@ source(
   echo = FALSE 
 )
 
+# relationship between education and loneliness, faceted by race
+brfss_clean|>
+  count(Health_status)
+summary <- brfss_clean|>
+  filter(loneliness_feeling_frequency != "Don’t know/Not sure" & loneliness_feeling_frequency != "Refused" 
+         & !is.na(RACE) & RACE != "Uncertain/Refused" & !is.na(EDUCA) & EDUCA != "Refused")|>
+  group_by(EDUCA, RACE)|>
+  summarize(lonely = mean(loneliness_feeling_frequency == "Usually" | loneliness_feeling_frequency == "Always", na.rm = TRUE))
+
+summary$EDUCA_factor <- factor(summary$EDUCA,levels = c("None/Kindergarten", "Elementary", "Some High School", 
+                                         "High School Graduate","Some College", "College Graduate"))
+
+ggplot(summary, aes(x = reorder(EDUCA_factor, desc(EDUCA_factor)), 
+                    y = lonely, fill = EDUCA_factor)) +
+  geom_col() +
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~RACE)+
+  coord_flip()+
+  theme(             
+    axis.text.y = element_blank(),                        
+    axis.title.y = element_blank(),                      
+  )+
+  labs(fill = "Education level")+
+  scale_fill_viridis_d()
+
+brfss_clean|>
+  filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
+  group_by(EDUCA)|>
+  summarize(higher_income = mean(`_INCOMG1` == 6 |`_INCOMG1` == 7))
+  
+
+ggplot(brfss_clean,aes(x = stress_feeling_frequency, y = MENTHLTH))+
+  geom_boxplot()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 # Turley playing
 anova_data <- brfss_clean %>%
   mutate(Health_status = as.factor(Health_status),
@@ -217,6 +253,36 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
+#new version for the medical cost, race, health status, glm
+ht_mc<-brfss_clean|>
+  mutate(
+    medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
+    Health_status = recode(as.character(Health_status),  "Excellent"= 5,
+                           "Very Good"=4,
+                           "Good"=3,
+                           "Fair"=2,
+                           "Poor"= 1,
+                           "Don’t Know/Not Sure"=7,
+                           "Refused"=9)
+  )%>%drop_na(medical_cost, Health_status,)
+ 
+
+ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
+summary(ht_mc_model)
+
+predicted_prob <- predict(ht_mc_model, type = "response")
+ht_mc$Y_hat <- predicted_prob
+
+ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
+  geom_point( alpha = 0.6,color = "blue") + 
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
+  labs(title = "Predicted Probability of Medical Cost by Health Status and Race",
+       x = "Health Status",
+       y = "Predicted Probability of 'No' for Medical Cost") +
+
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  guides(color = "none")
 
 ### merged data analysis
 merged_data|>
@@ -240,7 +306,7 @@ cor(merged_data$`Gross domestic product (GDP)`, merged_data$MENTHLTH, use = "com
 #state gdp level on overall loneliness, mental health 
 loneliness <- merged_data|>
   filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
-           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never")|>
+           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never", !is.na(MENTHLTH))|>
   mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
   select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH, State)|>
   rename(GDP = `Gross domestic product (GDP)`)
@@ -257,31 +323,42 @@ poisson_model <- glm(MENTHLTH ~ log(GDP) + Binary_lonely,
 summary(poisson_model)
 (exp(coefficients(poisson_model))-1)*100
 
+loneliness$predicted <- predict(poisson_model, type = "response")
 
+ggplot(loneliness, aes(x = GDP, y = predicted, color = as_factor(Binary_lonely))) +
+geom_line() +
+labs(title = "Number of Days with Bad Mental Health Based on Your State GDP",
+     x = "State GDP",
+     y = "Number of Poor Mental Health Days",
+     color = "Emotional Status") +
+scale_color_manual(values = c("red", "blue"), labels = c("Not Lonely", "Feeling Lonely"))+
+  scale_x_log10()+
+theme_minimal()
 
-
-
-# Fit the negative binomial regression model
-data2_clean_filtered <- data2_clean %>%
+# Filter the dataset to remove missing values for relevant variables
+data2_clean_filtered <- merged_data %>%
   filter(!is.na(Alcohol_Drinks_Per_Day), !is.na(BMI_category))
 
-# Fit the negative binomial regression model on the filtered dataset
+# Fit the negative binomial regression model
 nb_model <- glm.nb(Alcohol_Drinks_Per_Day ~ BMI_category, data = data2_clean_filtered)
 
-# Display model summary
+# Display the model summary
 summary(nb_model)
 
-# Generate predictions on the filtered dataset
+# Generate predictions and add them to the dataset
 data2_clean_filtered <- data2_clean_filtered %>%
   mutate(predicted_drinks = predict(nb_model, type = "response"))
 
-# Visualization of observed vs. predicted alcohol drinks per day across BMI categories
+# Create a visualization of observed vs. predicted values
 ggplot(data2_clean_filtered, aes(x = BMI_category, y = Alcohol_Drinks_Per_Day)) +
-  geom_boxplot(aes(fill = BMI_category)) +
-  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, position = position_jitter(width = 0.2)) +
+  geom_boxplot(aes(fill = BMI_category), outlier.shape = NA) +  # Boxplot for observed data
+  geom_jitter(aes(y = Alcohol_Drinks_Per_Day), width = 0.2, alpha = 0.5) +  # Add jitter for observed points
+  geom_point(aes(y = predicted_drinks), color = "blue", size = 2, 
+             position = position_jitter(width = 0.2)) +  # Add predicted values
   labs(title = "Negative Binomial Regression: Alcohol Consumption by BMI Category",
        x = "BMI Category",
        y = "Average Alcohol Drinks per Day") +
+  scale_fill_brewer(palette = "Set2") +  # Optional: adjust color palette
   theme_minimal()
 
 #Alcohol_Drinks_Per_Day on Employment number 
@@ -310,13 +387,10 @@ min_ratio <- merged_data |>
 merged_data <- merged_data |> 
   left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
 
-<<<<<<< HEAD
 income_model <- glm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
-=======
 income_model <- lm(`Personal income` ~ minority_to_white_ratio, data = merged_data)
 merged_data|>
   select(minority_to_white_ratio)
->>>>>>> 2923ce9f7e7adb960b0bd59aec69f0df24dbbfaf
 
 summary(income_model)
 
