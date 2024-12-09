@@ -1,14 +1,19 @@
+#install.packages("viridis")
+#install.packages("sf")  
 library(tidyverse)
 library(haven)
 library(ggplot2)
 library(readxl)
 library(tidycensus)
+library(sf) 
+library(viridis)
+library(dplyr)
 
 #cleaning data
 
 #removing rows with missing values
 
-library(dplyr)
+
 
 
 
@@ -384,12 +389,21 @@ mean_medical_costs_data <- brfss_clean %>%
   group_by(State) %>%  
   summarize(mean_medical_cost = mean(`MEDCOST1`, na.rm = TRUE))
 
+
 map_dataset <- merge(US_map, mean_medical_costs_data, by = "State", all.x = TRUE)
+map_dataset <- map_dataset %>%
+  mutate(
+    centroid = st_centroid(geometry),         
+    longitude = st_coordinates(centroid)[, 1] 
+  ) %>%
+  filter(longitude > -60 & longitude < 180)   
+
+
 
 #  heatmap with the mean medical costs affordability
 ggplot(map_dataset) +
   geom_sf(aes(fill = mean_medical_cost), color = "pink") +
-  scale_fill_viridis() +
+    scale_fill_viridis() +
   labs(
     title = " Mean Medical Cost Affordability by State",
     fill = "Mean Medical Cost Affordability"
