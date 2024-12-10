@@ -579,3 +579,4 @@ map_dataset <- US_map |>
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
+saveRDS(map_dataset, file = "dataset/map_dataset.rds")
