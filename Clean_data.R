@@ -184,10 +184,12 @@ mari_alch <- brfss_clean %>%
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
-               values_to = "ExposureLevel") |>
+               values_to = "ExposureLevel"
+               ) |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
-               values_to = "Frequency")
+               values_to = "Frequency") |>
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
   geom_point(alpha = 0.6) + 
