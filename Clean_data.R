@@ -543,8 +543,8 @@ shiny_table <- merged_data |>
   summarize(
     avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
     avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
-    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)) * 100,  # Percentage who could not afford health costs
-    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n() * 100
+    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)), 
+    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n()
   )|>
   arrange(State) 
 
