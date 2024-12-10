@@ -175,41 +175,62 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-# fix this
-## marijuana and drinking frequency w adverse childhood # updated
+
+
+# Boxplot for final
+# Clean and rename columns
 mari_alch <- brfss_clean %>%
-  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1) %>%
-  filter(!MARIJAN1 %in% c(88, 77, 99))  
-  
-mari_alch_combined <- mari_alch |>
-  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
-               names_to = "ExposureType", 
-               values_to = "ExposureLevel"
-               ) |>
-  pivot_longer(cols = c(MARIJAN1), 
-               names_to = "Substance", 
-               values_to = "Frequency") |>
+  rename(
+    Depression = ACEDEPRS,
+    Alcohol = ACEDRINK,
+    Drug = ACEDRUGS
+  ) %>%
+  select(Depression, Alcohol, Drug, MARIJAN1) %>%
+  filter(!Depression %in% c(7, 9)) %>%
+  filter(!Alcohol %in% c(7, 9)) %>%
+  filter(!Drug %in% c(7, 9)) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99)) %>%
+  mutate(
+    Depression = ifelse(Depression == 1, "Yes", "No"),
+    Alcohol = ifelse(Alcohol == 1, "Yes", "No"),
+    Drug = ifelse(Drug == 1, "Yes", "No")
+  )
+
+mari_alch_combined <- mari_alch %>%
+  pivot_longer(
+    cols = c(Depression, Alcohol, Drug),
+    names_to = "ExposureType",
+    values_to = "ExposureLevel"
+  ) %>%
+  pivot_longer(
+    cols = c(MARIJAN1),
+    names_to = "Substance",
+    values_to = "Frequency"
+  ) %>%
   filter(!is.na(Frequency), !is.na(ExposureLevel))
 
-ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
-  geom_point(alpha = 0.6) + 
-  geom_smooth(method = "loess", se = FALSE) +  
-  facet_wrap(~ Substance) +  
+mari_alch_means <- mari_alch_combined %>%
+  group_by(ExposureType, ExposureLevel) %>%
+  summarize(MeanFrequency = mean(Frequency, na.rm = TRUE), .groups = "drop")
+
+ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~ ExposureType, scales = "free") +
   labs(
-    title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
+    title = "Distribution of Marijuana Usage Frequency by Exposure and Type",
     x = "Exposure Level",
-    y = "Frequency"
-     ) +
-  theme_minimal() 
-  
+    y = "Frequency",
+    fill = "Exposure Type"
+  ) +
+  theme_minimal()
+
+# included lm
+mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
+summary(mari_model) 
 
 # linear fitting for both frequencies
 alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + `ACEDRINK` + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
-
-
-mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
-summary(mari_model)
 
 
 #relationship between abusive childhood experiences+ one positve childhood experience  and mental health struggles via correlation matrix
@@ -219,11 +240,31 @@ cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
 # visualizing correlation matrix w correlation plot
+
+
 library(corrplot)
 
+# Select relevant columns for the correlation matrix
+childhood_mental <- brfss_clean %>%
+  select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN, ACEDEPRS, ADDEPEV3)
+
+cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
+
+print(cor_matrix)
+
+corrplot(cor_matrix, 
+         method = "color",         
+         type = "full",             
+         tl.col = "black",        
+         tl.srt = 45,              
+         addCoef.col = "black",     
+         number.cex = 0.7,          
+         title = "Full Correlation Matrix of Childhood Mental Health Variables", 
+         mar = c(0, 0, 2, 0))       
 
 
-#highlight groups of correlations in analysis
+
+
 
 
 # relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
