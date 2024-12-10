@@ -27,7 +27,7 @@ Your Big Data page should also include a small interactive dashboard. The dashbo
 
 
 
-```{r}
+```{shinylive-r}
 #| eval: false
 #| standalone: true
 #| viewerHeight: 640 # Adjust this to fit everything
@@ -65,7 +65,7 @@ ui <- fluidPage(
 # Define server logic ----
 server <- function(input, output) {
   # Load dataset from GitHub pages website
-  data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/dataset/shiny_table.rds")
+  data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
 
   # Load US map data
   US_map <- get_acs(geography = "state",

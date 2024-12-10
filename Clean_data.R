@@ -16,11 +16,11 @@ library(dplyr)
 
 
 
-
 source(
   "scripts/load_and_clean_data.R",
   echo = FALSE 
 )
+
 
 # relationship between education and loneliness, faceted by race
 brfss_clean|>
@@ -175,21 +175,25 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-
+# fix this
 ## marijuana and drinking frequency w adverse childhood # updated
-mari_alch <- brfss_clean |>
-select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)
+mari_alch <- brfss_clean %>%
+  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99))  
+  
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
-               values_to = "ExposureLevel") |>
+               values_to = "ExposureLevel"
+               ) |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
-               values_to = "Frequency")
+               values_to = "Frequency") |>
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
   geom_point(alpha = 0.6) + 
-  geom_smooth(method = "lm", se = FALSE) +  
+  geom_smooth(method = "loess", se = FALSE) +  
   facet_wrap(~ Substance) +  
   labs(
     title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
@@ -200,7 +204,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = Exposur
   
 
 # linear fitting for both frequencies
-alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
+alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + `ACEDRINK` + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
 
 
@@ -214,7 +218,12 @@ childhood_mental <- brfss_clean %>% select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETO
 cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
-colnames(brfss_clean)
+# visualizing correlation matrix w correlation plot
+library(corrplot)
+
+
+
+#highlight groups of correlations in analysis
 
 
 # relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
