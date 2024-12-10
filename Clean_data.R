@@ -16,11 +16,11 @@ library(dplyr)
 
 
 
-
 source(
   "scripts/load_and_clean_data.R",
   echo = FALSE 
 )
+
 
 # relationship between education and loneliness, faceted by race
 brfss_clean|>
@@ -51,7 +51,10 @@ brfss_clean|>
   filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
   group_by(EDUCA)|>
   summarize(higher_income = mean(`_INCOMG1` == 6 |`_INCOMG1` == 7))
-  
+
+cor_income_satisfaction <- brfss_clean|>
+  filter(LSATISFY %in% c(1, 2, 3, 4), `_INCOMG1` != 9)
+  cor(cor_income_satisfaction$LSATISFY,cor_income_satisfaction$`_INCOMG1`, use = "complete.obs")
 
 ggplot(brfss_clean,aes(x = stress_feeling_frequency, y = MENTHLTH))+
   geom_boxplot()+
@@ -175,21 +178,26 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-
+# fix this
 ## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
-select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)
+  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)|>
+  filter(!MARIJAN1 %in% c(88, 77, 99) & ACEDRINK != 7 & ACEDRINK != 9 & !is.na(ACEDRINK))
+
+  
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
-               values_to = "ExposureLevel") |>
+               values_to = "ExposureLevel"
+               ) |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
-               values_to = "Frequency")
+               values_to = "Frequency") |>
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
   geom_point(alpha = 0.6) + 
-  geom_smooth(method = "lm", se = FALSE) +  
+  geom_smooth(method = "loess", se = FALSE) +  
   facet_wrap(~ Substance) +  
   labs(
     title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
@@ -200,7 +208,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = Exposur
   
 
 # linear fitting for both frequencies
-alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
+alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + `ACEDRINK` + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
 
 
@@ -214,7 +222,12 @@ childhood_mental <- brfss_clean %>% select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETO
 cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
-colnames(brfss_clean)
+# visualizing correlation matrix w correlation plot
+library(corrplot)
+
+
+
+#highlight groups of correlations in analysis
 
 
 # relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
@@ -373,6 +386,11 @@ plot_alco_employ<-
 
 plot_alco_employ
 
+test_data <- brfss_clean|>
+  filter(!is.na(Alcohol_Drinks_Per_Day) & `_INCOMG1` != 9)
+
+test <- lm(data = test_data, Alcohol_Drinks_Per_Day~ `_INCOMG1` )
+summary(test)
 
 # Race (in minority:white ratio) and income
 min_ratio <- merged_data |> 
@@ -543,8 +561,8 @@ shiny_table <- merged_data |>
   summarize(
     avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
     avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
-    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)) * 100,  # Percentage who could not afford health costs
-    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n() * 100
+    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)), 
+    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n()
   )|>
   arrange(State) 
 

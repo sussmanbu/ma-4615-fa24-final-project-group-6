@@ -27,56 +27,75 @@ Your Big Data page should also include a small interactive dashboard. The dashbo
 
 
 
-```{r}
+```{shinylive-r}
 #| eval: false
 #| standalone: true
-#| viewerHeight: 640 # You will have to adjust this to fit everything
-
+#| viewerHeight: 640 # Adjust this to fit everything
 
 library(shiny)
 library(tidyverse)
+library(ggplot2)
+library(sf)
 options("readr.edition" = 1) # keep this to ensure you can download the data
 
-
-# Define UI for app that draws a histogram ----
+# Define UI for app ----
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("Hello Shiny!"),
+  titlePanel("US Map of Socioeconomic Factors and Health Statuses"),
 
   # Sidebar layout with input and output definitions ----
   verticalLayout(
-      # Input: Slider for the number of bins ----
-      sliderInput(inputId = "bins",
-                  label = "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 30),
+    # Input: Select a metric to display
+    selectInput(inputId = "metric",
+                label = "Choose a metric to visualize:",
+                choices = list(
+                  "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
+                  "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
+                  "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
+                  "Percentage of State That is Uninsured" = "perc_uninsured"
+                ),
+                selected = "average_physical_unwell"),
 
-      # Output: Histogram ----
-      plotOutput(outputId = "distPlot")
-
+    # Output: Heatmap ----
+    plotOutput(outputId = "heatmap")
   )
 )
 
-# Define server logic required to draw a histogram ----
+# Define server logic ----
 server <- function(input, output) {
-  # The URL below has to point to a dataset on your github pages website
-  # I recommend creating a small-ish rds file that has only the data relevant to 
-  # the interactive.
-  data <- read_rds("https://sussmanbu.github.io/ma4615-final-project-quarto/dataset/loan_refusal_clean.rds")
-  #data <- here::here(read_rds("dataset-ignore", "file-name"))
-  
-  output$distPlot <- renderPlot({
-    ggplot(data, aes(x = refusal_rate)) +
-      geom_histogram(bins = input$bins + 1)
+  # Load dataset from GitHub pages website
+  data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
 
+  # Load US map data
+  US_map <- get_acs(geography = "state",
+                    variables = "B01003_001E",
+                    year =2020,
+                    geometry = TRUE)|>
+    rename(State = NAME)
+  # Merge map data with your dataset
+  map_dataset <- US_map |>
+    rename(State = NAME) |>  
+    left_join(data, by = "State")
+
+  # Render the heatmap plot ----
+  output$heatmap <- renderPlot({
+    ggplot(map_dataset) +
+      geom_sf(aes_string(fill = input$metric), color = "white") +
+      scale_fill_viridis_c() +
+      labs(
+        title = "US Heatmap by Selected Socioeconomic Factor or Health Status",
+        fill = "Value"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "bottom")
   })
-
 }
+
 
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)
+
 ```
 
 ---
