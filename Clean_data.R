@@ -580,7 +580,7 @@ US_map_filtered <- US_map |>
   st_crop(xmin = -179, xmax = -60, ymin = 17.88328, ymax = 71.38782)
 
 # Merge map data with your dataset
-shiny_table <- US_map |>
+shiny_table <- US_map_filtered |>
   left_join(variables_table, by = 'State')
 
 
