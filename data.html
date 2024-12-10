@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="cleaning-methodology" class="level2">
 <h2 class="anchored" data-anchor-id="cleaning-methodology">Cleaning Methodology</h2>
-<p>Regardless of the types of variables, the dataset reports everything using numerical values. For example, “99” may represent the respondent refusing to answer. Therefore, we renamed and recoded many of the variables to make our data clearer in <a href=".\scripts/load_and_clean_data.R">cleaning script</a>. In addition, we also combined variables that are describing the same thing. For example, we combined the number of times respondents did exercise 1(that they spent the most time doing) and exercise 2 (that they spent the second most time doing) per month.</p>
+<p>Regardless of the types of variables, the dataset reports everything using numerical values. For example, “99” may represent the respondent refusing to answer. Therefore, we renamed and recoded many of the variables to make our data clearer in <a href="./scripts/load_and_clean_data.R">cleaning script</a>. In addition, we also combined variables that are describing the same thing. For example, we combined the number of times respondents did exercise 1(that they spent the most time doing) and exercise 2 (that they spent the second most time doing) per month.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scripts/load_and_clean_data.R"</span>,</span>
@@ -221,12 +221,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'readxl' was built under R version 4.4.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>brfss_clean<span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(RACE, State,Health_status, Exercise_frequency, insurance_status)<span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>brfss_clean<span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(RACE, State,Health_status, Exercise_frequency, insurance_status)<span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
   RACE  State   Health_status Exercise_frequency insurance_status    
