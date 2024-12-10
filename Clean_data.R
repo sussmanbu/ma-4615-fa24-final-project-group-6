@@ -558,7 +558,7 @@ ggplot(map_dataset3) +
 
 # shiny live data prep
 
-shiny_table <- merged_data |>
+variables_table <- merged_data |>
   group_by(State) |>
   summarize(
     avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
@@ -575,10 +575,13 @@ US_map <- get_acs(geography = "state",
   rename(State= NAME) |>
   arrange(State) |>
   filter(!GEOID %in% c('21', '42', '72'))
+
+US_map_filtered <- US_map |>
+  st_crop(xmin = -179, xmax = -60, ymin = 17.88328, ymax = 71.38782)
+
 # Merge map data with your dataset
-map_dataset <- US_map |>
-  left_join(shiny_table, by = 'State')
+shiny_table <- US_map |>
+  left_join(variables_table, by = 'State')
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
-saveRDS(map_dataset, file = "dataset/map_dataset.rds")
