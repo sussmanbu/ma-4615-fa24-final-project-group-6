@@ -46,7 +46,10 @@ brfss_clean|>
   filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
   group_by(EDUCA)|>
   summarize(higher_income = mean(`_INCOMG1` == 6 |`_INCOMG1` == 7))
-  
+
+cor_income_satisfaction <- brfss_clean|>
+  filter(LSATISFY %in% c(1, 2, 3, 4), `_INCOMG1` != 9)
+  cor(cor_income_satisfaction$LSATISFY,cor_income_satisfaction$`_INCOMG1`, use = "complete.obs")
 
 ggplot(brfss_clean,aes(x = stress_feeling_frequency, y = MENTHLTH))+
   geom_boxplot()+
