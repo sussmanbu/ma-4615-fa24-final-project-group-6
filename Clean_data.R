@@ -180,9 +180,10 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # fix this
 ## marijuana and drinking frequency w adverse childhood # updated
-mari_alch <- brfss_clean %>%
-  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1) %>%
-  filter(!MARIJAN1 %in% c(88, 77, 99))  
+mari_alch <- brfss_clean |>
+  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)|>
+  filter(!MARIJAN1 %in% c(88, 77, 99) & ACEDRINK != 7 & ACEDRINK != 9 & !is.na(ACEDRINK))
+
   
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
@@ -383,6 +384,11 @@ plot_alco_employ<-
 
 plot_alco_employ
 
+test_data <- brfss_clean|>
+  filter(!is.na(Alcohol_Drinks_Per_Day) & `_INCOMG1` != 9)
+
+test <- lm(data = test_data, Alcohol_Drinks_Per_Day~ `_INCOMG1` )
+summary(test)
 
 # Race (in minority:white ratio) and income
 min_ratio <- merged_data |> 
