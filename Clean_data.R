@@ -1,14 +1,18 @@
+#install.packages("viridis")
+#install.packages("sf")  
 library(tidyverse)
 library(haven)
 library(ggplot2)
 library(readxl)
 library(tidycensus)
+library(sf) 
+library(viridis)
+library(dplyr)
 
 #cleaning data
 
 #removing rows with missing values
 
-library(dplyr)
 
 
 
@@ -16,6 +20,7 @@ source(
   "scripts/load_and_clean_data.R",
   echo = FALSE 
 )
+
 
 # relationship between education and loneliness, faceted by race
 brfss_clean|>
@@ -173,10 +178,12 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-
+# fix this
 ## marijuana and drinking frequency w adverse childhood # updated
-mari_alch <- brfss_clean |>
-select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)
+mari_alch <- brfss_clean %>%
+  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99))  
+  
 mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
                names_to = "ExposureType", 
@@ -187,7 +194,7 @@ mari_alch_combined <- mari_alch |>
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
   geom_point(alpha = 0.6) + 
-  geom_smooth(method = "lm", se = FALSE) +  
+  geom_smooth(method = "loess", se = FALSE) +  
   facet_wrap(~ Substance) +  
   labs(
     title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
@@ -198,7 +205,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = Exposur
   
 
 # linear fitting for both frequencies
-alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
+alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + `ACEDRINK` + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
 
 
@@ -212,7 +219,12 @@ childhood_mental <- brfss_clean %>% select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETO
 cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
-colnames(brfss_clean)
+# visualizing correlation matrix w correlation plot
+library(corrplot)
+
+
+
+#highlight groups of correlations in analysis
 
 
 # relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
@@ -251,7 +263,7 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-#new version for the medical cost, race, health status, lm
+#new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
   mutate(
     medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
@@ -262,7 +274,7 @@ ht_mc<-brfss_clean|>
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
                            "Refused"=9)
-  )%>%drop_na(medical_cost, Health_status)
+  )%>%drop_na(medical_cost, Health_status,)
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
@@ -272,14 +284,15 @@ predicted_prob <- predict(ht_mc_model, type = "response")
 ht_mc$Y_hat <- predicted_prob
 
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
-  geom_point(aes(color = Health_status), alpha = 0.6) +  # 绘制预测概率点
-  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  # 添加回归线
+  geom_point( alpha = 0.6,color = "blue") + 
+  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
   labs(title = "Predicted Probability of Medical Cost by Health Status and Race",
        x = "Health Status",
-       y = "Predicted Probability of 'Yes' for Medical Cost") +
+       y = "Predicted Probability of 'No' for Medical Cost") +
 
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  guides(color = "none")
 
 ### merged data analysis
 merged_data|>
@@ -460,12 +473,21 @@ mean_medical_costs_data <- brfss_clean %>%
   group_by(State) %>%  
   summarize(mean_medical_cost = mean(`MEDCOST1`, na.rm = TRUE))
 
+
 map_dataset <- merge(US_map, mean_medical_costs_data, by = "State", all.x = TRUE)
+map_dataset <- map_dataset %>%
+  mutate(
+    centroid = st_centroid(geometry),         
+    longitude = st_coordinates(centroid)[, 1] 
+  ) %>%
+  filter(longitude > -60 & longitude < 180)   
+
+
 
 #  heatmap with the mean medical costs affordability
 ggplot(map_dataset) +
   geom_sf(aes(fill = mean_medical_cost), color = "pink") +
-  scale_fill_viridis() +
+    scale_fill_viridis() +
   labs(
     title = " Mean Medical Cost Affordability by State",
     fill = "Mean Medical Cost Affordability"
@@ -522,3 +544,19 @@ ggplot(map_dataset3) +
 
 #heatnmap with mean physical health
 
+
+
+# shiny live data prep
+
+shiny_table <- merged_data |>
+  group_by(State) |>
+  summarize(
+    avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
+    avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
+    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)) * 100,  # Percentage who could not afford health costs
+    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n() * 100
+  )|>
+  arrange(State) 
+
+
+saveRDS(shiny_table, file = "dataset/shiny_table.rds")
