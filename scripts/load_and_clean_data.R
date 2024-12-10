@@ -12,7 +12,7 @@ library(dplyr)
 
 #filtered all incomplete interviews
 
-brfss <- read_xpt("dataset-ignore/LLCP2023.XPT") |>
+brfss <- read_xpt(here::here("dataset-ignore/LLCP2023.XPT")) |>
   filter(DISPCODE == 1100)
 
 
@@ -283,4 +283,6 @@ brfss_clean <- brfss_clean |>
 
 merged_data <- merge(brfss_clean, income_clean, by.x = "State", by.y = "GeoName", all = FALSE) 
 head(merged_data) 
+
+
 
