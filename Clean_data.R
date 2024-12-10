@@ -563,10 +563,22 @@ shiny_table <- merged_data |>
   summarize(
     avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
     avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
-    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)), 
-    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n()
+    prop_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)), 
+    prop_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n()
   )|>
   arrange(State) 
 
+US_map <- get_acs(geography = "state",
+                  variables = "B01003_001E",
+                  year =2020,
+                  geometry = TRUE)|>
+  rename(State= NAME) |>
+  arrange(State) |>
+  filter(!GEOID %in% c('21', '42', '72'))
+# Merge map data with your dataset
+map_dataset <- US_map |>
+  left_join(shiny_table, by = 'State')
+
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
+saveRDS(map_dataset, file = "dataset/map_dataset.rds")
