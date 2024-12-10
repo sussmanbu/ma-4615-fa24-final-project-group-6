@@ -268,6 +268,8 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
 
 #new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
+  drop_na(medical_cost, Health_status, `_INCOMG1`)|>
+  filter(`_INCOMG1` != 9 & `medical_cost` != "Don’t know/Not sure" & medical_cost != "Refused")|>
   mutate(
     medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
     Health_status = recode(as.character(Health_status),  "Excellent"= 5,
@@ -277,7 +279,7 @@ ht_mc<-brfss_clean|>
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
                            "Refused"=9)
-  )%>%drop_na(medical_cost, Health_status,)
+  )
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
@@ -288,7 +290,7 @@ ht_mc$Y_hat <- predicted_prob
 
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
-  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
+  geom_line(color = "darkred") +  
   labs(title = "Predicted Probability of Unaffordability of Medical Cost by Health Status",
        x = "Health Status",
        y = "Predicted Probability of 'No' for Medical Cost") +
