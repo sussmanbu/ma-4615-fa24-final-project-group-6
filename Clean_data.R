@@ -276,7 +276,7 @@ ht_mc$Y_hat <- predicted_prob
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
   geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
-  labs(title = "Predicted Probability of Medical Cost by Health Status and Race",
+  labs(title = "Predicted Probability of Unaffordability of Medical Cost by Health Status",
        x = "Health Status",
        y = "Predicted Probability of 'No' for Medical Cost") +
 
