@@ -117,3 +117,31 @@ ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_fa
   theme_minimal()
 
 
+# relationship between adverse childhod experiences
+
+
+mari_alch_combined <- mari_alch |>
+  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+               names_to = "ExposureType", 
+               values_to = "ExposureLevel"
+  ) |>
+  pivot_longer(cols = c(MARIJAN1), 
+               names_to = "Substance", 
+               values_to = "Frequency") |>
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
+
+mari_alch_means <- mari_alch_combined %>%
+  group_by(ExposureType, ExposureLevel) %>%
+  summarize(MeanFrequency = mean(Frequency, na.rm = TRUE), .groups = "drop")
+
+ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~ ExposureType, scales = "free") +
+  labs(
+    title = "Distribution of Marijuana Usage Frequency by Exposure and Type",
+    x = "Exposure Level",
+    y = "Frequency",
+    fill = "Exposure Type"
+  ) +
+  theme_minimal() 
+
