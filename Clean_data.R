@@ -326,22 +326,27 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
 
 #new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
-  drop_na(medical_cost, Health_status, `_INCOMG1`)|>
-  filter(`_INCOMG1` != 9 & `medical_cost` != "Don’t know/Not sure" & medical_cost != "Refused")|>
+  drop_na(`medical_cost`, Health_status, insurance_status)|>
+  filter(`_INCOMG1` != 9 & `medical_cost` != "Don’t know/Not sure" & `medical_cost` != "Refused"
+         & insurance_status != "Uncertain/Refused")|>
   mutate(
-    medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
+    medical_cost = recode(as.character(medical_cost), 'Yes' = 0, 'No' = 1), 
     Health_status = recode(as.character(Health_status),  "Excellent"= 5,
                            "Very Good"=4,
                            "Good"=3,
                            "Fair"=2,
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
-                           "Refused"=9)
-  )
+                           "Refused"=9),
+    insurance_status = case_when(
+      insurance_status %in% c("Employer-based Insurance", "Government Insurance", "Private Insurance") ~ 1,
+      insurance_status == "No Insurance" ~ 0,
+  ))
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
 summary(ht_mc_model)
+
 
 predicted_prob <- predict(ht_mc_model, type = "response")
 ht_mc$Y_hat <- predicted_prob
@@ -349,13 +354,19 @@ ht_mc$Y_hat <- predicted_prob
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
   geom_line(color = "darkred") +  
-  labs(title = "Predicted Probability of Unaffordability of Medical Cost by Health Status",
+  labs(title = "Predicted Probability of Affordability of Medical Cost by Health Status",
        x = "Health Status",
-       y = "Predicted Probability of 'No' for Medical Cost") +
+       y = "Predicted Probability of Affordability for Medical Cost") +
 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   guides(color = "none")
+
+htmcis <- ht_mc %>% select(`medical_cost`, Health_status, insurance_status)
+cor_matrix <- cor(htmcis,method = "pearson")
+print(cor_matrix)
+library(corrplot)
+corrplot(cor_matrix, method = "circle")
 
 ### merged data analysis
 merged_data|>
