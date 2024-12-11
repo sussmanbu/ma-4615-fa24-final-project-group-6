@@ -51,8 +51,6 @@ ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   guides(color = "none")
 
 # relationship between education and loneliness, faceted by race
-brfss_clean|>
-  count(Health_status)
 summary <- brfss_clean|>
   filter(loneliness_feeling_frequency != "Don’t know/Not sure" & loneliness_feeling_frequency != "Refused" 
          & !is.na(RACE) & RACE != "Uncertain/Refused" & !is.na(EDUCA) & EDUCA != "Refused")|>
@@ -73,7 +71,8 @@ ggplot(summary, aes(x = reorder(EDUCA_factor, desc(EDUCA_factor)),
     axis.title.y = element_blank()
   )+
   labs(fill = "Education level", title = "Education Level vs. Loneliness by Race", x = "Loneliness")+
-  scale_fill_viridis_d()
+  scale_fill_viridis_d()+
+  theme(strip.text = element_text(size = 8))
 
 brfss_clean|>
   filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
@@ -85,6 +84,13 @@ cor_income_satisfaction <- brfss_clean|>
 cor(cor_income_satisfaction$LSATISFY,cor_income_satisfaction$`_INCOMG1`, use = "complete.obs")
 
 # loneliness and state income on mental health
+loneliness <- merged_data|>
+  filter(loneliness_feeling_frequency == "Always" | loneliness_feeling_frequency == "Usually" |
+           loneliness_feeling_frequency == "Rarely" | loneliness_feeling_frequency == "Never", !is.na(MENTHLTH))|>
+  mutate(Binary_lonely = if_else(loneliness_feeling_frequency %in% c("Always", "Usually"), 1, 0))|>
+  select(`Gross domestic product (GDP)`, AGE_GROUP, Binary_lonely, EDUCA, `Personal income`, MENTHLTH, State)|>
+  rename(GDP = `Gross domestic product (GDP)`)
+
 poisson_model <- glm(MENTHLTH ~ log(GDP) + Binary_lonely, 
                      family = quasipoisson, data = loneliness)
 summary(poisson_model)
@@ -105,6 +111,8 @@ brfss_regre <- brfss_clean|>
 binary <- glm(Binary_health~ Alcohol_Drinks_Per_Day + 
                 high_cholesterol, data = brfss_regre, family= binomial)
 summary(binary)
+(exp(coefficients(binary))-1)*100
+
 brfss_regre$predicted <- predict(binary, type = "response")
 ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_factor(high_cholesterol))) +
   geom_line() +
@@ -115,5 +123,6 @@ ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_fa
   scale_y_continuous(labels = scales::percent)+
   scale_color_manual(values = c("red", "blue"), labels = c("normal cholesterol", "high cholesterol"))+
   theme_minimal()
+
 
 
