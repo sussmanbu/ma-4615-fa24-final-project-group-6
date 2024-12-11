@@ -51,7 +51,10 @@ brfss_clean|>
   filter(!is.na(EDUCA) & EDUCA != "Refused" & `_INCOMG1` != 9)|>
   group_by(EDUCA)|>
   summarize(higher_income = mean(`_INCOMG1` == 6 |`_INCOMG1` == 7))
-  
+
+cor_income_satisfaction <- brfss_clean|>
+  filter(LSATISFY %in% c(1, 2, 3, 4), `_INCOMG1` != 9)
+  cor(cor_income_satisfaction$LSATISFY,cor_income_satisfaction$`_INCOMG1`, use = "complete.obs")
 
 ggplot(brfss_clean,aes(x = stress_feeling_frequency, y = MENTHLTH))+
   geom_boxplot()+
@@ -175,6 +178,7 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
+<<<<<<< HEAD
 
 
 # Boxplot for final
@@ -207,6 +211,23 @@ mari_alch_combined <- mari_alch %>%
     names_to = "Substance",
     values_to = "Frequency"
   ) %>%
+=======
+# fix this
+## marijuana and drinking frequency w adverse childhood # updated
+mari_alch <- brfss_clean |>
+  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)|>
+  filter(!MARIJAN1 %in% c(88, 77, 99) & ACEDRINK != 7 & ACEDRINK != 9 & !is.na(ACEDRINK))
+
+  
+mari_alch_combined <- mari_alch |>
+  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+               names_to = "ExposureType", 
+               values_to = "ExposureLevel"
+               ) |>
+  pivot_longer(cols = c(MARIJAN1), 
+               names_to = "Substance", 
+               values_to = "Frequency") |>
+>>>>>>> dfc50c326bf1c887d414decda45fd662f2809291
   filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 mari_alch_means <- mari_alch_combined %>%
@@ -305,6 +326,8 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
 
 #new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
+  drop_na(medical_cost, Health_status, `_INCOMG1`)|>
+  filter(`_INCOMG1` != 9 & `medical_cost` != "Don’t know/Not sure" & medical_cost != "Refused")|>
   mutate(
     medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
     Health_status = recode(as.character(Health_status),  "Excellent"= 5,
@@ -314,7 +337,7 @@ ht_mc<-brfss_clean|>
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
                            "Refused"=9)
-  )%>%drop_na(medical_cost, Health_status,)
+  )
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
@@ -325,8 +348,8 @@ ht_mc$Y_hat <- predicted_prob
 
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
-  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
-  labs(title = "Predicted Probability of Medical Cost by Health Status and Race",
+  geom_line(color = "darkred") +  
+  labs(title = "Predicted Probability of Unaffordability of Medical Cost by Health Status",
        x = "Health Status",
        y = "Predicted Probability of 'No' for Medical Cost") +
 
@@ -423,6 +446,11 @@ plot_alco_employ<-
 
 plot_alco_employ
 
+test_data <- brfss_clean|>
+  filter(!is.na(Alcohol_Drinks_Per_Day) & `_INCOMG1` != 9)
+
+test <- lm(data = test_data, Alcohol_Drinks_Per_Day~ `_INCOMG1` )
+summary(test)
 
 # Race (in minority:white ratio) and income
 min_ratio <- merged_data |> 
@@ -588,15 +616,30 @@ ggplot(map_dataset3) +
 
 # shiny live data prep
 
-shiny_table <- merged_data |>
+variables_table <- merged_data |>
   group_by(State) |>
   summarize(
     avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),  
     avg_physical_unwell_days = mean(PHYSHLTH, na.rm = TRUE),
-    perc_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)) * 100,  # Percentage who could not afford health costs
-    perc_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n() * 100
+    prop_cannot_afford = sum(MEDCOST1 == 2, na.rm = TRUE) / sum(!is.na(MEDCOST1)), 
+    prop_uninsured = sum(insurance_status == "No Insurance", na.rm = TRUE) / n()
   )|>
   arrange(State) 
+
+US_map <- get_acs(geography = "state",
+                  variables = "B01003_001E",
+                  year =2020,
+                  geometry = TRUE)|>
+  rename(State= NAME) |>
+  arrange(State) |>
+  filter(!GEOID %in% c('21', '42', '72'))
+
+US_map_filtered <- US_map |>
+  st_crop(xmin = -179, xmax = -60, ymin = 17.88328, ymax = 71.38782)
+
+# Merge map data with your dataset
+shiny_table <- US_map_filtered |>
+  left_join(variables_table, by = 'State')
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
