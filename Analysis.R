@@ -182,6 +182,62 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
   scale_fill_viridis_d() +
   theme_minimal()
 
+# barchart w errorbars version checking if results are stats signif
+
+
+standard_error <- function(x) {
+  sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))
+}
+
+mari_alch <- brfss_clean %>%
+  rename(
+    Depression = ACEDEPRS,
+    Alcohol = ACEDRINK,
+    Drug = ACEDRUGS
+  ) %>%
+  select(Depression, Alcohol, Drug, MARIJAN1) %>%
+  filter(!Depression %in% c(7, 9)) %>%
+  filter(!Alcohol %in% c(7, 9)) %>%
+  filter(!Drug %in% c(7, 9)) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99)) %>%
+  mutate(
+    Depression = ifelse(Depression == 1, "Yes", "No"),
+    Alcohol = ifelse(Alcohol == 1, "Yes", "No"),
+    Drug = ifelse(Drug == 1, "Yes", "No")
+  )
+
+mari_alch_combined <- mari_alch %>%
+  pivot_longer(
+    cols = c(Depression, Alcohol, Drug),
+    names_to = "ExposureType",
+    values_to = "ExposureLevel"
+  ) %>%
+  pivot_longer(
+    cols = c(MARIJAN1),
+    names_to = "Substance",
+    values_to = "Frequency"
+  ) %>%
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
+
+mari_alch_summary <- mari_alch_combined %>%
+  group_by(ExposureType, ExposureLevel) %>%
+  summarise(
+    mean_frequency = mean(Frequency, na.rm = TRUE),
+    se_frequency = standard_error(Frequency)
+  )
+
+ggplot(mari_alch_summary, aes(x = ExposureLevel, y = mean_frequency, fill = ExposureType)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(aes(ymin = mean_frequency - se_frequency, ymax = mean_frequency + se_frequency), width = 0.2, position = position_dodge(0.9)) +
+  facet_wrap(~ ExposureType, scales = "free") +
+  labs(
+    title = "Average Marijuana Usage Frequency by Exposure and Type",
+    x = "Exposure Level",
+    y = "Mean Frequency",
+    fill = "Exposure Type"
+  ) +
+  scale_fill_viridis_d() +
+  theme_minimal()
 
 
 #  physical and mental health accross race
