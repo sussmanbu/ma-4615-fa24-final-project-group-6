@@ -6,7 +6,7 @@ library(tidycensus)
 library(sf) 
 library(viridis)
 library(dplyr)
-
+library(tidyr)
 #cleaning data
 
 #removing rows with missing values
@@ -120,19 +120,35 @@ ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_fa
 # relationship between adverse childhod experiences
 
 
-mari_alch_combined <- mari_alch |>
-  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
-               names_to = "ExposureType", 
-               values_to = "ExposureLevel"
-  ) |>
-  pivot_longer(cols = c(MARIJAN1), 
-               names_to = "Substance", 
-               values_to = "Frequency") |>
-  filter(!is.na(Frequency), !is.na(ExposureLevel))
+mari_alch <- brfss_clean %>%
+  rename(
+    Depression = ACEDEPRS,
+    Alcohol = ACEDRINK,
+    Drug = ACEDRUGS
+  ) %>%
+  select(Depression, Alcohol, Drug, MARIJAN1) %>%
+  filter(!Depression %in% c(7, 9)) %>%
+  filter(!Alcohol %in% c(7, 9)) %>%
+  filter(!Drug %in% c(7, 9)) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99)) %>%
+  mutate(
+    Depression = ifelse(Depression == 1, "Yes", "No"),
+    Alcohol = ifelse(Alcohol == 1, "Yes", "No"),
+    Drug = ifelse(Drug == 1, "Yes", "No")
+  )
 
-mari_alch_means <- mari_alch_combined %>%
-  group_by(ExposureType, ExposureLevel) %>%
-  summarize(MeanFrequency = mean(Frequency, na.rm = TRUE), .groups = "drop")
+mari_alch_combined <- mari_alch %>%
+  pivot_longer(
+    cols = c(Depression, Alcohol, Drug),
+    names_to = "ExposureType",
+    values_to = "ExposureLevel"
+  ) %>%
+  pivot_longer(
+    cols = c(MARIJAN1),
+    names_to = "Substance",
+    values_to = "Frequency"
+  ) %>%
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
   geom_boxplot(alpha = 0.7) +
@@ -143,5 +159,28 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
     y = "Frequency",
     fill = "Exposure Type"
   ) +
-  theme_minimal() 
+  theme_minimal()
 
+
+#  physical and mental health accross race
+
+racial_health <- merged_data %>%
+  filter(!PHYSHLTH %in% c(88, 77, 99)) %>%
+  filter(!MENTHLTH %in% c(88, 77, 99)) %>%
+  filter(!POORHLTH %in% c(88, 77, 99)) %>%
+  filter(!RACE %in% c("Other", "Uncertain/Refused", NA)) %>%
+  group_by(RACE) %>%
+  summarise(
+    `Physical Health` = mean(PHYSHLTH, na.rm = TRUE),
+    `Mental Health` = mean(MENTHLTH, na.rm = TRUE),
+    `Poor Health` = mean(POORHLTH, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(`Physical Health`, `Mental Health`, `Poor Health`), names_to = "status", values_to = "days_unwell")
+
+
+ggplot(racial_health, aes(x = status, y = days_unwell, fill = status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ RACE) +
+  labs(title = "Average Days Unwell by Health Status for Each Race", x = "Health Status", y = "Average Days Unwell") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))

@@ -178,11 +178,11 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-<<<<<<< HEAD
+
 
 
 # Boxplot for final
-# Clean and rename columns
+
 mari_alch <- brfss_clean %>%
   rename(
     Depression = ACEDEPRS,
@@ -211,28 +211,7 @@ mari_alch_combined <- mari_alch %>%
     names_to = "Substance",
     values_to = "Frequency"
   ) %>%
-=======
-# fix this
-## marijuana and drinking frequency w adverse childhood # updated
-mari_alch <- brfss_clean |>
-  select(ACEDEPRS, ACEDRINK, ACEDRUGS, MARIJAN1)|>
-  filter(!MARIJAN1 %in% c(88, 77, 99) & ACEDRINK != 7 & ACEDRINK != 9 & !is.na(ACEDRINK))
-
-  
-mari_alch_combined <- mari_alch |>
-  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
-               names_to = "ExposureType", 
-               values_to = "ExposureLevel"
-               ) |>
-  pivot_longer(cols = c(MARIJAN1), 
-               names_to = "Substance", 
-               values_to = "Frequency") |>
->>>>>>> dfc50c326bf1c887d414decda45fd662f2809291
   filter(!is.na(Frequency), !is.na(ExposureLevel))
-
-mari_alch_means <- mari_alch_combined %>%
-  group_by(ExposureType, ExposureLevel) %>%
-  summarize(MeanFrequency = mean(Frequency, na.rm = TRUE), .groups = "drop")
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
   geom_boxplot(alpha = 0.7) +
@@ -244,6 +223,8 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
     fill = "Exposure Type"
   ) +
   theme_minimal()
+
+
 
 # included lm
 mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
@@ -643,3 +624,4 @@ shiny_table <- US_map_filtered |>
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
+
