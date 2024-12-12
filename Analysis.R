@@ -180,7 +180,7 @@ mean_values <- mari_alch_combined %>%
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
   geom_boxplot(alpha = 0.7) +
-  geom_point(data = mean_values, aes(x = ExposureLevel, y = mean_frequency), color = "blue", size = 3, shape = 18) +
+  geom_point(data = mean_values, aes(x = ExposureLevel, y = mean_frequency), color = "red", size = 3, shape = 18) +
   facet_wrap(~ ExposureType, scales = "free") +
   labs(
     title = "Distribution of  Marijuana Usage Frequency by Exposure and Type",
