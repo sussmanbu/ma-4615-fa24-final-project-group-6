@@ -6,11 +6,8 @@ library(tidycensus)
 library(sf) 
 library(viridis)
 library(dplyr)
-<<<<<<< HEAD
 library(tidyr)
-=======
 library(corrplot)
->>>>>>> b0a16a47932044938ac9d6ab273a87eb57035f7b
 #cleaning data
 
 #removing rows with missing values
@@ -202,14 +199,14 @@ racial_health <- merged_data %>%
   ) %>%
   pivot_longer(cols = c(`Physical Health`, `Mental Health`, `Poor Health`), names_to = "status", values_to = "days_unwell")
 
-
+# Create the bar graph with Viridis color palette
 ggplot(racial_health, aes(x = status, y = days_unwell, fill = status)) +
   geom_bar(stat = "identity", position = "dodge") +
   facet_wrap(~ RACE) +
   labs(title = "Average Days Unwell by Health Status for Each Race", x = "Health Status", y = "Average Days Unwell") +
+  scale_fill_viridis_d() +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
 
 #racial disparities across health
 race_health <- brfss_clean|>
@@ -230,4 +227,3 @@ ggplot(data = race_health, aes(x = reorder(RACE, -physical_avg), y = physical_av
   
 
 
->>>>>>> b0a16a47932044938ac9d6ab273a87eb57035f7b
