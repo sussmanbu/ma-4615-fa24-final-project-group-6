@@ -223,7 +223,7 @@ ggplot(data = race_health, aes(x = reorder(RACE, -physical_avg), y = physical_av
   geom_col()+
   theme(axis.text.x = element_text(angle = 20, hjust = 1), legend.position = "none")+
   scale_fill_viridis_d()+
-  labs(x = "Race", y = "Days of Physical Health Unwell", title = "Racial Disparities in Mental Health") 
+  labs(x = "Race", y = "Days of Physical Health Unwell", title = "Racial Disparities in Physical Health") 
   
 
 
