@@ -140,7 +140,6 @@ ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_fa
 
 # relationship between adverse childhod experiences
 
-
 mari_alch <- brfss_clean %>%
   rename(
     Depression = ACEDEPRS,
@@ -180,6 +179,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
     y = "Frequency",
     fill = "Exposure Type"
   ) +
+  scale_fill_viridis_d() +
   theme_minimal()
 
 
@@ -199,7 +199,6 @@ racial_health <- merged_data %>%
   ) %>%
   pivot_longer(cols = c(`Physical Health`, `Mental Health`, `Poor Health`), names_to = "status", values_to = "days_unwell")
 
-# Create the bar graph with Viridis color palette
 ggplot(racial_health, aes(x = status, y = days_unwell, fill = status)) +
   geom_bar(stat = "identity", position = "dodge") +
   facet_wrap(~ RACE) +
