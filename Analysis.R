@@ -140,7 +140,6 @@ ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_fa
 
 # relationship between adverse childhod experiences
 
-
 mari_alch <- brfss_clean %>%
   rename(
     Depression = ACEDEPRS,
@@ -175,17 +174,23 @@ mari_alch_combined <- mari_alch %>%
 anova_results <- aov(Frequency ~ ExposureType * ExposureLevel, data = mari_alch_combined)
 summary(anova_results)
 
+mean_values <- mari_alch_combined %>%
+  group_by(ExposureType, ExposureLevel) %>%
+  summarise(mean_frequency = mean(Frequency, na.rm = TRUE))
+
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
   geom_boxplot(alpha = 0.7) +
+  geom_point(data = mean_values, aes(x = ExposureLevel, y = mean_frequency), color = "blue", size = 3, shape = 18) +
   facet_wrap(~ ExposureType, scales = "free") +
   labs(
-    title = "Distribution of  Average Marijuana Usage Frequency by Exposure and Type",
+    title = "Distribution of Average Marijuana Usage Frequency by Exposure and Type",
     x = "Exposure Level",
-    y = "Average Frequency",
+    y = "Frequency",
     fill = "Exposure Type"
   ) +
   scale_fill_viridis_d() +
   theme_minimal()
+
 
 
 #  physical and mental health accross race
