@@ -179,9 +179,9 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
   geom_boxplot(alpha = 0.7) +
   facet_wrap(~ ExposureType, scales = "free") +
   labs(
-    title = "Distribution of Marijuana Usage Frequency by Exposure and Type",
+    title = "Distribution of  Average Marijuana Usage Frequency by Exposure and Type",
     x = "Exposure Level",
-    y = "Frequency",
+    y = "Average Frequency",
     fill = "Exposure Type"
   ) +
   scale_fill_viridis_d() +
