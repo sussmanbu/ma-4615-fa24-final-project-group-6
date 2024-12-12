@@ -493,9 +493,9 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
   geom_smooth(method = "lm", se = TRUE, color = "blue") +
   theme_minimal() +
   labs(
-    title = "Relationship Between Minority-to-White Ratio per Sate and Income",
+    title = "Minority-to-White Ratio and State Income",
     x = "Minority-to-White Ratio",
-    y = "Personal Income"
+    y = "Personal Income in each State"
   )
 
 

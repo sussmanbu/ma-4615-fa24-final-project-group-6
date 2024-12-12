@@ -47,7 +47,7 @@ ht_mc$Y_hat <- predicted_prob
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
   geom_line(color = "darkred") +  
-  labs(title = "Predicted Probability of Affordability of Medical Cost by Health Status",
+  labs(title = "Affordability of Medical Cost by Health Status",
        x = "Health Status",
        y = "Predicted Probability of Affordability for Medical Cost") +
   
@@ -110,38 +110,45 @@ summary(poisson_model)
 
 
 
-#logistic regression on health status vs alcohol drinks per day and cholesterol status
+#logistic regression on health status vs marijuana consumption and inability to pay bills
 brfss_regre <- brfss_clean|>
   filter(!(Health_status %in% c("Fair", "Don’t Know/Not Sure", "Refused")))|>
-  filter((TOLDHI3 == 1| TOLDHI3 ==2), !(is.na(Alcohol_Drinks_Per_Day)))|>
+  filter(!(MARIJAN1 %in% c(77 , 88, 99)& !is.na(MARIJAN1)) )|>
+  filter(SDHBILLS == 1 | SDHBILLS == 2)|>
   mutate(Binary_health = if_else(Health_status %in% c("Excellent", "Very Good", "Good"), 0, 1))|>
-  mutate(high_cholesterol = if_else(TOLDHI3 == 1, 1, 0))|>
-  select(Binary_health, Alcohol_Drinks_Per_Day, high_cholesterol)
+  mutate(cant_pay = if_else(SDHBILLS == 1, 1, 0))|>
+  select(Binary_health, Alcohol_Drinks_Per_Day, cant_pay, LANDSEX2 ,MARIJAN1)
 
 
-binary <- glm(Binary_health~ Alcohol_Drinks_Per_Day + 
-                high_cholesterol, data = brfss_regre, family= binomial)
+binary <- glm(Binary_health~ MARIJAN1 + 
+                cant_pay, data = brfss_regre, family= binomial)
 summary(binary)
+
 (exp(coefficients(binary))-1)*100
 
-brfss_regre$predicted <- predict(binary, type = "response")
-ggplot(brfss_regre, aes(x = Alcohol_Drinks_Per_Day, y = predicted, color = as_factor(high_cholesterol))) +
-  geom_line() +
-  labs(title = "Probability of Bad Health Based on Alcohol Drinks Per Day",
-       x = "Alcohol Drinks Per Day",
-       y = "Predicted Probability of Poor Health",
-       color = "Health Status") +
-  scale_y_continuous(labels = scales::percent)+
-  scale_color_manual(values = c("red", "blue"), labels = c("normal cholesterol", "high cholesterol"))+
-  theme_minimal()
 
 
 
 # relationship between adverse childhod experiences
-
+mari_alch <- brfss_clean %>%
+  rename(
+    Depression = ACEDEPRS,
+    Alcohol = ACEDRINK,
+    Drug = ACEDRUGS
+  ) %>%
+  select(Depression, Alcohol, Drug, MARIJAN1) %>%
+  filter(!Depression %in% c(7, 9)) %>%
+  filter(!Alcohol %in% c(7, 9)) %>%
+  filter(!Drug %in% c(7, 9)) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99)) %>%
+  mutate(
+    Depression = ifelse(Depression == 1, "Yes", "No"),
+    Alcohol = ifelse(Alcohol == 1, "Yes", "No"),
+    Drug = ifelse(Drug == 1, "Yes", "No")
+  )
 
 mari_alch_combined <- mari_alch |>
-  pivot_longer(cols = c(ACEDEPRS, ACEDRINK, ACEDRUGS), 
+  pivot_longer(cols = c(Depression, Alcohol, Drug), 
                names_to = "ExposureType", 
                values_to = "ExposureLevel"
   ) |>
@@ -180,7 +187,7 @@ ggplot(data = race_health, aes(x = reorder(RACE, -physical_avg), y = physical_av
   geom_col()+
   theme(axis.text.x = element_text(angle = 20, hjust = 1), legend.position = "none")+
   scale_fill_viridis_d()+
-  labs(x = "Race", y = "Days of Physical Health Unwell", title = "Racial Disparities in Mental Health") 
+  labs(x = "Race", y = "Days of Physical Health Unwell", title = "Racial Disparities in Physical Health") 
   
 
 
