@@ -39,6 +39,7 @@ ht_mc<-brfss_clean|>
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
 summary(ht_mc_model)
+(exp(coefficients(ht_mc_model))-1)*100
 
 
 predicted_prob <- predict(ht_mc_model, type = "response")
@@ -58,6 +59,7 @@ ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
 htmcis <- ht_mc %>% select(`medical_cost`, Health_status, insurance_status)
 cor_matrix <- cor(htmcis,method = "pearson")
 print(cor_matrix)
+library(corrplot)
 corrplot(cor_matrix, method = "circle")
 
 

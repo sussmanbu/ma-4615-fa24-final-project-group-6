@@ -178,7 +178,6 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-<<<<<<< HEAD
 
 
 # Boxplot for final
@@ -211,7 +210,7 @@ mari_alch_combined <- mari_alch %>%
     names_to = "Substance",
     values_to = "Frequency"
   ) %>%
-=======
+
 # fix this
 ## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
@@ -227,7 +226,6 @@ mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
                values_to = "Frequency") |>
->>>>>>> dfc50c326bf1c887d414decda45fd662f2809291
   filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 mari_alch_means <- mari_alch_combined %>%
@@ -346,6 +344,7 @@ ht_mc<-brfss_clean|>
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
 summary(ht_mc_model)
+(exp(coefficients(ht_mc_model))-1)*100
 
 
 predicted_prob <- predict(ht_mc_model, type = "response")
