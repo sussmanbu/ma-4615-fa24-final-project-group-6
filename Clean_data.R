@@ -178,10 +178,8 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
-
-
 # Boxplot for final
-# Clean and rename columns
+
 mari_alch <- brfss_clean %>%
   rename(
     Depression = ACEDEPRS,
@@ -211,6 +209,7 @@ mari_alch_combined <- mari_alch %>%
     values_to = "Frequency"
   ) %>%
 
+  
 # fix this
 ## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
@@ -226,11 +225,8 @@ mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
                values_to = "Frequency") |>
-  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
-mari_alch_means <- mari_alch_combined %>%
-  group_by(ExposureType, ExposureLevel) %>%
-  summarize(MeanFrequency = mean(Frequency, na.rm = TRUE), .groups = "drop")
+  filter(!is.na(Frequency), !is.na(ExposureLevel))
 
 ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
   geom_boxplot(alpha = 0.7) +
@@ -242,6 +238,8 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
     fill = "Exposure Type"
   ) +
   theme_minimal()
+
+
 
 # included lm
 mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
@@ -492,9 +490,9 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
   geom_smooth(method = "lm", se = TRUE, color = "blue") +
   theme_minimal() +
   labs(
-    title = "Relationship Between Minority-to-White Ratio per Sate and Income",
+    title = "Minority-to-White Ratio and State Income",
     x = "Minority-to-White Ratio",
-    y = "Personal Income"
+    y = "Personal Income in each State"
   )
 
 
@@ -653,3 +651,4 @@ shiny_table <- US_map_filtered |>
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
+
