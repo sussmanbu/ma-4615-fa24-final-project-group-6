@@ -178,6 +178,38 @@ ggplot(adverse_drug, aes(x = factor(ExposureLevel), y = CurrentUseFrequency)) +
 
 # statistical analysis method
 
+# Boxplot for final
+
+mari_alch <- brfss_clean %>%
+  rename(
+    Depression = ACEDEPRS,
+    Alcohol = ACEDRINK,
+    Drug = ACEDRUGS
+  ) %>%
+  select(Depression, Alcohol, Drug, MARIJAN1) %>%
+  filter(!Depression %in% c(7, 9)) %>%
+  filter(!Alcohol %in% c(7, 9)) %>%
+  filter(!Drug %in% c(7, 9)) %>%
+  filter(!MARIJAN1 %in% c(88, 77, 99)) %>%
+  mutate(
+    Depression = ifelse(Depression == 1, "Yes", "No"),
+    Alcohol = ifelse(Alcohol == 1, "Yes", "No"),
+    Drug = ifelse(Drug == 1, "Yes", "No")
+  )
+
+mari_alch_combined <- mari_alch %>%
+  pivot_longer(
+    cols = c(Depression, Alcohol, Drug),
+    names_to = "ExposureType",
+    values_to = "ExposureLevel"
+  ) %>%
+  pivot_longer(
+    cols = c(MARIJAN1),
+    names_to = "Substance",
+    values_to = "Frequency"
+  ) %>%
+
+  
 # fix this
 ## marijuana and drinking frequency w adverse childhood # updated
 mari_alch <- brfss_clean |>
@@ -193,27 +225,29 @@ mari_alch_combined <- mari_alch |>
   pivot_longer(cols = c(MARIJAN1), 
                names_to = "Substance", 
                values_to = "Frequency") |>
+
   filter(!is.na(Frequency), !is.na(ExposureLevel))
 
-ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, color = ExposureType)) +
-  geom_point(alpha = 0.6) + 
-  geom_smooth(method = "loess", se = FALSE) +  
-  facet_wrap(~ Substance) +  
+ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = ExposureType)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~ ExposureType, scales = "free") +
   labs(
-    title = "Exposure to Drugs vs Alcohol and Marijuana Frequency",
+    title = "Distribution of Marijuana Usage Frequency by Exposure and Type",
     x = "Exposure Level",
-    y = "Frequency"
-     ) +
-  theme_minimal() 
-  
+    y = "Frequency",
+    fill = "Exposure Type"
+  ) +
+  theme_minimal()
+
+
+
+# included lm
+mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
+summary(mari_model) 
 
 # linear fitting for both frequencies
 alch_model <- lm(AVEDRNK3 ~ ACEDEPRS + `ACEDRINK` + ACEDRUGS, data = brfss_clean)
 summary(alch_model)
-
-
-mari_model <- lm(MARIJAN1 ~ ACEDEPRS + ACEDRINK + ACEDRUGS, data = brfss_clean)
-summary(mari_model)
 
 
 #relationship between abusive childhood experiences+ one positve childhood experience  and mental health struggles via correlation matrix
@@ -223,11 +257,31 @@ cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
 print(cor_matrix)
 
 # visualizing correlation matrix w correlation plot
+
+
 library(corrplot)
 
+# Select relevant columns for the correlation matrix
+childhood_mental <- brfss_clean %>%
+  select(`_MENT14D`, ACEHURT1, ACESWEAR, ACETOUCH, ACEADSAF, ACEPRISN, ACEDEPRS, ADDEPEV3)
+
+cor_matrix <- cor(childhood_mental, use = "complete.obs", method = "pearson")
+
+print(cor_matrix)
+
+corrplot(cor_matrix, 
+         method = "color",         
+         type = "full",             
+         tl.col = "black",        
+         tl.srt = 45,              
+         addCoef.col = "black",     
+         number.cex = 0.7,          
+         title = "Full Correlation Matrix of Childhood Mental Health Variables", 
+         mar = c(0, 0, 2, 0))       
 
 
-#highlight groups of correlations in analysis
+
+
 
 
 # relationship between  mental health status (0days, 1-13 days, 14-30 days) and other childhood experiences
@@ -268,34 +322,48 @@ ggplot(data = brfss_clean, aes(x = Health_status, y = medical_cost)) +
 
 #new version for the medical cost, race, health status, glm
 ht_mc<-brfss_clean|>
+  drop_na(`medical_cost`, Health_status, insurance_status)|>
+  filter(`_INCOMG1` != 9 & `medical_cost` != "Don’t know/Not sure" & `medical_cost` != "Refused"
+         & insurance_status != "Uncertain/Refused")|>
   mutate(
-    medical_cost = recode(as.character(medical_cost), 'Yes' = 1, 'No' = 0), 
+    medical_cost = recode(as.character(medical_cost), 'Yes' = 0, 'No' = 1), 
     Health_status = recode(as.character(Health_status),  "Excellent"= 5,
                            "Very Good"=4,
                            "Good"=3,
                            "Fair"=2,
                            "Poor"= 1,
                            "Don’t Know/Not Sure"=7,
-                           "Refused"=9)
-  )%>%drop_na(medical_cost, Health_status,)
+                           "Refused"=9),
+    insurance_status = case_when(
+      insurance_status %in% c("Employer-based Insurance", "Government Insurance", "Private Insurance") ~ 1,
+      insurance_status == "No Insurance" ~ 0,
+  ))
  
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
 summary(ht_mc_model)
+(exp(coefficients(ht_mc_model))-1)*100
+
 
 predicted_prob <- predict(ht_mc_model, type = "response")
 ht_mc$Y_hat <- predicted_prob
 
 ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
   geom_point( alpha = 0.6,color = "blue") + 
-  geom_smooth(method = "lm", se = FALSE, color = "darkred") +  
-  labs(title = "Predicted Probability of Unaffordability of Medical Cost by Health Status",
+  geom_line(color = "darkred") +  
+  labs(title = "Predicted Probability of Affordability of Medical Cost by Health Status",
        x = "Health Status",
-       y = "Predicted Probability of 'No' for Medical Cost") +
+       y = "Predicted Probability of Affordability for Medical Cost") +
 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   guides(color = "none")
+
+htmcis <- ht_mc %>% select(`medical_cost`, Health_status, insurance_status)
+cor_matrix <- cor(htmcis,method = "pearson")
+print(cor_matrix)
+library(corrplot)
+corrplot(cor_matrix, method = "circle")
 
 ### merged data analysis
 merged_data|>
@@ -422,9 +490,9 @@ ggplot(merged_data, aes(x = minority_to_white_ratio, y = `Personal income`)) +
   geom_smooth(method = "lm", se = TRUE, color = "blue") +
   theme_minimal() +
   labs(
-    title = "Relationship Between Minority-to-White Ratio per Sate and Income",
+    title = "Minority-to-White Ratio and State Income",
     x = "Minority-to-White Ratio",
-    y = "Personal Income"
+    y = "Personal Income in each State"
   )
 
 
@@ -583,3 +651,4 @@ shiny_table <- US_map_filtered |>
 
 
 saveRDS(shiny_table, file = "dataset/shiny_table.rds")
+
