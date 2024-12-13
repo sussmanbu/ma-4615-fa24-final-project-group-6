@@ -61,8 +61,8 @@ ui <- fluidPage(
                 choices = list(
                   "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
                   "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
-                  "Proportion of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
-                  "Proportion of State That is Uninsured" = "perc_uninsured"
+                  "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
+                  "Proportion of State That is Uninsured" = "prop_uninsured"
                 ),
                 selected = "average_physical_unwell"),
 
@@ -74,19 +74,8 @@ ui <- fluidPage(
 # Define server logic ----
 server <- function(input, output) {
   # Load dataset from GitHub pages website
-  data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/map_sataset.rds")
+  data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
 
-  # Load US map data
-  US_map <- get_acs(geography = "state",
-                    variables = "B01003_001E",
-                    year =2020,
-                    geometry = TRUE)|>
-    rename(State = NAME) |>
-    arrange(State) |>
-    filter(!GEOID %in% c('21', '42', '72'))
-  # Merge map data with your dataset
-  map_dataset <- US_map |>
-    left_join(data, by = State)
 
   # Render the heatmap plot ----
   output$heatmap <- renderPlot({
