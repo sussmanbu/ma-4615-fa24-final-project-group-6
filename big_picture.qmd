@@ -42,23 +42,20 @@ options("readr.edition" = 1) # keep this to ensure you can download the data
 ui <- fluidPage(
 
   # App title ----
-  titlePanel("US Map of Socioeconomic Factors and Health Statuses"),
+  titlePanel("US Map of Socioeconomic Factors of Interest"),
 
   # Sidebar layout with input and output definitions ----
   verticalLayout(
     # Input: Select a metric to display
     selectInput(inputId = "metric",
-                label = "Choose a metric to visualize:",
+                label = "Select a socioeconomic factor to visualize:",
                 choices = list(
                   "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
                   "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
-<<<<<<< HEAD
                   "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
-                  "Proportion of State That is Uninsured" = "prop_uninsured"
-=======
+                  "Proportion of State That is Uninsured" = "prop_uninsured",
                   "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
                   "Percentage of State That is Uninsured" = "perc_uninsured"
->>>>>>> b775f734db120cce9fd1dca3111e84c63f0c35aa
                 ),
                 selected = "average_physical_unwell"),
 
@@ -72,8 +69,6 @@ server <- function(input, output) {
   # Load dataset from GitHub pages website
   data <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
 
-<<<<<<< HEAD
-=======
   # Load US map data
   US_map <- get_acs(geography = "state",
                     variables = "B01003_001E",
@@ -84,7 +79,6 @@ server <- function(input, output) {
   map_dataset <- US_map |>
     rename(State = NAME) |>  
     left_join(data, by = "State")
->>>>>>> b775f734db120cce9fd1dca3111e84c63f0c35aa
 
   # Render the heatmap plot ----
   output$heatmap <- renderPlot({
