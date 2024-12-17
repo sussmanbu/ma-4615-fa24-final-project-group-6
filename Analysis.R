@@ -177,7 +177,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
   facet_wrap(~ ExposureType, scales = "free") +
   labs(
     title = "Marijuana Usage Frequency by Exposure and Type",
-    x = "Exposure Level",
+    x = "Exposed",
     y = "Frequency",
     fill = "Exposure Type"
   ) +
@@ -220,11 +220,16 @@ ggplot(data = race_health, aes(x = reorder(RACE, -mental_avg), y = mental_avg, f
   theme(axis.text.x = element_text(angle = 20, hjust = 1), legend.position = "none")+
   scale_fill_viridis_d()+
   labs(x = "Race", y = "Days of Mental Health Unwell", title = "Racial Disparities in Mental Health")
-ggplot(data = race_health, aes(x = reorder(RACE, -physical_avg), y = physical_avg, fill = reorder(RACE, -physical_avg)))+
+ggplot(data = race_health, aes(x = reorder(RACE, -mental_avg), y = physical_avg, fill = reorder(RACE, -mental_avg)))+
   geom_col()+
   theme(axis.text.x = element_text(angle = 20, hjust = 1), legend.position = "none")+
   scale_fill_viridis_d()+
   labs(x = "Race", y = "Days of Physical Health Unwell", title = "Racial Disparities in Physical Health") 
-  
+
+brfss_clean|>
+  filter(`_INCOMG1` != 9)|>
+  group_by(RACE)|>
+  summarize(income_avg = mean(`_INCOMG1`))|>
+  arrange(desc(income_avg))
 
 
