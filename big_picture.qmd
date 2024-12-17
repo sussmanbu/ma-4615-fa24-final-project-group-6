@@ -39,7 +39,7 @@ These plots show how the state you live in can impact key socioeconomic factors.
 
 Choose the topic you are interested in down below and explore how these factors vary across the U.S. The social factors of interest can negatively impact an individual’s ability to take part in their own lives, including their ability to be successful in social and workplace settings. The economic factors of interest can impact if an individual reaches out for medical care, which can lead to worse health outcomes and decreased quality of life.
 
-```{r}
+```{shinylive-r}
 #| eval: false
 #| standalone: true
 #| viewerHeight: 640 # Adjust this to fit everything
