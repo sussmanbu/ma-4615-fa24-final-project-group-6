@@ -27,7 +27,7 @@ Your Big Data page should also include a small interactive dashboard. The dashbo
 
 
 
-```{r}
+```{shinylive-r}
 #| eval: false
 #| standalone: true
 #| viewerHeight: 640 # Adjust this to fit everything
