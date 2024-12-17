@@ -1,5 +1,5 @@
 ---
-title: "Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live"
+title: "Big Picture"
 description: "A 538/Upshot style article about the data."
 toc: true
 draft: FALSE
@@ -7,19 +7,37 @@ filters:
   - shinylive
 ---
 
-![](images/The_Big_Picture_2.jpeg)
+![](images/publicmentalhealth.jpg)
 
-This comes from the file `big_picture.Rmd`.
+# Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live
 
-Think of this page as your 538/Upshot style article. This means that you should try to tell a story through the data and your analysis. Read articles from those sites and similar sites to get a feeling for what they are like. Try to write in the style of a news or popular article. Importantly, this page should be geared towards the general public. You shouldn't assume the reader understands how to interpret a linear regression or a complicated plot. Focus on interpretation and visualizations.
+Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health. People's financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual's health status. In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected elements significantly influence overall well-being, life expectancy, and quality of life. 
+
+Recent studies and surveys have revealed a troubling trend across all demographics: people across various age groups and demographics are reporting increased rates of loneliness. In an era defined by digital connectivity, the paradox is clear—people are becoming less socially engaged in meaningful ways, which directly impacts mental health. Loneliness is linked to heightened risks of anxiety, depression, and other mental health challenges, underscoring the growing importance of prioritizing mental well-being. The predicted number of days with poor mental health per month is 543.45% higher for individuals who feel lonely compared to those who do not, highlighting the impact of loneliness on our mental well-being. Thus, one’s socioeconomic status such as their education level indirectly associates with mental health outcomes.
+
+Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health.   For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experiences. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.
+
+Thus, we emphasize that exposure to adverse behaviors during childhood has a significant likelihood of shaping current behavioral patterns, particularly concerning health and the impact of exposure to relatively unhealthy conditions. The results underline the importance of addressing and mitigating harmful exposures during childhood to reduce the likelihood of adverse health behaviors later in life.
+
+Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph below illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism. 
+
+The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health. 
 
 ------------------------------------------------------------------------
 
 ### Interactive
 
-You will also be required to make an interactive dashboard like [this one](/flex/flex.html).
+These plots show how the state you live in can impact key socioeconomic factors. Factors of interest include:
 
-Your Big Data page should also include a small interactive dashboard. The dashboard should be created either using Shinylive, as below. This interactive component should in some way support your thesis from your big picture page. Good interactives often provide both high-level understanding of the data while allowing a user to investigate specific scenarios, observations, subgroups, etc.
+-   The average days that mental health is unwell
+
+-   The average days that physical health is unwell
+
+-   The proportion of the state that cannot afford medical costs
+
+-   The proportion of the state that has insurance
+
+Choose the topic you are interested in down below and explore how these factors vary across the U.S. The social factors of interest can negatively impact an individual’s ability to take part in their own lives, including their ability to be successful in social and workplace settings. The economic factors of interest can impact if an individual reaches out for medical care, which can lead to worse health outcomes and decreased quality of life.
 
 ```{r}
 #| eval: false
@@ -94,33 +112,4 @@ shinyApp(ui = ui, server = server)
 
 ```
 
-------------------------------------------------------------------------
-
-## Rubric: On this page
-
-You will
-
--   Title
-    -   Your big picture page should have a creative/click-bait-y title/headline that provides a hint about your thesis.
--   Clarity of Explanation
-    -   You should have a clear thesis/goal for this page. What are you trying to show? Make sure that you explain your analysis in detail but don't go into top much mathematics or statistics. The audience for this page is the general public (to the extent possible). Your thesis should be a statement, not a question.
-    -   Each figure should be very polished and also not too complicated. There should be a clear interpretation of the figure so the figure has a clear purpose. Even something like a histogram can be difficult to interpret for non-experts.
--   Creativity
-    -   Do your best to make things interesting. Think of a story. Think of how each part of your analysis supports the previous part or provides a different perspective.
--   Interactive component
-    -   Quality and ease of use of the interactive components. Is it clear what can be explored using your interactive components? Does it enhance and reinforce your conclusions?
--   This page should be self-contained.
-
-**Note**: This page should have no code visible, i.e. use `#| echo: FALSE`.
-
-## Rubric: Other components
-
-### Video Recording
-
-Make a video recording (probably using Zoom) demonstrating your interactive components. You should provide a quick explanation of your data and demonstrate some of the conclusions from your EDA. This video should be no longer than 4 minutes. Include a link to your video (and password if needed) in your README.md file on your Github repository. You are not required to provide a link on the website. This can be presented by any subset of the team members.
-
-### Rest of the Site
-
-Finally, here are important things to keep in mind for the rest of the site.
-
-The main title of your page is informative. Each post has an author/description/informative title. All lab required posts are present. Each page (including the home page) has a nice featured image associated with it. Your about page is up to date and clean. You have removed the generic posts from the initial site template.
+Ensuring access to health insurance and promoting socioeconomic equity are not just healthcare issues—they are investments in the long-term well-being of individuals and communities. By addressing these factors, society can create a foundation for healthier, more resilient populations.

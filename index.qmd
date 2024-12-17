@@ -1,5 +1,5 @@
 ---
-title: "MA [46]15 Final Project"
+title: "Linking Socioeconomic Factors to Health Outcomes"
 listing:
   contents: "posts/*/*.qmd"
   sort: "date desc"
@@ -11,6 +11,6 @@ page-layout: full
 title-block-banner: true
 ---
 
-![](images/data-science.png)
+![](images/home_page.png)
 
-# Final Project due May 7, 2024 at 11:59pm.
+# MA 415 Group 6 Analysis

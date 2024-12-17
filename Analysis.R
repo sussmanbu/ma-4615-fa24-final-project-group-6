@@ -218,7 +218,7 @@ ggplot(mari_alch_combined, aes(x = ExposureLevel, y = Frequency, fill = Exposure
   geom_point(data = mean_values, aes(x = ExposureLevel, y = mean_frequency), color = "red", size = 3, shape = 18) +
   facet_wrap(~ ExposureType, scales = "free") +
   labs(
-    title = "Marijuana Usage Frequency by Exposure and Type",
+    title = "Marijuana Usage Frequency by Exposure Type",
     x = "Exposed",
     y = "Frequency",
     fill = "Exposure Type"
