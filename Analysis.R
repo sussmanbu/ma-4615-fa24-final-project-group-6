@@ -40,6 +40,7 @@ ht_mc<-brfss_clean|>
 
 ht_mc_model <- glm(medical_cost ~ Health_status, data = ht_mc, family = "binomial")
 summary(ht_mc_model)
+(exp(coefficients(ht_mc_model))-1)*100
 
 
 predicted_prob <- predict(ht_mc_model, type = "response")
@@ -59,6 +60,7 @@ ggplot(ht_mc, aes(x = Health_status, y = Y_hat )) +
 htmcis <- ht_mc %>% select(`medical_cost`, Health_status, insurance_status)
 cor_matrix <- cor(htmcis,method = "pearson")
 print(cor_matrix)
+library(corrplot)
 corrplot(cor_matrix, method = "circle")
 
 
@@ -83,7 +85,7 @@ ggplot(summary, aes(x = reorder(EDUCA_factor, desc(EDUCA_factor)),
     axis.title.y = element_blank()
   )+
   labs(fill = "Education level", title = "Education Level vs. Loneliness by Race", x = "Loneliness")+
-  scale_fill_viridis_d()+
+  scale_fill_viridis_d() +
   theme(strip.text = element_text(size = 8))
 
 brfss_clean|>
@@ -109,6 +111,46 @@ summary(poisson_model)
 (exp(coefficients(poisson_model))-1)*100
 
 
+# Minority-to-white ratio & Income & average days mental health unwell
+min_ratio <- merged_data |> 
+  group_by(State, RACE) |> 
+  summarise(count = n(), .groups = "drop") |> 
+  group_by(State) |> 
+  mutate(total_population = sum(count)) |> 
+  ungroup() |> 
+  pivot_wider(names_from = RACE, values_from = count, values_fill = 0) |> 
+  mutate(minority_to_white_ratio = (total_population - White) / White)
+
+merged_data <- merged_data |> 
+  left_join(min_ratio |> select(State, minority_to_white_ratio), by = "State")
+
+avg_ment_unwell_data <- merged_data |>
+  group_by(State) |>
+  summarise(
+    avg_personal_income = mean(`Personal income`, na.rm = TRUE),
+    minority_to_white_ratio = mean(minority_to_white_ratio, na.rm = TRUE),
+    avg_ment_unwell_days = mean(MENTHLTH, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  drop_na(avg_personal_income, minority_to_white_ratio, avg_ment_unwell_days)
+
+# Linear model and correlation
+income_model <- lm(`Personal income` ~ minority_to_white_ratio  + MENTHLTH, data = merged_data)
+summary(income_model)
+cor(merged_data$`Personal income`, merged_data$minority_to_white_ratio)
+
+# Visualization
+ggplot(avg_ment_unwell_data, aes(x = minority_to_white_ratio, y = avg_personal_income, color = avg_ment_unwell_days)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "black") +
+  scale_color_viridis() +
+  theme_minimal() +
+  labs(
+    title = "Diversity Ratio and Days Mental Health Unwell on Income Per State",
+    x = "Diversity Ratio",
+    y = "Average Personal Income",
+    color = "Days Mental Health Unwell "
+  )
 
 
 #logistic regression on health status vs marijuana consumption and inability to pay bills
