@@ -650,5 +650,6 @@ shiny_table <- US_map_filtered |>
   left_join(variables_table, by = 'State')
 
 
-saveRDS(shiny_table, file = "shinydataset/shiny_table.rds")
+saveRDS(shiny_table, file = "shinydataset/shiny_table_updated.rds")
+saveRDS(shiny_table, file = "scripts/shiny_table.rds")
 
