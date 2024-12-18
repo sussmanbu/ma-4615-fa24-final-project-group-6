@@ -5,7 +5,6 @@ toc: true
 draft: FALSE
 filters:
   - shinylive
-runtime: shiny
 ---
 
 ![](images/publicmentalhealth.jpg)
