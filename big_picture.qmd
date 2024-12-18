@@ -11,15 +11,31 @@ filters:
 
 # Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live
 
-Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health. People's financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual's health status. In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected elements significantly influence overall well-being, life expectancy, and quality of life. 
+Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health.
+
+![](images/medical_cost_health.png)
+
+People's financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual's health status. As shown in the graph above, individuals with poorer health status are less likely to be able to afford their medical costs. Besides medical costs, other financial stress like inability to afford rent also correlates with poor health.
+
+![](images/education_simple.png)
+
+In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected socioeconomic elements significantly influence overall well-being, life expectancy, and quality of life. 
 
 Recent studies and surveys have revealed a troubling trend across all demographics: people across various age groups and demographics are reporting increased rates of loneliness. In an era defined by digital connectivity, the paradox is clear—people are becoming less socially engaged in meaningful ways, which directly impacts mental health. Loneliness is linked to heightened risks of anxiety, depression, and other mental health challenges, underscoring the growing importance of prioritizing mental well-being. The predicted number of days with poor mental health per month is 543.45% higher for individuals who feel lonely compared to those who do not, highlighting the impact of loneliness on our mental well-being. Thus, one’s socioeconomic status such as their education level indirectly associates with mental health outcomes.
 
-Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health.   For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experiences. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.
+Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health.
+
+![](images/exposed_simple.png)
+
+For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experience, such as living with alcoholic, drug-using, or depressed family members. As shown by the comparison of the black horizontal line positions on each graph, individuals who reported prior exposure have higher marijuana consumption today compared to those who did not. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.
 
 Thus, we emphasize that exposure to adverse behaviors during childhood has a significant likelihood of shaping current behavioral patterns, particularly concerning health and the impact of exposure to relatively unhealthy conditions. The results underline the importance of addressing and mitigating harmful exposures during childhood to reduce the likelihood of adverse health behaviors later in life.
 
-Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph below illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism. 
+![](images/race_simple.png)
+
+Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph above illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism. 
+
+![](images/ratio_state_income_updated.png)
 
 The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health. 
 
@@ -78,7 +94,7 @@ ui <- fluidPage(
 # Define server logic ----
 server <- function(input, output) {
   # Load dataset from GitHub pages website
-  map_dataset <- read_rds("shinydataset/shiny_table.rds")
+  map_dataset <- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/scripts/shiny_table.rds")
 
 
   # Render the heatmap plot ----
@@ -100,6 +116,5 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 ```
-
 
 Ensuring access to health insurance and promoting socioeconomic equity are not just healthcare issues—they are investments in the long-term well-being of individuals and communities. By addressing these factors, society can create a foundation for healthier, more resilient populations.

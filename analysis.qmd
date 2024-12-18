@@ -51,7 +51,7 @@ These findings suggest that socioeconomic factors, such as education level, dire
 
 ### Socioeconomic Variations across States on Mental Health
 
-![](images/ratio_state_income.png)
+![](images/ratio_state_income_updated.png)
 
 There is a significantly moderate positive correlation (0.31) between the average personal income of a state and the diversity ratio of the state. This means that as a state becomes more diverse, the average personal income of the state increases, suggesting that diversity leads to better economic outcomes for each state. There is also a significantly positive correlation between the average personal income of a state and the average days that mental health is unwell. This means that as a state's income increases, the average days that mental health is unwell for the population of that state also increases. Though this relationship is significant, it is important to consider that the range for average days that mental health is unwell per state ranges from about 3 to 5 days. 
 
@@ -69,7 +69,9 @@ The plot clearly illustrates this trend, with the red line showing the relations
 
 ### Past Exposure and Current Consumption on Physical Health
 
-![](images/exposure_consumption.png) Respondents were asked to report the number of days they used marijuana over the past 30 days. The box plot illustrates the distribution of marijuana usage frequencies based on childhood exposure to specific conditions or behaviors. The y-axis represents the number of days marijuana was used in a 30-day period, while the x-axis indicates binary exposure levels: "Yes" for respondents who were exposed to a specific condition or behavior during childhood, and "No" for those who were not.
+![](images/exposure_consumption.png)
+
+Respondents were asked to report the number of days they used marijuana over the past 30 days. The box plot illustrates the distribution of marijuana usage frequencies based on childhood exposure to specific conditions or behaviors. The y-axis represents the number of days marijuana was used in a 30-day period, while the x-axis indicates binary exposure levels: "Yes" for respondents who were exposed to a specific condition or behavior during childhood, and "No" for those who were not.
 
 Mean values are represented by the red dots present in the images. The mean marijuana frequency across all exposure types is larger for respondents who indicated that they were exposed. For example, for alcohol exposure, the mean is 14.59 days for respondents who were not exposed and 16.43 days for respondents who were exposed. Median values show a similar pattern, with higher medians among respondents exposed to a condition or behavior. For example, the median for those not exposed to depression is 10, compared to 20 for those exposed. Participants who were exposed to various adverse childhood experiences are susceptible to higher usage for marijuana.
 
