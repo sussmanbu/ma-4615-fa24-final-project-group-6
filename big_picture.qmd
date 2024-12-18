@@ -96,10 +96,9 @@ server <- function(input, output) {
                     variables = "B01003_001E",
                     year =2020,
                     geometry = TRUE)|>
-    rename(State = NAME)
+    rename(State = 'NAME')
   # Merge map data with your dataset
   map_dataset <- US_map |>
-    rename(State = NAME) |>  
     left_join(data, by = "State")
 
   # Render the heatmap plot ----
