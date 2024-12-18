@@ -33,6 +33,7 @@ Your Big Data page should also include a small interactive dashboard. The dashbo
 #| viewerHeight: 640 # Adjust this to fit everything
 
 library(shiny)
+library(tidycensus)
 library(tidyverse)
 library(ggplot2)
 library(sf)
@@ -53,9 +54,7 @@ ui <- fluidPage(
                   "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
                   "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
                   "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
-                  "Proportion of State That is Uninsured" = "prop_uninsured",
-                  "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
-                  "Percentage of State That is Uninsured" = "perc_uninsured"
+                  "Proportion of State That is Uninsured" = "prop_uninsured"
                 ),
                 selected = "average_physical_unwell"),
 
@@ -74,10 +73,9 @@ server <- function(input, output) {
                     variables = "B01003_001E",
                     year =2020,
                     geometry = TRUE)|>
-    rename(State = NAME)
+    rename(State = 'NAME')
   # Merge map data with your dataset
   map_dataset <- US_map |>
-    rename(State = NAME) |>  
     left_join(data, by = "State")
 
   # Render the heatmap plot ----
