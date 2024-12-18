@@ -54,6 +54,7 @@ Choose the topic you are interested in down below and explore how these factors 
 #| viewerHeight: 640 # Adjust this to fit everything
 
 library(shiny)
+library(shinylive)
 library(tidycensus)
 library(tidyverse)
 library(ggplot2)
