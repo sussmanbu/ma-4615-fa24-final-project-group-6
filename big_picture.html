@@ -163,12 +163,13 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="images/publicmentalhealth.jpg" class="img-fluid"></p>
 <section id="is-your-health-at-risk-the-unseen-connection-between-money-race-and-where-you-live" class="level1">
 <h1>Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live</h1>
-<p>Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health. People’s financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual’s health status. In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected elements significantly influence overall well-being, life expectancy, and quality of life.&nbsp;</p>
+<p>Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health. <img src="images/medical_cost_health.png" class="img-fluid"> People’s financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual’s health status. As shown in the graph above, individuals with poorer health status are less likely to be able to afford their medical costs. Besides medical costs, other financial stress like inability to afford rent also correlates with poor health.</p>
+<p><img src="images/education_simple.png" class="img-fluid"> In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected socioeconomic elements significantly influence overall well-being, life expectancy, and quality of life.&nbsp;</p>
 <p>Recent studies and surveys have revealed a troubling trend across all demographics: people across various age groups and demographics are reporting increased rates of loneliness. In an era defined by digital connectivity, the paradox is clear—people are becoming less socially engaged in meaningful ways, which directly impacts mental health. Loneliness is linked to heightened risks of anxiety, depression, and other mental health challenges, underscoring the growing importance of prioritizing mental well-being. The predicted number of days with poor mental health per month is 543.45% higher for individuals who feel lonely compared to those who do not, highlighting the impact of loneliness on our mental well-being. Thus, one’s socioeconomic status such as their education level indirectly associates with mental health outcomes.</p>
-<p>Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health. &nbsp; For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experiences. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.</p>
+<p>Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health. <img src="images/exposed_simple.png" class="img-fluid"> For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experience, such as living with alcoholic, drug-using, or depressed family members. As shown by the comparison of the black horizontal line positions on each graph, individuals who reported prior exposure have higher marijuana consumption today compared to those who did not. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.</p>
 <p>Thus, we emphasize that exposure to adverse behaviors during childhood has a significant likelihood of shaping current behavioral patterns, particularly concerning health and the impact of exposure to relatively unhealthy conditions. The results underline the importance of addressing and mitigating harmful exposures during childhood to reduce the likelihood of adverse health behaviors later in life.</p>
-<p>Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph below illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism.&nbsp;</p>
-<p>The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health.&nbsp;</p>
+<p><img src="images/race_simple.png" class="img-fluid"> Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph above illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism.&nbsp;</p>
+<p><img src="images/ratio_state_income_updated.png" class="img-fluid"> The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health.&nbsp;</p>
 <hr>
 <section id="interactive" class="level3">
 <h3 class="anchored" data-anchor-id="interactive">Interactive</h3>
@@ -189,6 +190,7 @@ ul.task-list li input[type="checkbox"] {
 
 library(shiny)
 library(tidyverse)
+library(tidycensus)
 library(ggplot2)
 library(sf)
 options("readr.edition" = 1) # keep this to ensure you can download the data
@@ -208,9 +210,7 @@ ui &lt;- fluidPage(
                   "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
                   "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
                   "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
-                  "Proportion of State That is Uninsured" = "prop_uninsured",
-                  "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
-                  "Percentage of State That is Uninsured" = "perc_uninsured"
+                  "Proportion of State That is Uninsured" = "prop_uninsured"
                 ),
                 selected = "average_physical_unwell"),
 
@@ -222,18 +222,8 @@ ui &lt;- fluidPage(
 # Define server logic ----
 server &lt;- function(input, output) {
   # Load dataset from GitHub pages website
-  data &lt;- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
+  map_dataset &lt;- read_rds("shinydataset/shiny_table.rds")
 
-  # Load US map data
-  US_map &lt;- get_acs(geography = "state",
-                    variables = "B01003_001E",
-                    year =2020,
-                    geometry = TRUE)|&gt;
-    rename(State = NAME)
-  # Merge map data with your dataset
-  map_dataset &lt;- US_map |&gt;
-    rename(State = NAME) |&gt;  
-    left_join(data, by = "State")
 
   # Render the heatmap plot ----
   output$heatmap &lt;- renderPlot({
