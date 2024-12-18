@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -74,6 +40,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -155,12 +126,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#interactive" id="toc-interactive" class="nav-link active" data-scroll-target="#interactive">Interactive</a></li>
-  <li><a href="#rubric-on-this-page" id="toc-rubric-on-this-page" class="nav-link" data-scroll-target="#rubric-on-this-page">Rubric: On this page</a></li>
-  <li><a href="#rubric-other-components" id="toc-rubric-other-components" class="nav-link" data-scroll-target="#rubric-other-components">Rubric: Other components</a>
+  <li><a href="#is-your-health-at-risk-the-unseen-connection-between-money-race-and-where-you-live" id="toc-is-your-health-at-risk-the-unseen-connection-between-money-race-and-where-you-live" class="nav-link active" data-scroll-target="#is-your-health-at-risk-the-unseen-connection-between-money-race-and-where-you-live">Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live</a>
   <ul class="collapse">
-  <li><a href="#video-recording" id="toc-video-recording" class="nav-link" data-scroll-target="#video-recording">Video Recording</a></li>
-  <li><a href="#rest-of-the-site" id="toc-rest-of-the-site" class="nav-link" data-scroll-target="#rest-of-the-site">Rest of the Site</a></li>
+  <li><a href="#interactive" id="toc-interactive" class="nav-link" data-scroll-target="#interactive">Interactive</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -192,116 +160,100 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><img src="images/The_Big_Picture_2.jpeg" class="img-fluid"></p>
-<p>This comes from the file <code>big_picture.Rmd</code>.</p>
-<p>Think of this page as your 538/Upshot style article. This means that you should try to tell a story through the data and your analysis. Read articles from those sites and similar sites to get a feeling for what they are like. Try to write in the style of a news or popular article. Importantly, this page should be geared towards the general public. You shouldn’t assume the reader understands how to interpret a linear regression or a complicated plot. Focus on interpretation and visualizations.</p>
+<p><img src="images/publicmentalhealth.jpg" class="img-fluid"></p>
+<section id="is-your-health-at-risk-the-unseen-connection-between-money-race-and-where-you-live" class="level1">
+<h1>Is Your Health at Risk? The Unseen Connection Between Money, Race, and Where You Live</h1>
+<p>Socioeconomic status and social determinants directly correlate with health outcomes, with variations across race and geography. Socioeconomic factors like education, income, and social determinants—such as current behaviors and past experiences—have a profound impact on both mental and physical health. People’s financial status and access to medical resources may be correlated with their health status. Among factors such as income and accessibility to medical resources, we also observe a positive correlation between the affordability of medical costs and an individual’s health status. In addition, higher education is generally associated with a lower percentage of individuals experiencing loneliness. This is likely due to the fact that individuals with higher education tend to have higher income and better life satisfaction, which in turn lowers loneliness level. These interconnected elements significantly influence overall well-being, life expectancy, and quality of life.&nbsp;</p>
+<p>Recent studies and surveys have revealed a troubling trend across all demographics: people across various age groups and demographics are reporting increased rates of loneliness. In an era defined by digital connectivity, the paradox is clear—people are becoming less socially engaged in meaningful ways, which directly impacts mental health. Loneliness is linked to heightened risks of anxiety, depression, and other mental health challenges, underscoring the growing importance of prioritizing mental well-being. The predicted number of days with poor mental health per month is 543.45% higher for individuals who feel lonely compared to those who do not, highlighting the impact of loneliness on our mental well-being. Thus, one’s socioeconomic status such as their education level indirectly associates with mental health outcomes.</p>
+<p>Our social determinants also play a critical role in shaping our behaviors, opportunities, and overall health. The places we live, work, and interact influence access to resources, social interactions, and support systems, all of which are essential for maintaining mental and physical health. &nbsp; For instance, it was found that mean marijuana usage frequency is influenced by exposure to adverse childhood experiences. Previous exposure to these adversities is linked to higher consumption, which is associated with poorer physical health outcomes.</p>
+<p>Thus, we emphasize that exposure to adverse behaviors during childhood has a significant likelihood of shaping current behavioral patterns, particularly concerning health and the impact of exposure to relatively unhealthy conditions. The results underline the importance of addressing and mitigating harmful exposures during childhood to reduce the likelihood of adverse health behaviors later in life.</p>
+<p>Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph below illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism.&nbsp;</p>
+<p>The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health.&nbsp;</p>
 <hr>
 <section id="interactive" class="level3">
 <h3 class="anchored" data-anchor-id="interactive">Interactive</h3>
-<p>You will also be required to make an interactive dashboard like <a href=".\flex/flex.html">this one</a>.</p>
-<p>Your Big Data page should also include a small interactive dashboard. The dashboard should be created either using Shinylive, as below. This interactive component should in some way support your thesis from your big picture page. Good interactives often provide both high-level understanding of the data while allowing a user to investigate specific scenarios, observations, subgroups, etc.</p>
-<div class="cell" data-standalone="true" data-viewerheight="640">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">"readr.edition"</span> <span class="ot">=</span> <span class="dv">1</span>) <span class="co"># keep this to ensure you can download the data</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define UI for app ----</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># App title ----</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"US Map of Socioeconomic Factors and Health Statuses"</span>),</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sidebar layout with input and output definitions ----</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">verticalLayout</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input: Select a metric to display</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selectInput</span>(<span class="at">inputId =</span> <span class="st">"metric"</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">"Choose a metric to visualize:"</span>,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">choices =</span> <span class="fu">list</span>(</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Average Days of Unwellness Mental Health"</span> <span class="ot">=</span> <span class="st">"avg_ment_unwell_days"</span>,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Average Days of Unwellness Physical Health"</span> <span class="ot">=</span> <span class="st">"avg_physical_unwell_days"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Percentage of State That is Unable to Afford Medical Costs"</span> <span class="ot">=</span> <span class="st">"perc_cannot_afford"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"Percentage of State That is Uninsured"</span> <span class="ot">=</span> <span class="st">"perc_uninsured"</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                ),</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">selected =</span> <span class="st">"average_physical_unwell"</span>),</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output: Heatmap ----</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plotOutput</span>(<span class="at">outputId =</span> <span class="st">"heatmap"</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Define server logic ----</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load dataset from GitHub pages website</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds"</span>)</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load US map data</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  US_map <span class="ot">&lt;-</span> <span class="fu">get_acs</span>(<span class="at">geography =</span> <span class="st">"state"</span>,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                    <span class="at">variables =</span> <span class="st">"B01003_001E"</span>,</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                    <span class="at">year =</span><span class="dv">2020</span>,</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                    <span class="at">geometry =</span> <span class="cn">TRUE</span>)<span class="sc">|&gt;</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">State =</span> NAME)</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge map data with your dataset</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  map_dataset <span class="ot">&lt;-</span> US_map <span class="sc">|&gt;</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">State =</span> NAME) <span class="sc">|&gt;</span>  </span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(data, <span class="at">by =</span> <span class="st">"State"</span>)</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Render the heatmap plot ----</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>heatmap <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(map_dataset) <span class="sc">+</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="fu">aes_string</span>(<span class="at">fill =</span> input<span class="sc">$</span>metric), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>() <span class="sc">+</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">"US Heatmap by Selected Socioeconomic Factor or Health Status"</span>,</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="st">"Value"</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Shiny app ----</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<hr>
-</section>
-<section id="rubric-on-this-page" class="level2">
-<h2 class="anchored" data-anchor-id="rubric-on-this-page">Rubric: On this page</h2>
-<p>You will</p>
+<p>These plots show how the state you live in can impact key socioeconomic factors. Factors of interest include:</p>
 <ul>
-<li>Title
-<ul>
-<li>Your big picture page should have a creative/click-bait-y title/headline that provides a hint about your thesis.</li>
-</ul></li>
-<li>Clarity of Explanation
-<ul>
-<li>You should have a clear thesis/goal for this page. What are you trying to show? Make sure that you explain your analysis in detail but don’t go into top much mathematics or statistics. The audience for this page is the general public (to the extent possible). Your thesis should be a statement, not a question.</li>
-<li>Each figure should be very polished and also not too complicated. There should be a clear interpretation of the figure so the figure has a clear purpose. Even something like a histogram can be difficult to interpret for non-experts.</li>
-</ul></li>
-<li>Creativity
-<ul>
-<li>Do your best to make things interesting. Think of a story. Think of how each part of your analysis supports the previous part or provides a different perspective.</li>
-</ul></li>
-<li>Interactive component
-<ul>
-<li>Quality and ease of use of the interactive components. Is it clear what can be explored using your interactive components? Does it enhance and reinforce your conclusions?</li>
-</ul></li>
-<li>This page should be self-contained.</li>
+<li><p>The average days that mental health is unwell</p></li>
+<li><p>The average days that physical health is unwell</p></li>
+<li><p>The proportion of the state that cannot afford medical costs</p></li>
+<li><p>The proportion of the state that has insurance</p></li>
 </ul>
-<p><strong>Note</strong>: This page should have no code visible, i.e.&nbsp;use <code>#| echo: FALSE</code>.</p>
-</section>
-<section id="rubric-other-components" class="level2">
-<h2 class="anchored" data-anchor-id="rubric-other-components">Rubric: Other components</h2>
-<section id="video-recording" class="level3">
-<h3 class="anchored" data-anchor-id="video-recording">Video Recording</h3>
-<p>Make a video recording (probably using Zoom) demonstrating your interactive components. You should provide a quick explanation of your data and demonstrate some of the conclusions from your EDA. This video should be no longer than 4 minutes. Include a link to your video (and password if needed) in your README.md file on your Github repository. You are not required to provide a link on the website. This can be presented by any subset of the team members.</p>
-</section>
-<section id="rest-of-the-site" class="level3">
-<h3 class="anchored" data-anchor-id="rest-of-the-site">Rest of the Site</h3>
-<p>Finally, here are important things to keep in mind for the rest of the site.</p>
-<p>The main title of your page is informative. Each post has an author/description/informative title. All lab required posts are present. Each page (including the home page) has a nice featured image associated with it. Your about page is up to date and clean. You have removed the generic posts from the initial site template.</p>
+<p>Choose the topic you are interested in down below and explore how these factors vary across the U.S. The social factors of interest can negatively impact an individual’s ability to take part in their own lives, including their ability to be successful in social and workplace settings. The economic factors of interest can impact if an individual reaches out for medical care, which can lead to worse health outcomes and decreased quality of life.</p>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| eval: false
+#| standalone: true
+#| viewerHeight: 640 # Adjust this to fit everything
+
+library(shiny)
+library(tidyverse)
+library(ggplot2)
+library(sf)
+options("readr.edition" = 1) # keep this to ensure you can download the data
+
+# Define UI for app ----
+ui &lt;- fluidPage(
+
+  # App title ----
+  titlePanel("US Map of Socioeconomic Factors of Interest"),
+
+  # Sidebar layout with input and output definitions ----
+  verticalLayout(
+    # Input: Select a metric to display
+    selectInput(inputId = "metric",
+                label = "Select a socioeconomic factor to visualize:",
+                choices = list(
+                  "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
+                  "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
+                  "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
+                  "Proportion of State That is Uninsured" = "prop_uninsured",
+                  "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
+                  "Percentage of State That is Uninsured" = "perc_uninsured"
+                ),
+                selected = "average_physical_unwell"),
+
+    # Output: Heatmap ----
+    plotOutput(outputId = "heatmap")
+  )
+)
+
+# Define server logic ----
+server &lt;- function(input, output) {
+  # Load dataset from GitHub pages website
+  data &lt;- read_rds("https://sussmanbu.github.io/ma-4615-fa24-final-project-group-6/shinydataset/shiny_table.rds")
+
+  # Load US map data
+  US_map &lt;- get_acs(geography = "state",
+                    variables = "B01003_001E",
+                    year =2020,
+                    geometry = TRUE)|&gt;
+    rename(State = NAME)
+  # Merge map data with your dataset
+  map_dataset &lt;- US_map |&gt;
+    rename(State = NAME) |&gt;  
+    left_join(data, by = "State")
+
+  # Render the heatmap plot ----
+  output$heatmap &lt;- renderPlot({
+    ggplot(map_dataset) +
+      geom_sf(aes_string(fill = input$metric), color = "white") +
+      scale_fill_viridis_c() +
+      labs(
+        title = "US Heatmap by Selected Socioeconomic Factor or Health Status",
+        fill = "Value"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "bottom")
+  })
+}
+
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)
+</code></pre>
+<p>Ensuring access to health insurance and promoting socioeconomic equity are not just healthcare issues—they are investments in the long-term well-being of individuals and communities. By addressing these factors, society can create a foundation for healthier, more resilient populations.</p>
 
 
 </section>

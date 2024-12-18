@@ -164,7 +164,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#cleaning-1" id="toc-cleaning-1" class="nav-link" data-scroll-target="#cleaning-1">Cleaning</a></li>
   </ul></li>
   <li><a href="#merging" id="toc-merging" class="nav-link" data-scroll-target="#merging">Merging</a></li>
-  <li><a href="#rubric-on-this-page" id="toc-rubric-on-this-page" class="nav-link" data-scroll-target="#rubric-on-this-page">Rubric: On this page</a></li>
   </ul>
 </nav>
     </div>
@@ -195,10 +194,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p><img src="images/data_page.png" class="img-fluid"></p>
 <section id="first-data-set" class="level2">
 <h2 class="anchored" data-anchor-id="first-data-set">First Data Set</h2>
-<p>The 2023 Behavioral Risk Factor Surveillance System dataset gathers standardized and state-specific data on health risks and behaviors, chronic conditions, healthcare access, mental health, and other factors related to leading causes of death and disability in the U.S. The data was collected by the Centers for Disease Control and Prevention (CDC) in partnership with state health departments and U.S. territories. Key topics surveyed in 2023 included health status, exercise, chronic conditions, tobacco and alcohol use, immunizations, HIV/AIDS, mental health, seatbelt use, driving behaviors, and COVID. Data is self-reported; proxy interviews are not conducted. Landline interviews are conducted with randomly selected adults in households, while cellular interviews focus on adults living in private residences or college housing. However, the lack of proxy interviews restricts data collection from individuals with disabilities who need guardians to report on their behalf, as well as from those without phones. Furthermore, the absence of TTY services or accommodations for individuals who are deaf or hard of hearing may result in the exclusion of these populations.</p>
-<p>There are 350 total variables in the dataset and it contains 433,323 observations. The dataset is available at: https://www.cdc.gov/brfss/annual_data/annual_2023.html.</p>
+<p>The 2023 Behavioral Risk Factor Surveillance System dataset gathers standardized and state-specific data on health risks and behaviors, chronic conditions, healthcare access, mental health, and other factors related to leading causes of death and disability in the U.S. The data was collected by the Centers for Disease Control and Prevention (CDC) in partnership with state health departments and U.S. territories. Key topics surveyed in 2023 included health status, exercise, chronic conditions, tobacco and alcohol use, immunizations, HIV/AIDS, mental health, seatbelt use, driving behaviors, and COVID. Data is self-reported; proxy interviews are not conducted. Landline interviews are conducted with randomly selected adults in households, while cellular interviews focus on adults living in private residences or college housing.</p>
+<p>There are 350 total variables in the dataset and it contains 433,323 observations. The dataset is available at <a href="https://www.cdc.gov/brfss/annual_data/annual_2023.html.">here</a>.</p>
 <p>We intended to explore the variables from each categorization:</p>
 <p><strong>The Identity-Based Category</strong>: For variables that describe the identity of respondents</p>
 <ul>
@@ -211,6 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>MEDCOST1:Renamed to medical_cost. Health Care Access</li>
 <li>PRIMINS1: Renamed to insurance_status. Have any health insurance</li>
 <li>_INCOMG1: income categories of participant</li>
+<li>SDHBILLS: Inability of pay rent, mortgage, or utility bills.</li>
 </ul>
 <p><strong>The Health Category</strong>: includes variables that contain information regarding mental health and variables with information describing the physical well-being of respondents.</p>
 <ul>
@@ -276,7 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="second-data-set">Second Data Set</h2>
 <p>During our work, we realized that we still needed more economic factors and context in our research project. We tried to find another dataset and select one from five possible datasets, and the chosen one “Regional Data: GDP and Personal Income” from the Bureau of Economic Analysis (BEA) Interactive Data Application.</p>
 <p><a href="https://apps.bea.gov/iTable/?reqid=70&amp;step=1&amp;isuri=1&amp;acrdn=9&amp;_gl=1*1lwyymi*_ga*NDgzMzEzNzcxLjE3MzEzNjY1MTQ.*_ga_J4698JNNFT*MTczMTM2NjUxMy4xLjEuMTczMTM2Njg1OC4xNS4wLjA.#eyJhcHBpZCI6NzAsInN0ZXBzIjpbMSwyOSwyNSwzMSwyNiwyNywzMF0sImRhdGEiOltbIlRhYmxlSWQiLCI2MDAiXSxbIk1ham9yX0FyZWEiLCIwIl0sWyJTdGF0ZSIsWyIwIl1dLFsiQXJlYSIsWyJYWCJdXSxbIlN0YXRpc3RpYyIsWyItMSJdXSxbIlVuaXRfb2ZfbWVhc3VyZSIsIkxldmVscyJdLFsiWWVhciIsWyIyMDIzIl1dLFsiWWVhckJlZ2luIiwiLTEiXSxbIlllYXJfRW5kIiwiLTEiXV19">This dataset</a> is the economic summary statistics for all the States in the U.S. in 2023, which includes personal income, GDP, consumer spending, price indexes, and employment. This dataset is available at the Bureau of Economic Analysis, U.S. Department of Commerce. We try to merge it into our first dataset examining how economic factors like GDP and employment levels impact public health behaviors.</p>
-<p>The challenge we met in the second data set is that we will face many imcompatible problems with the first data set and need to do many cleaning jobs when we merge it, such as we need to reshape the second data set to the wide format and there are many unnecessary columns and rows.</p>
+<p>The challenge we met in the second data set is that we will face many incompatible problems with the first data set and need to do many cleaning jobs when we merge it, such as we need to reshape the second data set to the wide format and there are many unnecessary columns and rows.</p>
 <p>The following variables were used in our analysis:</p>
 <p><strong>Gross domestic product (GDP)</strong>: Total market value of goods and services at current prices without inflation adjustment.</p>
 <p><strong>Personal income:</strong> Total earnings received by individuals, indicating overall economic well-being.</p>
@@ -302,36 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge</span>(brfss_clean, income_clean, <span class="at">by.x =</span> <span class="st">"State"</span>, <span class="at">by.y =</span> <span class="st">"GeoName"</span>, <span class="at">all =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After we clean the new dataset, we try to merge the “Regional Data: GDP and Personal Income” dataset to the original one on state names (State and GeoName). We successfully combined our two datasets on the “state” variable that was present in both datasets, this resulted in a dataset that provided a more comprehensive financial perspective on the factors we are currently looking at. Some of the data analytic questions we explored in the new dataset include: Whether state income is correlated with physical health status, the relationship between state GDP on overall loneliness level, the relationship between alcohol use and state employment quantity, the relationship between Insurance Status, per capita current dollar statistics for each state, and so on.</p>
-<hr>
-</section>
-<section id="rubric-on-this-page" class="level2">
-<h2 class="anchored" data-anchor-id="rubric-on-this-page">Rubric: On this page</h2>
-<p>You will</p>
-<ul>
-<li>Describe where/how to find data.
-<ul>
-<li>You must include a link to the original data source(s). Make sure to provide attribution to those who collected the data.</li>
-<li>Why was the data collected/curated? Who put it together? (This is important, if you don’t know why it was collected then that might not be a good dataset to look at.</li>
-</ul></li>
-<li>Describe the different data files used and what each variable means.
-<ul>
-<li>If you have many variables then only describe the most relevant ones and summarize the rest.</li>
-</ul></li>
-<li>Describe any cleaning you had to do for your data.
-<ul>
-<li>You <em>must</em> include a link to your <code>load_and_clean_data.R</code> file.</li>
-<li>Rrename variables and recode factors to make data more clear.</li>
-<li>Also, describe any additional R packages you used outside of those covered in class.</li>
-<li>Describe and show code for how you combined multiple data files and any cleaning that was necessary for that.</li>
-<li>Some repetition of what you do in your <code>load_and_clean_data.R</code> file is fine and encouraged if it helps explain what you did.</li>
-</ul></li>
-<li>Organization, clarity, cleanliness of the page
-<ul>
-<li>Make sure to remove excessive warnings, use clean easy-to-read code (without side scrolling), organize with sections, use bullets and other organization tools, etc.</li>
-<li>This page should be self-contained.</li>
-</ul></li>
-</ul>
+<p>After we cleaned the new dataset, we tried to merge the “Regional Data: GDP and Personal Income” dataset to the original one on state names (State and GeoName). We successfully combined our two datasets on the “state” variable that was present in both datasets. This resulted in a dataset that provided a more comprehensive financial perspective on the factors we are currently looking at. Some of the data analytic questions we explored in the new dataset include: Whether state income is correlated with physical health status, the relationship between state GDP on overall loneliness level, the relationship between alcohol use and state employment quantity, the relationship between Insurance Status, per capita current dollar statistics for each state, and so on.</p>
 
 
 </section>
