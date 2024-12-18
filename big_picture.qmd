@@ -5,6 +5,7 @@ toc: true
 draft: FALSE
 filters:
   - shinylive
+runtime: shiny
 ---
 
 ![](images/publicmentalhealth.jpg)
@@ -48,14 +49,12 @@ These plots show how the state you live in can impact key socioeconomic factors.
 
 Choose the topic you are interested in down below and explore how these factors vary across the U.S. The social factors of interest can negatively impact an individual’s ability to take part in their own lives, including their ability to be successful in social and workplace settings. The economic factors of interest can impact if an individual reaches out for medical care, which can lead to worse health outcomes and decreased quality of life.
 
-```{shinylive-r}
+```{r}
 #| eval: false
 #| standalone: true
 #| viewerHeight: 640 # Adjust this to fit everything
 
 library(shiny)
-library(shinylive)
-library(tidycensus)
 library(tidyverse)
 library(ggplot2)
 library(sf)
@@ -76,7 +75,9 @@ ui <- fluidPage(
                   "Average Days of Unwellness Mental Health" = "avg_ment_unwell_days",
                   "Average Days of Unwellness Physical Health" = "avg_physical_unwell_days",
                   "Proportion of State That is Unable to Afford Medical Costs" = "prop_cannot_afford",
-                  "Proportion of State That is Uninsured" = "prop_uninsured"
+                  "Proportion of State That is Uninsured" = "prop_uninsured",
+                  "Percentage of State That is Unable to Afford Medical Costs" = "perc_cannot_afford",
+                  "Percentage of State That is Uninsured" = "perc_uninsured"
                 ),
                 selected = "average_physical_unwell"),
 
@@ -95,9 +96,10 @@ server <- function(input, output) {
                     variables = "B01003_001E",
                     year =2020,
                     geometry = TRUE)|>
-    rename(State = 'NAME')
+    rename(State = NAME)
   # Merge map data with your dataset
   map_dataset <- US_map |>
+    rename(State = NAME) |>  
     left_join(data, by = "State")
 
   # Render the heatmap plot ----
@@ -119,5 +121,6 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 ```
+
 
 Ensuring access to health insurance and promoting socioeconomic equity are not just healthcare issues—they are investments in the long-term well-being of individuals and communities. By addressing these factors, society can create a foundation for healthier, more resilient populations.
