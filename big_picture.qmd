@@ -29,7 +29,7 @@ Thus, we emphasize that exposure to adverse behaviors during childhood has a sig
 ![](images/race_simple.png)
 Despite these factors that influence all demographics, different racial groups experience varied health outcomes. As the graph above illustrates, groups with historically limited access to economic resources and healthcare—such as Multiracial individuals, American Indians, and Pacific Islanders—experience higher levels of mental distress compared to the other racial groups. On the other hand, racial groups with higher income, such as Asian and White, report better mental health status. While the ranking varies slightly for physical health outcomes, a similar pattern emerges. Racial disparities in both physical and mental health outcomes underscore ongoing inequities in healthcare access, social determinants of health, and systemic racism. 
 
-![](images/ratio_state_income.png)
+![](images/ratio_state_income_updated.png)
 The state you live in can also cause variations in health outcomes. One of the relationships is how increased diversity in a state leads to higher personal income levels, which then leads to more days a month that mental health is unwell. While diversity leads to the positive outcome of increased wealth, increased wealth often comes with added complexity of maintaining that wealth which can lead to decreased mental health. 
 
 ------------------------------------------------------------------------

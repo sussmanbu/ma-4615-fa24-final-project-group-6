@@ -51,7 +51,7 @@ These findings suggest that socioeconomic factors, such as education level, dire
 
 ### Socioeconomic Variations across States on Mental Health
 
-![](images/ratio_state_income.png)
+![](images/ratio_state_income_updated.png)
 
 There is a significantly moderate positive correlation (0.31) between the average personal income of a state and the diversity ratio of the state. This means that as a state becomes more diverse, the average personal income of the state increases, suggesting that diversity leads to better economic outcomes for each state. There is also a significantly positive correlation between the average personal income of a state and the average days that mental health is unwell. This means that as a state's income increases, the average days that mental health is unwell for the population of that state also increases. Though this relationship is significant, it is important to consider that the range for average days that mental health is unwell per state ranges from about 3 to 5 days. 
 
