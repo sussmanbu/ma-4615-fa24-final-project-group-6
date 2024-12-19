@@ -194,11 +194,15 @@ ul.task-list li input[type="checkbox"] {
 #| eval: false
 #| standalone: true
 #| viewerHeight: 640 # Adjust this to fit everything
+suppressPackageStartupMessages(library(shiny))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(tidycensus))
+suppressPackageStartupMessages(library(sf))
+
 
 library(shiny)
 library(tidyverse)
 library(tidycensus)
-library(ggplot2)
 library(sf)
 options("readr.edition" = 1) # keep this to ensure you can download the data
 
